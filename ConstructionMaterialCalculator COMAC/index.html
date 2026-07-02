@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Material Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e67e22;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #34495e;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #e67e22;
+        }
+
+        .checkbox-group {
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            accent-color: #e67e22;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-calculate {
+            background: #e67e22;
+            color: white;
+        }
+
+        .btn-calculate:hover {
+            background: #d35400;
+        }
+
+        .btn-reset {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #7f8c8d;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            min-height: 150px;
+            white-space: pre-line;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .result-title {
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Construction Material Calculator</h1>
+            <p>Calculate materials for walls, flooring, concrete, and paint</p>
+        </header>
+
+        <div class="grid">
+            <!-- Wall Section -->
+            <div class="card">
+                <h2>Wall Material Calculation</h2>
+                <div class="form-group">
+                    <label for="wallLength">Wall Length (m):</label>
+                    <input type="number" id="wallLength" step="0.01" placeholder="Enter wall length">
+                </div>
+                <div class="form-group">
+                    <label for="wallHeight">Wall Height (m):</label>
+                    <input type="number" id="wallHeight" step="0.01" placeholder="Enter wall height">
+                </div>
+                <div class="form-group">
+                    <label for="windowLength">Window Length (m):</label>
+                    <input type="number" id="windowLength" step="0.01" placeholder="Enter window length">
+                </div>
+                <div class="form-group">
+                    <label for="windowHeight">Window Height (m):</label>
+                    <input type="number" id="windowHeight" step="0.01" placeholder="Enter window height">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-calculate" onclick="calculateWall()">Calculate</button>
+                    <button class="btn-reset" onclick="resetWall()">Reset</button>
+                </div>
+                <div class="result-box" id="wallResult"></div>
+            </div>
+
+            <!-- Floor Section -->
+            <div class="card">
+                <h2>Floor Tile Calculation</h2>
+                <div class="form-group">
+                    <label for="floorLength">Floor Length (m):</label>
+                    <input type="number" id="floorLength" step="0.01" placeholder="Enter floor length">
+                </div>
+                <div class="form-group">
+                    <label for="floorWidth">Floor Width (m):</label>
+                    <input type="number" id="floorWidth" step="0.01" placeholder="Enter floor width">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-calculate" onclick="calculateFloor()">Calculate</button>
+                    <button class="btn-reset" onclick="resetFloor()">Reset</button>
+                </div>
+                <div class="result-box" id="floorResult"></div>
+            </div>
+
+            <!-- Concrete Section -->
+            <div class="card">
+                <h2>Concrete Calculation</h2>
+                <div class="form-group">
+                    <label for="concLength">Length (m):</label>
+                    <input type="number" id="concLength" step="0.01" placeholder="Enter length">
+                </div>
+                <div class="form-group">
+                    <label for="concWidth">Width (m):</label>
+                    <input type="number" id="concWidth" step="0.01" placeholder="Enter width">
+                </div>
+                <div class="form-group">
+                    <label for="concHeight">Height (m):</label>
+                    <input type="number" id="concHeight" step="0.01" placeholder="Enter height">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-calculate" onclick="calculateConcrete()">Calculate</button>
+                    <button class="btn-reset" onclick="resetConcrete()">Reset</button>
+                </div>
+                <div class="result-box" id="concreteResult"></div>
+            </div>
+
+            <!-- Paint Section -->
+            <div class="card">
+                <h2>Paint Calculation</h2>
+                <div class="form-group">
+                    <label for="paintLength">Wall Length (ft):</label>
+                    <input type="number" id="paintLength" step="0.01" placeholder="Enter wall length">
+                </div>
+                <div class="form-group">
+                    <label for="paintHeight">Wall Height (ft):</label>
+                    <input type="number" id="paintHeight" step="0.01" placeholder="Enter wall height">
+                </div>
+                <div class="form-group">
+                    <label for="coats">Number of Coats:</label>
+                    <input type="number" id="coats" step="1" placeholder="Enter number of coats">
+                </div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="nippon" onchange="updatePaint()"> Nippon Paint</label>
+                    <label><input type="checkbox" id="dulux" onchange="updatePaint()"> Dulux Paint</label>
+                    <label><input type="checkbox" id="jotun" onchange="updatePaint()"> Jotun Paint</label>
+                    <label><input type="checkbox" id="nipponCourt" onchange="updatePaint()"> Nippon Court Paint</label>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-calculate" onclick="calculatePaint()">Calculate</button>
+                    <button class="btn-reset" onclick="resetPaint()">Reset</button>
+                </div>
+                <div class="result-box" id="paintResult"></div>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2024 Construction Material Calculator. Deploy this file on GitHub Pages.
+        </footer>
+    </div>
+
+    <script>
+        const MATERIAL_CONSTANTS = {
+            cementDensity: 1440,
+            bagWeight: 50,
+            elaToM3: 1.308,
+            cementBagPerM3: 1440 / 50
+        };
+
+        function calculateWall() {
+            const length = parseFloat(document.getElementById('wallLength').value);
+            const height = parseFloat(document.getElementById('wallHeight').value);
+            const windowLength = parseFloat(document.getElementById('windowLength').value) || 0;
+            const windowHeight = parseFloat(document.getElementById('windowHeight').value) || 0;
+
+            if (isNaN(length) || isNaN(height) || length <= 0 || height <= 0) {
+                document.getElementById('wallResult').innerHTML = '<span class="result-title">Error:</span> Length and height must be greater than zero.';
+                return;
+            }
+
+            const c = MATERIAL_CONSTANTS;
+            const wallArea = length * height;
+            const windowArea = windowLength * windowHeight;
+            const totalArea = wallArea - windowArea;
+
+            const brickArea = 0.22 * 0.07;
+            const bricks = totalArea / brickArea;
+
+            const cementVolume = totalArea * 0.03 * (1 / 5);
+            const cementBags = cementVolume * c.cementBagPerM3;
+            const sandVolume = totalArea * 0.03 * (4 / 5);
+            const sandEla = sandVolume / c.elaToM3;
+
+            const plasterMortar = totalArea * 0.019;
+            const plasterCementBags = plasterMortar * (1 / 5) * c.cementBagPerM3;
+            const plasterSandEla = plasterMortar * (4 / 5) / c.elaToM3;
+
+            const resultText = 
+                `Wall Area: ${wallArea.toFixed(2)} m²\n` +
+                `Window Area: ${windowArea.toFixed(2)} m²\n` +
+                `Total Area: ${totalArea.toFixed(2)} m²\n\n` +
+                `--- Wall Construction ---\n` +
+                `Bricks Needed: ${Math.floor(bricks)}\n` +
+                `Cement: ${cementBags.toFixed(2)} bags\n` +
+                `Sand: ${sandEla.toFixed(2)} ela\n\n` +
+                `--- Plastering ---\n` +
+                `Cement: ${plasterCementBags.toFixed(2)} bags\n` +
+                `Sand: ${plasterSandEla.toFixed(2)} ela`;
+
+            document.getElementById('wallResult').innerHTML = `<span class="result-title">Results:</span>\n${resultText}`;
+        }
+
+        function calculateFloor() {
+            const length = parseFloat(document.getElementById('floorLength').value);
+            const width = parseFloat(document.getElementById('floorWidth').value);
+
+            if (isNaN(length) || isNaN(width) || length <= 0 || width <= 0) {
+                document.getElementById('floorResult').innerHTML = '<span class="result-title">Error:</span> Length and width must be greater than zero.';
+                return;
+            }
+
+            const c = MATERIAL_CONSTANTS;
+            const area = length * width;
+            const tileArea = 0.3 * 0.3;
+            const tiles = area / tileArea;
+            const mortarBed = area * 0.02;
+            const simenMortarBags = mortarBed * (1 / 5) * c.cementBagPerM3;
+            const sandMortarEla = (mortarBed * (4 / 5)) / c.elaToM3;
+            const adhesiveCementBags = (area * 0.005) * (c.cementDensity / 25);
+
+            const resultText = 
+                `Floor Area: ${area.toFixed(2)} m²\n` +
+                `Tiles Needed (1ft): ${Math.floor(tiles)}\n` +
+                `Tiles Needed (2ft): ${Math.floor(tiles / 2)}\n\n` +
+                `Cement: ${simenMortarBags.toFixed(2)} bags\n` +
+                `Sand: ${sandMortarEla.toFixed(2)} ela\n` +
+                `Adhesive Cement: ${adhesiveCementBags.toFixed(2)} bags`;
+
+            document.getElementById('floorResult').innerHTML = `<span class="result-title">Results:</span>\n${resultText}`;
+        }
+
+        function calculateConcrete() {
+            const length = parseFloat(document.getElementById('concLength').value);
+            const width = parseFloat(document.getElementById('concWidth').value);
+            const height = parseFloat(document.getElementById('concHeight').value);
+
+            if (isNaN(length) || isNaN(width) || isNaN(height) || length <= 0 || width <= 0 || height <= 0) {
+                document.getElementById('concreteResult').innerHTML = '<span class="result-title">Error:</span> Length, width, and height must be &gt; 0.';
+                return;
+            }
+
+            const cementRatio = 1/7;
+            const sandRatio = 2/7;
+            const aggRatio = 2/7;
+            const prices = {concrete: 300, cement: 25, sand: 100, batu: 100, brc: 100};
+            const area = length * width;
+            const volume = length * width * height;
+
+            const cementBags = volume * cementRatio * 28.25;
+            const sandEla = (volume * sandRatio) / 1.308;
+            const aggVol = volume * aggRatio;
+            const brcQty = area / (2.2 * 6);
+
+            const total = cementBags*prices.cement + sandEla*prices.sand + aggVol*prices.batu + brcQty*prices.brc;
+            const readymix = volume * prices.concrete;
+
+            const resultText = 
+                `Total Volume: ${volume.toFixed(2)} m³\n\n` +
+                `Ready-mix Price: RM ${readymix.toFixed(2)}\n\n` +
+                `--- Manual Mix ---\n` +
+                `Cement: ${cementBags.toFixed(2)} bags (RM ${(cementBags*prices.cement).toFixed(2)})\n` +
+                `Sand: ${sandEla.toFixed(2)} ela (RM ${(sandEla*prices.sand).toFixed(2)})\n` +
+                `Aggregate: ${aggVol.toFixed(2)} m³ (RM ${(aggVol*prices.batu).toFixed(2)})\n` +
+                `BRC: ${brcQty.toFixed(2)} unit (RM ${(brcQty*prices.brc).toFixed(2)})\n\n` +
+                `Grand Total: RM ${total.toFixed(2)}`;
+
+            document.getElementById('concreteResult').innerHTML = `<span class="result-title">Results:</span>\n${resultText}`;
+        }
+
+        let paintCov = 107;
+
+        function updatePaint() {
+            const nippon = document.getElementById('nippon').checked;
+            const dulux = document.getElementById('dulux').checked;
+            const jotun = document.getElementById('jotun').checked;
+            const nipponCourt = document.getElementById('nipponCourt').checked;
+
+            if (dulux) {
+                paintCov = 124;
+            } else if (jotun) {
+                paintCov = 113;
+            } else if (nippon || nipponCourt) {
+                paintCov = 107;
+            } else {
+                paintCov = 107;
+            }
+        }
+
+        function calculatePaint() {
+            const length = parseFloat(document.getElementById('paintLength').value);
+            const height = parseFloat(document.getElementById('paintHeight').value);
+            const coats = parseFloat(document.getElementById('coats').value);
+
+            if (isNaN(length) || isNaN(height) || isNaN(coats) || length <= 0 || height <= 0 || coats <= 0) {
+                document.getElementById('paintResult').innerHTML = '<span class="result-title">Error:</span> Values must be greater than zero.';
+                return;
+            }
+
+            const area = length * height;
+            const sealer = area / paintCov;
+            const paint = (area * coats) / paintCov;
+
+            const resultText = 
+                `Surface Area: ${area.toFixed(2)} sq ft\n` +
+                `Sealer Needed: ${sealer.toFixed(2)} litres\n` +
+                `Paint Needed (${Math.floor(coats)} coats): ${paint.toFixed(2)} litres`;
+
+            document.getElementById('paintResult').innerHTML = `<span class="result-title">Results:</span>\n${resultText}`;
+        }
+
+        function resetWall() {
+            document.getElementById('wallLength').value = '';
+            document.getElementById('wallHeight').value = '';
+            document.getElementById('windowLength').value = '';
+            document.getElementById('windowHeight').value = '';
+            document.getElementById('wallResult').innerHTML = '';
+        }
+
+        function resetFloor() {
+            document.getElementById('floorLength').value = '';
+            document.getElementById('floorWidth').value = '';
+            document.getElementById('floorResult').innerHTML = '';
+        }
+
+        function resetConcrete() {
+            document.getElementById('concLength').value = '';
+            document.getElementById('concWidth').value = '';
+            document.getElementById('concHeight').value = '';
+            document.getElementById('concreteResult').innerHTML = '';
+        }
+
+        function resetPaint() {
+            document.getElementById('paintLength').value = '';
+            document.getElementById('paintHeight').value = '';
+            document.getElementById('coats').value = '';
+            document.getElementById('nippon').checked = false;
+            document.getElementById('dulux').checked = false;
+            document.getElementById('jotun').checked = false;
+            document.getElementById('nipponCourt').checked = false;
+            paintCov = 107;
+            document.getElementById('paintResult').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
