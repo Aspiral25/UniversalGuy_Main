@@ -490,7 +490,7 @@
 
                 <!-- Floor Section -->
                 <div class="card">
-                    <h2><span data-key="floor-title">Kiraan Jubin Lantai</span> <button class="info-toggle" onclick="toggleInfo('floorInfo')" data-key="btn-formula2">Formula</button></h2>
+                    <h2><span data-key="floor-title">Kiraan Jubin Lantai</span> <button class="info-toggle" onclick="toggleInfo('floorInfo')" data-key="btn-formula">Formula</button></h2>
                     <div class="info-panel" id="floorInfo">
                         <h4 data-key="floor-legend1">Anggaran Jubin</h4>
                         <div class="formula" data-key="floor-formula1">Jubin Diperlukan = Luas Lantai ÷ (0.3m × 0.3m)</div>
@@ -512,15 +512,15 @@
                         <input type="number" id="floorWidth" step="0.01" data-ph="ph-floor-width">
                     </div>
                     <div class="btn-group">
-                        <button class="btn-calculate" onclick="calculateFloor()" data-key="btn-calculate2">Kira</button>
-                        <button class="btn-reset" onclick="resetFloor()" data-key="btn-reset2">Set Semula</button>
+                        <button class="btn-calculate" onclick="calculateFloor()" data-key="btn-calculate">Kira</button>
+                        <button class="btn-reset" onclick="resetFloor()" data-key="btn-reset">Set Semula</button>
                     </div>
                     <div class="result-box" id="floorResult"></div>
                 </div>
 
                 <!-- Concrete Section -->
                 <div class="card">
-                    <h2><span data-key="conc-title">Kiraan Konkrit</span> <button class="info-toggle" onclick="toggleInfo('concreteInfo')" data-key="btn-formula3">Formula</button></h2>
+                    <h2><span data-key="conc-title">Kiraan Konkrit</span> <button class="info-toggle" onclick="toggleInfo('concreteInfo')" data-key="btn-formula">Formula</button></h2>
                     <div class="info-panel" id="concreteInfo">
                         <h4 data-key="conc-legend1">Isipadu</h4>
                         <div class="formula" data-key="conc-formula1">Isipadu = Panjang × Lebar × Tinggi (m³)</div>
@@ -547,15 +547,15 @@
                         <input type="number" id="concHeight" step="0.01" data-ph="ph-conc-height">
                     </div>
                     <div class="btn-group">
-                        <button class="btn-calculate" onclick="calculateConcrete()" data-key="btn-calculate3">Kira</button>
-                        <button class="btn-reset" onclick="resetConcrete()" data-key="btn-reset3">Set Semula</button>
+                        <button class="btn-calculate" onclick="calculateConcrete()" data-key="btn-calculate">Kira</button>
+                        <button class="btn-reset" onclick="resetConcrete()" data-key="btn-reset">Set Semula</button>
                     </div>
                     <div class="result-box" id="concreteResult"></div>
                 </div>
 
                 <!-- Paint Section -->
                 <div class="card">
-                    <h2><span data-key="paint-title">Kiraan Cat</span> <button class="info-toggle" onclick="toggleInfo('paintInfo')" data-key="btn-formula4">Formula</button></h2>
+                    <h2><span data-key="paint-title">Kiraan Cat</span> <button class="info-toggle" onclick="toggleInfo('paintInfo')" data-key="btn-formula">Formula</button></h2>
                     <div class="info-panel" id="paintInfo">
                         <h4 data-key="paint-legend1">Kadar Liputan (per liter)</h4>
                         <div class="formula" data-key="paint-formula1">Nippon EasyWash / Court: 107 kps / liter</div>
@@ -568,11 +568,11 @@
                         <p class="note" data-key="paint-note2">Pengedap/primer diandaikan 1 lapisan tanpa mengira bilangan lapisan cat.</p>
                     </div>
                     <div class="form-group">
-                        <label for="paintLength" data-key="paint-length">Panjang Dinding (kps):</label>
+                        <label for="paintLength" data-key="paint-length">Panjang Dinding (kaki):</label>
                         <input type="number" id="paintLength" step="0.01" data-ph="ph-paint-length">
                     </div>
                     <div class="form-group">
-                        <label for="paintHeight" data-key="paint-height">Tinggi Dinding (kps):</label>
+                        <label for="paintHeight" data-key="paint-height">Tinggi Dinding (kaki):</label>
                         <input type="number" id="paintHeight" step="0.01" data-ph="ph-paint-height">
                     </div>
                     <div class="form-group">
@@ -586,8 +586,8 @@
                         <label><input type="checkbox" id="nipponCourt" onchange="updatePaint()"> <span data-key="paint-nippon-court">Cat Nippon Court</span></label>
                     </div>
                     <div class="btn-group">
-                        <button class="btn-calculate" onclick="calculatePaint()" data-key="btn-calculate4">Kira</button>
-                        <button class="btn-reset" onclick="resetPaint()" data-key="btn-reset4">Set Semula</button>
+                        <button class="btn-calculate" onclick="calculatePaint()" data-key="btn-calculate">Kira</button>
+                        <button class="btn-reset" onclick="resetPaint()" data-key="btn-reset">Set Semula</button>
                     </div>
                     <div class="result-box" id="paintResult"></div>
                 </div>
@@ -639,9 +639,9 @@
                     </div>
                     <div class="material-card">
                         <h4 data-key="mat-paint-title">Liputan Cat</h4>
-                        <p><b>Nippon:</b> 107 kps/liter</p>
-                        <p><b>Dulux:</b> 124 kps/liter</p>
-                        <p><b>Jotun:</b> 113 kps/liter</p>
+                        <p data-key="mat-paint-nippon"><b>Nippon:</b> 107 kps/liter</p>
+                        <p data-key="mat-paint-dulux"><b>Dulux:</b> 124 kps/liter</p>
+                        <p data-key="mat-paint-jotun"><b>Jotun:</b> 113 kps/liter</p>
                     </div>
                 </div>
             </div>
@@ -736,7 +736,6 @@
                 'btn-reset': 'Set Semula',
                 // Floor card
                 'floor-title': 'Kiraan Jubin Lantai',
-                'btn-formula2': 'Formula',
                 'floor-legend1': 'Anggaran Jubin',
                 'floor-formula1': 'Jubin Diperlukan = Luas Lantai ÷ (0.3m × 0.3m)',
                 'floor-note1': 'Saiz jubin standard 300mm × 300mm (1ft). Untuk jubin 600mm, bahagi dengan 2 keping.',
@@ -749,11 +748,8 @@
                 'floor-note3': 'Ketebalan lapisan pelekat: 5mm. Menggunakan beg pelekat 25kg.',
                 'floor-length': 'Panjang Lantai (m):',
                 'floor-width': 'Lebar Lantai (m):',
-                'btn-calculate2': 'Kira',
-                'btn-reset2': 'Set Semula',
                 // Concrete card
                 'conc-title': 'Kiraan Konkrit',
-                'btn-formula3': 'Formula',
                 'conc-legend1': 'Isipadu',
                 'conc-formula1': 'Isipadu = Panjang × Lebar × Tinggi (m³)',
                 'conc-legend2': 'Campuran Manual (nisbah 1:2:2)',
@@ -768,11 +764,8 @@
                 'conc-length': 'Panjang (m):',
                 'conc-width': 'Lebar (m):',
                 'conc-height': 'Tinggi (m):',
-                'btn-calculate3': 'Kira',
-                'btn-reset3': 'Set Semula',
                 // Paint card
                 'paint-title': 'Kiraan Cat',
-                'btn-formula4': 'Formula',
                 'paint-legend1': 'Kadar Liputan (per liter)',
                 'paint-formula1': 'Nippon EasyWash / Court: 107 kps / liter',
                 'paint-formula2': 'Dulux EasyClean: 124 kps / liter',
@@ -782,15 +775,13 @@
                 'paint-formula4': 'Pengedap = Luas Permukaan ÷ Kadar Liputan',
                 'paint-formula5': 'Cat = (Luas Permukaan × Lapisan) ÷ Kadar Liputan',
                 'paint-note2': 'Pengedap/primer diandaikan 1 lapisan tanpa mengira bilangan lapisan cat.',
-                'paint-length': 'Panjang Dinding (kps):',
-                'paint-height': 'Tinggi Dinding (kps):',
+                'paint-length': 'Panjang Dinding (kaki):',
+                'paint-height': 'Tinggi Dinding (kaki):',
                 'paint-coats': 'Bilangan Lapisan:',
                 'paint-nippon': 'Cat Nippon',
                 'paint-dulux': 'Cat Dulux',
                 'paint-jotun': 'Cat Jotun',
                 'paint-nippon-court': 'Cat Nippon Court',
-                'btn-calculate4': 'Kira',
-                'btn-reset4': 'Set Semula',
                 // Material Data section
                 'mat-title': 'Data Rujukan Bahan',
                 'mat-desc': 'Nilai standard yang digunakan dalam semua pengiraan di bawah. Variasi tempatan wujud — sentiasa sahkan dengan pembekal.',
@@ -823,6 +814,9 @@
                 'mat-size2': 'Saiz:',
                 'mat-price-ref4': 'Harga Rujukan:',
                 'mat-paint-title': 'Liputan Cat',
+                'mat-paint-nippon': '<b>Nippon:</b> 107 kps/liter',
+                'mat-paint-dulux': '<b>Dulux:</b> 124 kps/liter',
+                'mat-paint-jotun': '<b>Jotun:</b> 113 kps/liter',
                 // Formula Guide section
                 'ref-title': 'Panduan Rujukan Formula',
                 'ref-desc': 'Pecahan terperinci setiap persamaan yang digunakan dalam kalkulator. Memahami ini membolehkan anda menyesuaikan untuk keadaan tapak tertentu.',
@@ -941,7 +935,6 @@
                 'btn-reset': 'Reset',
                 // Floor card
                 'floor-title': 'Floor Tile Calculation',
-                'btn-formula2': 'Formula',
                 'floor-legend1': 'Tile Estimation',
                 'floor-formula1': 'Tiles Needed = Floor Area ÷ (0.3m × 0.3m)',
                 'floor-note1': 'Standard tile size 300mm × 300mm (1ft). For 600mm tiles, divide by 2 pieces.',
@@ -954,11 +947,8 @@
                 'floor-note3': 'Adhesive bed thickness: 5mm. Uses 25kg adhesive bags.',
                 'floor-length': 'Floor Length (m):',
                 'floor-width': 'Floor Width (m):',
-                'btn-calculate2': 'Calculate',
-                'btn-reset2': 'Reset',
                 // Concrete card
                 'conc-title': 'Concrete Calculation',
-                'btn-formula3': 'Formula',
                 'conc-legend1': 'Volume',
                 'conc-formula1': 'Volume = Length × Width × Height (m³)',
                 'conc-legend2': 'Manual Mix (1:2:2 ratio)',
@@ -973,11 +963,8 @@
                 'conc-length': 'Length (m):',
                 'conc-width': 'Width (m):',
                 'conc-height': 'Height (m):',
-                'btn-calculate3': 'Calculate',
-                'btn-reset3': 'Reset',
                 // Paint card
                 'paint-title': 'Paint Calculation',
-                'btn-formula4': 'Formula',
                 'paint-legend1': 'Coverage Rates (per litre)',
                 'paint-formula1': 'Nippon EasyWash / Court: 107 sq ft / litre',
                 'paint-formula2': 'Dulux EasyClean: 124 sq ft / litre',
@@ -1028,6 +1015,9 @@
                 'mat-size2': 'Size:',
                 'mat-price-ref4': 'Price Ref:',
                 'mat-paint-title': 'Paint Coverage',
+                'mat-paint-nippon': '<b>Nippon:</b> 107 sq ft/litre',
+                'mat-paint-dulux': '<b>Dulux:</b> 124 sq ft/litre',
+                'mat-paint-jotun': '<b>Jotun:</b> 113 sq ft/litre',
                 // Formula Guide section
                 'ref-title': 'Formula Reference Guide',
                 'ref-desc': 'Detailed breakdown of every equation used in the calculators. Understanding these lets you adjust for site-specific conditions.',
