@@ -1,6 +1,6 @@
 # Construction Material Calculator
 
-A web-based and desktop tool to estimate construction materials for **walls, flooring, concrete, and paint**. Built from a PyQt6 desktop app into a single-page web app deployable on GitHub Pages.
+A web-based and desktop tool to estimate construction materials for **walls, flooring, concrete, and paint**. 
 
 ## Features
 
@@ -60,19 +60,8 @@ All calculations follow standard construction mix ratios and material constants:
 
 For a full breakdown, open the web app and switch to the **Formula Guide** and **Material Data** tabs.
 
-## Deployment
-
-Deploy `index.html` on GitHub Pages:
-
-1. Push this repository to GitHub
-2. Go to **Settings → Pages**
-3. Select **Deploy from a branch** → choose `main` (or `master`)
-4. Your calculator will be live at `https://<username>.github.io/<repo-name>/`
-
-No build step or server required.
-
 ## Screenshots / Live Demo
-*(Add your deployed GitHub Pages link here)*
+*(https://aspiral25.github.io/BuildingHouseCalculator/)*
 
 ## Contributing
 Contributions are welcome — feel free to open issues or submit PRs for new material types, regions, or additional estimators.
@@ -86,8 +75,6 @@ MIT License. Free for personal and commercial use.
 
 If you found this tool useful, consider buying me a coffee:
 
-<a href="https://ko-fi.com/YOUR_KOFI_USERNAME" target="_blank">
+<a href="https://ko-fi.com/nsdotmy" target="_blank">
   <img src="https://storage.ko-fi.com/cdn/kofi2.png" alt="Buy me a coffee" style="height: 60px;">
 </a>
-
-Replace `YOUR_KOFI_USERNAME` with your actual Ko-fi username.
