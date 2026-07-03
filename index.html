@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Construction Material Calculator | Learn & Calculate</title>
+    <title>Kalkulator Bahan Binaan | Kira & Belajar</title>
     <style>
         * {
             margin: 0;
@@ -32,6 +32,7 @@
             color: white;
             border-radius: 12px;
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            position: relative;
         }
 
         header h1 {
@@ -379,52 +380,72 @@
             background: #e67e22;
             color: white;
         }
+
+        .lang-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: none;
+        }
+
+        .lang-btn:hover {
+            background: #2980b9;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Construction Material Calculator</h1>
-            <p>Estimate materials for <b>walls</b>, <b>flooring</b>, <b>concrete</b>, and <b>paint</b>. Learn the science behind every number.</p>
+            <h1><span data-key="title">Kalkulator Bahan Binaan</span></h1>
+            <p><span data-key="subtitle">Anggaran bahan untuk <b>dinding</b>, <b>lantai</b>, <b>konkrit</b>, dan <b>cat</b>. Pelajari sains di sebalik setiap pengiraan.</span></p>
             <div style="margin-top:10px;">
-                <span class="tag">Contracts</span>
-                <span class="tag">Materials</span>
-                <span class="tag">Costing</span>
-                <span class="tag">DIY</span>
+                <span class="tag" data-key="tag-contract">Kontrak</span>
+                <span class="tag" data-key="tag-materials">Bahan</span>
+                <span class="tag" data-key="tag-costing">Kos</span>
+                <span class="tag" data-key="tag-diy">DIY</span>
             </div>
+            <button id="langToggle" class="lang-btn" onclick="toggleLanguage()">EN</button>
         </header>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('calculators')">Calculators</button>
-            <button class="nav-tab" onclick="showSection('materials')">Material Data</button>
-            <button class="nav-tab" onclick="showSection('formulas')">Formula Guide</button>
+            <button class="nav-tab active" onclick="showSection('calculators')" data-key="nav-calculators">Kalkulator</button>
+            <button class="nav-tab" onclick="showSection('materials')" data-key="nav-materials">Data Bahan</button>
+            <button class="nav-tab" onclick="showSection('formulas')" data-key="nav-formulas">Panduan Formula</button>
         </div>
 
         <div id="section-calculators" class="section">
             <div class="learn-section">
-                <h2><span class="icon">🎓</span> How Construction Estimation Works</h2>
+                <h2><span class="icon">&#127891;</span><span data-key="learn-title"> Cara Anggaran Binaan Berfungsi</span></h2>
                 <div class="step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <p><b>Measure Areas and Volumes:</b> Every material estimate start with geometry — area for walls/floors, volume for concrete. Always subtract openings like windows and doors.</p>
+                        <p><b><span data-key="step1-title">Ukur Kawasan dan Isipadu:</span></b><span data-key="step1-text"> Setiap anggaran bahan bermula dengan geometri — luas untuk dinding/lantai, isipadu untuk konkrit. Sentiasa tolak bukaan seperti tingkap dan pintu.</span></p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <p><b>Apply Mix Ratios:</b> Mortar and concrete are never pure cement. Standard ratios like 1:4 (cement:sand) determine how much of each material is needed per cubic meter.</p>
+                        <p><b><span data-key="step2-title">Gunakan Nisbah Campuran:</span></b><span data-key="step2-text"> Mortar dan konkrit bukan simen tulen. Nisbah standard seperti 1:4 (simen:pasir) menentukan jumlah setiap bahan yang diperlukan setiap meter padu.</span></p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <p><b>Account for Wastage & Bond:</b> Real-world projects add 5&ndash;10% extra for spillage, uneven surfaces, and mortar joint thickness (usually 10&ndash;20mm).</p>
+                        <p><b><span data-key="step3-title">Ambil Kira Pembaziran & Ikatan:</span></b><span data-key="step3-text"> Projek sebenar menambah 5–10% lebihan untuk tumpahan, permukaan tidak rata, dan ketebalan sendi mortar (biasanya 10–20mm).</span></p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <p><b>Convert to Usable Units:</b> Cement is sold in 50kg bags, sand in local volumetric units (ela/brass), and tiles in piece counts. Conversion factors bridge the gap.</p>
+                        <p><b><span data-key="step4-title">Tukar kepada Unit Guna:</span></b><span data-key="step4-text"> Simen dijual dalam beg 50kg, pasir dalam unit volumetrik tempatan (ela/brass), dan jubin dalam kiraan keping. Faktor penukaran menjembatani jurang ini.</span></p>
                     </div>
                 </div>
             </div>
@@ -432,141 +453,141 @@
             <div class="grid">
                 <!-- Wall Section -->
                 <div class="card">
-                    <h2>Wall Material Calculation <button class="info-toggle" onclick="toggleInfo('wallInfo')">Formula</button></h2>
+                    <h2><span data-key="wall-title">Kiraan Bahan Dinding</span><button class="info-toggle" onclick="toggleInfo('wallInfo')" data-key="btn-formula">Formula</button></h2>
                     <div class="info-panel" id="wallInfo">
-                        <h4>Wall Construction</h4>
-                        <div class="formula">Bricks = Wall Area ÷ (0.22m × 0.07m)</div>
-                        <div class="formula">Cement (bags) = Wall Area × 0.03m × (1/5) × 28.8 bags/m³</div>
-                        <div class="formula">Sand (ela) = Wall Area × 0.03m × (4/5) ÷ 1.308</div>
-                        <p class="note">Assumes 230mm × 70mm brick, 30mm mortar thickness, 1:4 cement:sand ratio. 1m³ cement = 28.8 bags (1440kg ÷ 50kg).</p>
-                        <h4 style="margin-top:10px;">Plastering</h4>
-                        <div class="formula">Cement (bags) = Wall Area × 0.019m × (1/5) × 28.8</div>
-                        <div class="formula">Sand (ela) = Wall Area × 0.019m × (4/5) ÷ 1.308</div>
-                        <p class="note">Plaster thickness assumed at 19mm with same 1:4 mix ratio.</p>
+                        <h4 data-key="wall-legend">Pembinaan Dinding</h4>
+                        <div class="formula" data-key="wall-formula1">Bata = Luas Dinding ÷ (0.22m × 0.07m)</div>
+                        <div class="formula" data-key="wall-formula2">Simen (beg) = Luas Dinding × 0.03m × (1/5) × 28.8 beg/m³</div>
+                        <div class="formula" data-key="wall-formula3">Pasir (ela) = Luas Dinding × 0.03m × (4/5) ÷ 1.308</div>
+                        <p class="note" data-key="wall-note">Andaian bata 230mm × 70mm, ketebalan mortar 30mm, nisbah simen:pasir 1:4. 1m³ simen = 28.8 beg (1440kg ÷ 50kg).</p>
+                        <h4 style="margin-top:10px;" data-key="plaster-legend">Plaster</h4>
+                        <div class="formula" data-key="plaster-formula1">Simen (beg) = Luas Dinding × 0.019m × (1/5) × 28.8</div>
+                        <div class="formula" data-key="plaster-formula2">Pasir (ela) = Luas Dinding × 0.019m × (4/5) ÷ 1.308</div>
+                        <p class="note" data-key="plaster-note">Ketebalan plaster diandaikan 19mm dengan nisbah campuran 1:4 yang sama.</p>
                     </div>
                     <div class="form-group">
-                        <label for="wallLength">Wall Length (m):</label>
-                        <input type="number" id="wallLength" step="0.01" placeholder="Enter wall length">
+                        <label for="wallLength" data-key="wall-length">Panjang Dinding (m):</label>
+                        <input type="number" id="wallLength" step="0.01" data-ph="ph-wall-length">
                     </div>
                     <div class="form-group">
-                        <label for="wallHeight">Wall Height (m):</label>
-                        <input type="number" id="wallHeight" step="0.01" placeholder="Enter wall height">
+                        <label for="wallHeight" data-key="wall-height">Tinggi Dinding (m):</label>
+                        <input type="number" id="wallHeight" step="0.01" data-ph="ph-wall-height">
                     </div>
                     <div class="form-group">
-                        <label for="windowLength">Window Length (m):</label>
-                        <input type="number" id="windowLength" step="0.01" placeholder="Enter window length">
+                        <label for="windowLength" data-key="window-length">Panjang Tingkap (m):</label>
+                        <input type="number" id="windowLength" step="0.01" data-ph="ph-window-length">
                     </div>
                     <div class="form-group">
-                        <label for="windowHeight">Window Height (m):</label>
-                        <input type="number" id="windowHeight" step="0.01" placeholder="Enter window height">
+                        <label for="windowHeight" data-key="window-height">Tinggi Tingkap (m):</label>
+                        <input type="number" id="windowHeight" step="0.01" data-ph="ph-window-height">
                     </div>
                     <div class="btn-group">
-                        <button class="btn-calculate" onclick="calculateWall()">Calculate</button>
-                        <button class="btn-reset" onclick="resetWall()">Reset</button>
+                        <button class="btn-calculate" onclick="calculateWall()" data-key="btn-calculate">Kira</button>
+                        <button class="btn-reset" onclick="resetWall()" data-key="btn-reset">Set Semula</button>
                     </div>
                     <div class="result-box" id="wallResult"></div>
                 </div>
 
                 <!-- Floor Section -->
                 <div class="card">
-                    <h2>Floor Tile Calculation <button class="info-toggle" onclick="toggleInfo('floorInfo')">Formula</button></h2>
+                    <h2><span data-key="floor-title">Kiraan Jubin Lantai</span> <button class="info-toggle" onclick="toggleInfo('floorInfo')" data-key="btn-formula2">Formula</button></h2>
                     <div class="info-panel" id="floorInfo">
-                        <h4>Tile Estimation</h4>
-                        <div class="formula">Tiles Needed = Floor Area ÷ (0.3m × 0.3m)</div>
-                        <p class="note">Standard tile size 300mm × 300mm (1ft). For 600mm tiles, divide by 2 pieces.</p>
-                        <h4 style="margin-top:10px;">Mortar Bed</h4>
-                        <div class="formula">Cement (bags) = Floor Area × 0.02m × (1/5) × 28.8</div>
-                        <div class="formula">Sand (ela) = Floor Area × 0.02m × (4/5) ÷ 1.308</div>
-                        <p class="note">Mortar bed thickness: 20mm. 1:4 cement-sand mix.</p>
-                        <h4 style="margin-top:10px;">Adhesive</h4>
-                        <div class="formula">Adhesive Cement = Floor Area × 0.005m × (1440 ÷ 25)</div>
-                        <p class="note">Adhesive bed thickness: 5mm. Uses 25kg adhesive bags.</p>
+                        <h4 data-key="floor-legend1">Anggaran Jubin</h4>
+                        <div class="formula" data-key="floor-formula1">Jubin Diperlukan = Luas Lantai ÷ (0.3m × 0.3m)</div>
+                        <p class="note" data-key="floor-note1">Saiz jubin standard 300mm × 300mm (1ft). Untuk jubin 600mm, bahagi dengan 2 keping.</p>
+                        <h4 style="margin-top:10px;" data-key="floor-legend2">Lapisan Mortar</h4>
+                        <div class="formula" data-key="floor-formula2">Simen (beg) = Luas Lantai × 0.02m × (1/5) × 28.8</div>
+                        <div class="formula" data-key="floor-formula3">Pasir (ela) = Luas Lantai × 0.02m × (4/5) ÷ 1.308</div>
+                        <p class="note" data-key="floor-note2">Ketebalan lapisan mortar: 20mm. Campuran simen-pasir 1:4.</p>
+                        <h4 style="margin-top:10px;" data-key="floor-legend3">Pelekat</h4>
+                        <div class="formula" data-key="floor-formula4">Simen Pelekat = Luas Lantai × 0.005m × (1440 ÷ 25)</div>
+                        <p class="note" data-key="floor-note3">Ketebalan lapisan pelekat: 5mm. Menggunakan beg pelekat 25kg.</p>
                     </div>
                     <div class="form-group">
-                        <label for="floorLength">Floor Length (m):</label>
-                        <input type="number" id="floorLength" step="0.01" placeholder="Enter floor length">
+                        <label for="floorLength" data-key="floor-length">Panjang Lantai (m):</label>
+                        <input type="number" id="floorLength" step="0.01" data-ph="ph-floor-length">
                     </div>
                     <div class="form-group">
-                        <label for="floorWidth">Floor Width (m):</label>
-                        <input type="number" id="floorWidth" step="0.01" placeholder="Enter floor width">
+                        <label for="floorWidth" data-key="floor-width">Lebar Lantai (m):</label>
+                        <input type="number" id="floorWidth" step="0.01" data-ph="ph-floor-width">
                     </div>
                     <div class="btn-group">
-                        <button class="btn-calculate" onclick="calculateFloor()">Calculate</button>
-                        <button class="btn-reset" onclick="resetFloor()">Reset</button>
+                        <button class="btn-calculate" onclick="calculateFloor()" data-key="btn-calculate2">Kira</button>
+                        <button class="btn-reset" onclick="resetFloor()" data-key="btn-reset2">Set Semula</button>
                     </div>
                     <div class="result-box" id="floorResult"></div>
                 </div>
 
                 <!-- Concrete Section -->
                 <div class="card">
-                    <h2>Concrete Calculation <button class="info-toggle" onclick="toggleInfo('concreteInfo')">Formula</button></h2>
+                    <h2><span data-key="conc-title">Kiraan Konkrit</span> <button class="info-toggle" onclick="toggleInfo('concreteInfo')" data-key="btn-formula3">Formula</button></h2>
                     <div class="info-panel" id="concreteInfo">
-                        <h4>Volume</h4>
-                        <div class="formula">Volume = Length × Width × Height (m³)</div>
-                        <h4 style="margin-top:10px;">Manual Mix (1:2:2 ratio)</h4>
-                        <div class="formula">Cement = Volume × (1/7) × 28.25 bags</div>
-                        <div class="formula">Sand (ela) = Volume × (2/7) ÷ 1.308</div>
-                        <div class="formula">Aggregate (m³) = Volume × (2/7)</div>
-                        <div class="formula">BRC = Area ÷ (2.2m × 6m)</div>
-                        <p class="note">1:2:2 concrete mix. 1 bag = 28.25 units. BRC standard size 2.2m × 6m. Prices per unit in RM.</p>
-                        <h4 style="margin-top:10px;">Ready-mix Alternative</h4>
-                        <div class="formula">Ready-mix Cost = Volume × RM 300/m³</div>
-                        <p class="note">Use lorri gred 25 ready-mix as benchmark.</p>
+                        <h4 data-key="conc-legend1">Isipadu</h4>
+                        <div class="formula" data-key="conc-formula1">Isipadu = Panjang × Lebar × Tinggi (m³)</div>
+                        <h4 style="margin-top:10px;" data-key="conc-legend2">Campuran Manual (nisbah 1:2:2)</h4>
+                        <div class="formula" data-key="conc-formula2">Simen = Isipadu × (1/7) × 28.25 beg</div>
+                        <div class="formula" data-key="conc-formula3">Pasir (ela) = Isipadu × (2/7) ÷ 1.308</div>
+                        <div class="formula" data-key="conc-formula4">Batu (m³) = Isipadu × (2/7)</div>
+                        <div class="formula" data-key="conc-formula5">BRC = Luas ÷ (2.2m × 6m)</div>
+                        <p class="note" data-key="conc-note1">Campuran konkrit 1:2:2. 1 beg = 28.25 unit. BRC saiz standard 2.2m × 6m. Harga per unit dalam RM.</p>
+                        <h4 style="margin-top:10px;" data-key="conc-legend3">Alternatif Sedia Campur</h4>
+                        <div class="formula" data-key="conc-formula6">Kos Sedia Campur = Isipadu × RM 300/m³</div>
+                        <p class="note" data-key="conc-note2">Gunakan lorri gred 25 sedia campur sebagai penanda aras.</p>
                     </div>
                     <div class="form-group">
-                        <label for="concLength">Length (m):</label>
-                        <input type="number" id="concLength" step="0.01" placeholder="Enter length">
+                        <label for="concLength" data-key="conc-length">Panjang (m):</label>
+                        <input type="number" id="concLength" step="0.01" data-ph="ph-conc-length">
                     </div>
                     <div class="form-group">
-                        <label for="concWidth">Width (m):</label>
-                        <input type="number" id="concWidth" step="0.01" placeholder="Enter width">
+                        <label for="concWidth" data-key="conc-width">Lebar (m):</label>
+                        <input type="number" id="concWidth" step="0.01" data-ph="ph-conc-width">
                     </div>
                     <div class="form-group">
-                        <label for="concHeight">Height (m):</label>
-                        <input type="number" id="concHeight" step="0.01" placeholder="Enter height">
+                        <label for="concHeight" data-key="conc-height">Tinggi (m):</label>
+                        <input type="number" id="concHeight" step="0.01" data-ph="ph-conc-height">
                     </div>
                     <div class="btn-group">
-                        <button class="btn-calculate" onclick="calculateConcrete()">Calculate</button>
-                        <button class="btn-reset" onclick="resetConcrete()">Reset</button>
+                        <button class="btn-calculate" onclick="calculateConcrete()" data-key="btn-calculate3">Kira</button>
+                        <button class="btn-reset" onclick="resetConcrete()" data-key="btn-reset3">Set Semula</button>
                     </div>
                     <div class="result-box" id="concreteResult"></div>
                 </div>
 
                 <!-- Paint Section -->
                 <div class="card">
-                    <h2>Paint Calculation <button class="info-toggle" onclick="toggleInfo('paintInfo')">Formula</button></h2>
+                    <h2><span data-key="paint-title">Kiraan Cat</span> <button class="info-toggle" onclick="toggleInfo('paintInfo')" data-key="btn-formula4">Formula</button></h2>
                     <div class="info-panel" id="paintInfo">
-                        <h4>Coverage Rates (per litre)</h4>
-                        <div class="formula">Nippon EasyWash / Court: 107 sq ft / litre</div>
-                        <div class="formula">Dulux EasyClean: 124 sq ft / litre</div>
-                        <div class="formula">Jotun Essence: 113 sq ft / litre</div>
-                        <p class="note">Coverage based on 2-coat application on primed walls.</p>
-                        <h4 style="margin-top:10px;">Calculations</h4>
-                        <div class="formula">Sealer = Surface Area ÷ Coverage Rate</div>
-                        <div class="formula">Paint = (Surface Area × Coats) ÷ Coverage Rate</div>
-                        <p class="note">Sealer/primer assumed as 1 coat regardless of paint coats.</p>
+                        <h4 data-key="paint-legend1">Kadar Liputan (per liter)</h4>
+                        <div class="formula" data-key="paint-formula1">Nippon EasyWash / Court: 107 kps / liter</div>
+                        <div class="formula" data-key="paint-formula2">Dulux EasyClean: 124 kps / liter</div>
+                        <div class="formula" data-key="paint-formula3">Jotun Essence: 113 kps / liter</div>
+                        <p class="note" data-key="paint-note1">Liputan berdasarkan 2 lapisan pada dinding yang telah disapu primer.</p>
+                        <h4 style="margin-top:10px;" data-key="paint-legend2">Pengiraan</h4>
+                        <div class="formula" data-key="paint-formula4">Pengedap = Luas Permukaan ÷ Kadar Liputan</div>
+                        <div class="formula" data-key="paint-formula5">Cat = (Luas Permukaan × Lapisan) ÷ Kadar Liputan</div>
+                        <p class="note" data-key="paint-note2">Pengedap/primer diandaikan 1 lapisan tanpa mengira bilangan lapisan cat.</p>
                     </div>
                     <div class="form-group">
-                        <label for="paintLength">Wall Length (ft):</label>
-                        <input type="number" id="paintLength" step="0.01" placeholder="Enter wall length">
+                        <label for="paintLength" data-key="paint-length">Panjang Dinding (kps):</label>
+                        <input type="number" id="paintLength" step="0.01" data-ph="ph-paint-length">
                     </div>
                     <div class="form-group">
-                        <label for="paintHeight">Wall Height (ft):</label>
-                        <input type="number" id="paintHeight" step="0.01" placeholder="Enter wall height">
+                        <label for="paintHeight" data-key="paint-height">Tinggi Dinding (kps):</label>
+                        <input type="number" id="paintHeight" step="0.01" data-ph="ph-paint-height">
                     </div>
                     <div class="form-group">
-                        <label for="coats">Number of Coats:</label>
-                        <input type="number" id="coats" step="1" placeholder="Enter number of coats">
+                        <label for="coats" data-key="paint-coats">Bilangan Lapisan:</label>
+                        <input type="number" id="coats" step="1" data-ph="ph-paint-coats">
                     </div>
                     <div class="checkbox-group">
-                        <label><input type="checkbox" id="nippon" onchange="updatePaint()"> Nippon Paint</label>
-                        <label><input type="checkbox" id="dulux" onchange="updatePaint()"> Dulux Paint</label>
-                        <label><input type="checkbox" id="jotun" onchange="updatePaint()"> Jotun Paint</label>
-                        <label><input type="checkbox" id="nipponCourt" onchange="updatePaint()"> Nippon Court Paint</label>
+                        <label><input type="checkbox" id="nippon" onchange="updatePaint()"> <span data-key="paint-nippon">Cat Nippon</span></label>
+                        <label><input type="checkbox" id="dulux" onchange="updatePaint()"> <span data-key="paint-dulux">Cat Dulux</span></label>
+                        <label><input type="checkbox" id="jotun" onchange="updatePaint()"> <span data-key="paint-jotun">Cat Jotun</span></label>
+                        <label><input type="checkbox" id="nipponCourt" onchange="updatePaint()"> <span data-key="paint-nippon-court">Cat Nippon Court</span></label>
                     </div>
                     <div class="btn-group">
-                        <button class="btn-calculate" onclick="calculatePaint()">Calculate</button>
-                        <button class="btn-reset" onclick="resetPaint()">Reset</button>
+                        <button class="btn-calculate" onclick="calculatePaint()" data-key="btn-calculate4">Kira</button>
+                        <button class="btn-reset" onclick="resetPaint()" data-key="btn-reset4">Set Semula</button>
                     </div>
                     <div class="result-box" id="paintResult"></div>
                 </div>
@@ -575,52 +596,52 @@
 
         <div id="section-materials" class="section" style="display:none;">
             <div class="learn-section">
-                <h2><span class="icon">🧱</span> Material Reference Data</h2>
-                <p style="margin-bottom:15px;">Standard values used in all calculations below. Local variations exist — always verify with suppliers.</p>
+                <h2><span class="icon">&#129521;</span> <span data-key="mat-title">Data Rujukan Bahan</span></h2>
+                <p style="margin-bottom:15px;" data-key="mat-desc">Nilai standard yang digunakan dalam semua pengiraan di bawah. Variasi tempatan wujud — sentiasa sahkan dengan pembekal.</p>
                 <div class="material-grid">
                     <div class="material-card">
-                        <h4>Cement (Portland)</h4>
-                        <p><b>Bulk Density:</b> 1440 kg/m³</p>
-                        <p><b>Bag Weight:</b> 50 kg</p>
-                        <p><b>Bags per m³:</b> 28.8 bags</p>
-                        <p><b>Price Ref:</b> RM 25/bag</p>
+                        <h4 data-key="mat-cement-title">Simen (Portland)</h4>
+                        <p><b data-key="mat-bulk-density">Ketumpatan Pukal:</b> 1440 kg/m³</p>
+                        <p><b data-key="mat-bag-weight">Berat Beg:</b> 50 kg</p>
+                        <p><b data-key="mat-bags-per-m3">Beg per m³:</b> 28.8 <span data-key="mat-bags">beg</span></p>
+                        <p><b data-key="mat-price-ref">Harga Rujukan:</b> RM 25/<span data-key="mat-per-bag">beg</span></p>
                     </div>
                     <div class="material-card">
-                        <h4>Sand (Fine Aggregate)</h4>
-                        <p><b>Conversion:</b> 1 ela = 1.308 m³</p>
-                        <p><b>Price Ref:</b> RM 100/ela</p>
+                        <h4 data-key="mat-sand-title">Pasir (Agregat Halus)</h4>
+                        <p><b data-key="mat-conversion">Penukaran:</b> 1 ela = 1.308 m³</p>
+                        <p><b data-key="mat-price-ref2">Harga Rujukan:</b> RM 100/ela</p>
                     </div>
                     <div class="material-card">
-                        <h4>Brick (Standard)</h4>
-                        <p><b>Size:</b> 230mm × 70mm × 100mm</p>
-                        <p><b>Face Area:</b> 0.22m × 0.07m = 0.0154 m²</p>
+                        <h4 data-key="mat-brick-title">Bata (Standard)</h4>
+                        <p><b data-key="mat-size">Saiz:</b> 230mm × 70mm × 100mm</p>
+                        <p><b data-key="mat-face-area">Luas Muka:</b> 0.22m × 0.07m = 0.0154 m²</p>
                     </div>
                     <div class="material-card">
-                        <h4>Tile</h4>
-                        <p><b>1ft Size:</b> 300mm × 300mm = 0.09 m²</p>
-                        <p><b>2ft Size:</b> 600mm × 600mm = 0.36 m²</p>
+                        <h4 data-key="mat-tile-title">Jubin</h4>
+                        <p><b data-key="mat-tile-1ft">Saiz 1ft:</b> 300mm × 300mm = 0.09 m²</p>
+                        <p><b data-key="mat-tile-2ft">Saiz 2ft:</b> 600mm × 600mm = 0.36 m²</p>
                     </div>
                     <div class="material-card">
-                        <h4>Adhesive Cement</h4>
-                        <p><b>Bag Weight:</b> 25 kg</p>
-                        <p><b>Bags per m³:</b> 57.6 bags</p>
+                        <h4 data-key="mat-adhesive-title">Simen Pelekat</h4>
+                        <p><b data-key="mat-bag-weight2">Berat Beg:</b> 25 kg</p>
+                        <p><b data-key="mat-bags-per-m3b">Beg per m³:</b> 57.6 <span data-key="mat-bags2">beg</span></p>
                     </div>
                     <div class="material-card">
-                        <h4>Aggregate (Batu 3/4)</h4>
-                        <p><b>Price Ref:</b> RM 100/ela</p>
-                        <p><b>Mix Ratio:</b> 2 parts in 1:2:2 concrete</p>
+                        <h4 data-key="mat-aggregate-title">Batu (Batu 3/4)</h4>
+                        <p><b data-key="mat-price-ref3">Harga Rujukan:</b> RM 100/ela</p>
+                        <p><b data-key="mat-mix-ratio">Nisbah Campuran:</b> <span data-key="mat-mix-ratio-val">2 bahagian dalam konkrit 1:2:2</span></p>
                     </div>
                     <div class="material-card">
-                        <h4>BRC (Reinforcing Mesh)</h4>
-                        <p><b>Type:</b> A6 JKR Spec</p>
-                        <p><b>Size:</b> 2.2m × 6m</p>
-                        <p><b>Price Ref:</b> RM 100/unit</p>
+                        <h4 data-key="mat-brc-title">BRC (Jejaring Pengukuhan)</h4>
+                        <p><b data-key="mat-type">Jenis:</b> A6 JKR Spec</p>
+                        <p><b data-key="mat-size2">Saiz:</b> 2.2m × 6m</p>
+                        <p><b data-key="mat-price-ref4">Harga Rujukan:</b> RM 100/unit</p>
                     </div>
                     <div class="material-card">
-                        <h4>Paint Coverage</h4>
-                        <p><b>Nippon:</b> 107 sq ft/litre</p>
-                        <p><b>Dulux:</b> 124 sq ft/litre</p>
-                        <p><b>Jotun:</b> 113 sq ft/litre</p>
+                        <h4 data-key="mat-paint-title">Liputan Cat</h4>
+                        <p><b>Nippon:</b> 107 kps/liter</p>
+                        <p><b>Dulux:</b> 124 kps/liter</p>
+                        <p><b>Jotun:</b> 113 kps/liter</p>
                     </div>
                 </div>
             </div>
@@ -628,47 +649,506 @@
 
         <div id="section-formulas" class="section" style="display:none;">
             <div class="learn-section">
-                <h2><span class="icon">📐</span> Formula Reference Guide</h2>
-                <p style="margin-bottom:20px;">Detailed breakdown of every equation used in the calculators. Understanding these lets you adjust for site-specific conditions.</p>
+                <h2><span class="icon">&#128208;</span> <span data-key="ref-title">Panduan Rujukan Formula</span></h2>
+                <p style="margin-bottom:20px;" data-key="ref-desc">Pecahan terperinci setiap persamaan yang digunakan dalam kalkulator. Memahami ini membolehkan anda menyesuaikan untuk keadaan tapak tertentu.</p>
 
-                <h3>WALL & PLASTER</h3>
-                <div class="formula">Gross Wall Area = Length × Height (m²)</div>
-                <div class="formula">Net Wall Area = Gross Area − Window Area (m²)</div>
-                <div class="formula">Brick Count = Net Area ÷ Brick Face Area</div>
-                <div class="formula">Cement Volume = Net Area × Mortar Thickness × Cement Fraction</div>
-                <div class="formula">Cement Bags = Cement Volume × Density ÷ Bag Weight</div>
-                <div class="formula">Sand Volume = Cement Volume × (Sand Fraction ÷ Cement Fraction)</div>
-                <div class="formula">Sand Ela = Sand Volume ÷ 1.308</div>
+                <h3 data-key="ref-wall-header">DINDING & PLASTER</h3>
+                <div class="formula" data-key="ref-wall-f1">Luas Kasar Dinding = Panjang × Tinggi (m²)</div>
+                <div class="formula" data-key="ref-wall-f2">Luas Bersih Dinding = Luas Kasar − Luas Tingkap (m²)</div>
+                <div class="formula" data-key="ref-wall-f3">Kiraan Bata = Luas Bersih ÷ Luas Muka Bata</div>
+                <div class="formula" data-key="ref-wall-f4">Isipadu Simen = Luas Bersih × Ketebalan Mortar × Pecahan Simen</div>
+                <div class="formula" data-key="ref-wall-f5">Beg Simen = Isipadu Simen × Ketumpatan ÷ Berat Beg</div>
+                <div class="formula" data-key="ref-wall-f6">Isipadu Pasir = Isipadu Simen × (Pecahan Pasir ÷ Pecahan Simen)</div>
+                <div class="formula" data-key="ref-wall-f7">Pasir Ela = Isipadu Pasir ÷ 1.308</div>
 
-                <h3 style="margin-top:20px;">FLOOR TILES</h3>
-                <div class="formula">Tile Count = Floor Area ÷ Single Tile Area</div>
-                <div class="formula">Mortar Cement Bags = Floor Area × Bed Thickness × Cement Fraction × Density</div>
-                <div class="formula">Adhesive Cement = Floor Area × Adh Thickness × Density ÷ Adh Bag Weight</div>
+                <h3 style="margin-top:20px;" data-key="ref-floor-header">JUBIN LANTAI</h3>
+                <div class="formula" data-key="ref-floor-f1">Kiraan Jubin = Luas Lantai ÷ Luas Satu Jubin</div>
+                <div class="formula" data-key="ref-floor-f2">Beg Simen Mortar = Luas Lantai × Ketebalan Lapisan × Pecahan Simen × Ketumpatan</div>
+                <div class="formula" data-key="ref-floor-f3">Simen Pelekat = Luas Lantai × Ketebalan Pelekat × Ketumpatan ÷ Berat Beg Pelekat</div>
 
-                <h3 style="margin-top:20px;">CONCRETE</h3>
-                <div class="formula">Concrete Volume = L × W × H (m³)</div>
-                <div class="formula">Cement Bags = Volume × (Cement Ratio ÷ Total Ratio) × Bags per m³</div>
-                <div class="formula">Sand / Aggregate = Volume × Material Ratio</div>
-                <div class="formula">BRC Quantity = Slab Area ÷ (2.2m × 6m)</div>
-                <div class="formula">Total Cost = Σ(Quantity × Unit Price)</div>
+                <h3 style="margin-top:20px;" data-key="ref-conc-header">KONKRIT</h3>
+                <div class="formula" data-key="ref-conc-f1">Isipadu Konkrit = P × L × T (m³)</div>
+                <div class="formula" data-key="ref-conc-f2">Beg Simen = Isipadu × (Nisbah Simen ÷ Jumlah Nisbah) × Beg per m³</div>
+                <div class="formula" data-key="ref-conc-f3">Pasir / Batu = Isipadu × Nisbah Bahan</div>
+                <div class="formula" data-key="ref-conc-f4">Kuantiti BRC = Luas Papak ÷ (2.2m × 6m)</div>
+                <div class="formula" data-key="ref-conc-f5">Jumlah Kos = Σ(Kuantiti × Harga Unit)</div>
 
-                <h3 style="margin-top:20px;">PAINT</h3>
-                <div class="formula">Surface Area = Wall Length × Wall Height (sq ft)</div>
-                <div class="formula">Sealer Litres = Surface Area ÷ Coverage Rate</div>
-                <div class="formula">Paint Litres = (Surface Area × Coats) ÷ Coverage Rate</div>
+                <h3 style="margin-top:20px;" data-key="ref-paint-header">CAT</h3>
+                <div class="formula" data-key="ref-paint-f1">Luas Permukaan = Panjang Dinding × Tinggi Dinding (kps)</div>
+                <div class="formula" data-key="ref-paint-f2">Liter Pengedap = Luas Permukaan ÷ Kadar Liputan</div>
+                <div class="formula" data-key="ref-paint-f3">Liter Cat = (Luas Permukaan × Lapisan) ÷ Kadar Liputan</div>
 
-                <div class="note" style="margin-top:20px;">
-                    <b>Tip:</b> Add 5&ndash;10% overrun to all material quantities for wastage, breakage, and irregular surfaces in real construction sites.
+                <div class="note" style="margin-top:20px;" data-key="ref-tip">
+                    <b>Tip:</b> Tambah 5–10% lebihan pada semua kuantiti bahan untuk pembaziran, kerosakan, dan permukaan tidak rata di tapak pembinaan sebenar.
                 </div>
             </div>
         </div>
 
         <footer>
-            Construction Material Calculator &copy; 2024. Educational tool for contractors, builders, and DIY enthusiasts. Deployed on GitHub Pages.
+            <span data-key="footer">Kalkulator Bahan Binaan &copy; 2024. Alat pendidikan untuk kontraktor, pembina, dan peminat DIY. Digunakan di GitHub Pages.</span>
         </footer>
     </div>
 
     <script>
+        // ==================== TRANSLATION SYSTEM ====================
+        const translations = {
+            ms: {
+                // Page title
+                'page-title': 'Kalkulator Bahan Binaan | Kira & Belajar',
+                // Header
+                'title': 'Kalkulator Bahan Binaan',
+                'subtitle': 'Anggaran bahan untuk <b>dinding</b>, <b>lantai</b>, <b>konkrit</b>, dan <b>cat</b>. Pelajari sains di sebalik setiap pengiraan.',
+                'tag-contract': 'Kontrak',
+                'tag-materials': 'Bahan',
+                'tag-costing': 'Kos',
+                'tag-diy': 'DIY',
+                // Nav
+                'nav-calculators': 'Kalkulator',
+                'nav-materials': 'Data Bahan',
+                'nav-formulas': 'Panduan Formula',
+                // Learning steps
+                'learn-title': ' Cara Anggaran Binaan Berfungsi',
+                'step1-title': 'Ukur Kawasan dan Isipadu:',
+                'step1-text': ' Setiap anggaran bahan bermula dengan geometri — luas untuk dinding/lantai, isipadu untuk konkrit. Sentiasa tolak bukaan seperti tingkap dan pintu.',
+                'step2-title': 'Gunakan Nisbah Campuran:',
+                'step2-text': ' Mortar dan konkrit bukan simen tulen. Nisbah standard seperti 1:4 (simen:pasir) menentukan jumlah setiap bahan yang diperlukan setiap meter padu.',
+                'step3-title': 'Ambil Kira Pembaziran & Ikatan:',
+                'step3-text': ' Projek sebenar menambah 5–10% lebihan untuk tumpahan, permukaan tidak rata, dan ketebalan sendi mortar (biasanya 10–20mm).',
+                'step4-title': 'Tukar kepada Unit Guna:',
+                'step4-text': ' Simen dijual dalam beg 50kg, pasir dalam unit volumetrik tempatan (ela/brass), dan jubin dalam kiraan keping. Faktor penukaran menjembatani jurang ini.',
+                // Wall card
+                'wall-title': 'Kiraan Bahan Dinding',
+                'btn-formula': 'Formula',
+                'wall-legend': 'Pembinaan Dinding',
+                'wall-formula1': 'Bata = Luas Dinding ÷ (0.22m × 0.07m)',
+                'wall-formula2': 'Simen (beg) = Luas Dinding × 0.03m × (1/5) × 28.8 beg/m³',
+                'wall-formula3': 'Pasir (ela) = Luas Dinding × 0.03m × (4/5) ÷ 1.308',
+                'wall-note': 'Andaian bata 230mm × 70mm, ketebalan mortar 30mm, nisbah simen:pasir 1:4. 1m³ simen = 28.8 beg (1440kg ÷ 50kg).',
+                'plaster-legend': 'Plaster',
+                'plaster-formula1': 'Simen (beg) = Luas Dinding × 0.019m × (1/5) × 28.8',
+                'plaster-formula2': 'Pasir (ela) = Luas Dinding × 0.019m × (4/5) ÷ 1.308',
+                'plaster-note': 'Ketebalan plaster diandaikan 19mm dengan nisbah campuran 1:4 yang sama.',
+                'wall-length': 'Panjang Dinding (m):',
+                'wall-height': 'Tinggi Dinding (m):',
+                'window-length': 'Panjang Tingkap (m):',
+                'window-height': 'Tinggi Tingkap (m):',
+                'btn-calculate': 'Kira',
+                'btn-reset': 'Set Semula',
+                // Floor card
+                'floor-title': 'Kiraan Jubin Lantai',
+                'btn-formula2': 'Formula',
+                'floor-legend1': 'Anggaran Jubin',
+                'floor-formula1': 'Jubin Diperlukan = Luas Lantai ÷ (0.3m × 0.3m)',
+                'floor-note1': 'Saiz jubin standard 300mm × 300mm (1ft). Untuk jubin 600mm, bahagi dengan 2 keping.',
+                'floor-legend2': 'Lapisan Mortar',
+                'floor-formula2': 'Simen (beg) = Luas Lantai × 0.02m × (1/5) × 28.8',
+                'floor-formula3': 'Pasir (ela) = Luas Lantai × 0.02m × (4/5) ÷ 1.308',
+                'floor-note2': 'Ketebalan lapisan mortar: 20mm. Campuran simen-pasir 1:4.',
+                'floor-legend3': 'Pelekat',
+                'floor-formula4': 'Simen Pelekat = Luas Lantai × 0.005m × (1440 ÷ 25)',
+                'floor-note3': 'Ketebalan lapisan pelekat: 5mm. Menggunakan beg pelekat 25kg.',
+                'floor-length': 'Panjang Lantai (m):',
+                'floor-width': 'Lebar Lantai (m):',
+                'btn-calculate2': 'Kira',
+                'btn-reset2': 'Set Semula',
+                // Concrete card
+                'conc-title': 'Kiraan Konkrit',
+                'btn-formula3': 'Formula',
+                'conc-legend1': 'Isipadu',
+                'conc-formula1': 'Isipadu = Panjang × Lebar × Tinggi (m³)',
+                'conc-legend2': 'Campuran Manual (nisbah 1:2:2)',
+                'conc-formula2': 'Simen = Isipadu × (1/7) × 28.25 beg',
+                'conc-formula3': 'Pasir (ela) = Isipadu × (2/7) ÷ 1.308',
+                'conc-formula4': 'Batu (m³) = Isipadu × (2/7)',
+                'conc-formula5': 'BRC = Luas ÷ (2.2m × 6m)',
+                'conc-note1': 'Campuran konkrit 1:2:2. 1 beg = 28.25 unit. BRC saiz standard 2.2m × 6m. Harga per unit dalam RM.',
+                'conc-legend3': 'Alternatif Sedia Campur',
+                'conc-formula6': 'Kos Sedia Campur = Isipadu × RM 300/m³',
+                'conc-note2': 'Gunakan lorri gred 25 sedia campur sebagai penanda aras.',
+                'conc-length': 'Panjang (m):',
+                'conc-width': 'Lebar (m):',
+                'conc-height': 'Tinggi (m):',
+                'btn-calculate3': 'Kira',
+                'btn-reset3': 'Set Semula',
+                // Paint card
+                'paint-title': 'Kiraan Cat',
+                'btn-formula4': 'Formula',
+                'paint-legend1': 'Kadar Liputan (per liter)',
+                'paint-formula1': 'Nippon EasyWash / Court: 107 kps / liter',
+                'paint-formula2': 'Dulux EasyClean: 124 kps / liter',
+                'paint-formula3': 'Jotun Essence: 113 kps / liter',
+                'paint-note1': 'Liputan berdasarkan 2 lapisan pada dinding yang telah disapu primer.',
+                'paint-legend2': 'Pengiraan',
+                'paint-formula4': 'Pengedap = Luas Permukaan ÷ Kadar Liputan',
+                'paint-formula5': 'Cat = (Luas Permukaan × Lapisan) ÷ Kadar Liputan',
+                'paint-note2': 'Pengedap/primer diandaikan 1 lapisan tanpa mengira bilangan lapisan cat.',
+                'paint-length': 'Panjang Dinding (kps):',
+                'paint-height': 'Tinggi Dinding (kps):',
+                'paint-coats': 'Bilangan Lapisan:',
+                'paint-nippon': 'Cat Nippon',
+                'paint-dulux': 'Cat Dulux',
+                'paint-jotun': 'Cat Jotun',
+                'paint-nippon-court': 'Cat Nippon Court',
+                'btn-calculate4': 'Kira',
+                'btn-reset4': 'Set Semula',
+                // Material Data section
+                'mat-title': 'Data Rujukan Bahan',
+                'mat-desc': 'Nilai standard yang digunakan dalam semua pengiraan di bawah. Variasi tempatan wujud — sentiasa sahkan dengan pembekal.',
+                'mat-cement-title': 'Simen (Portland)',
+                'mat-bulk-density': 'Ketumpatan Pukal:',
+                'mat-bag-weight': 'Berat Beg:',
+                'mat-bags-per-m3': 'Beg per m³:',
+                'mat-bags': 'beg',
+                'mat-price-ref': 'Harga Rujukan:',
+                'mat-per-bag': 'beg',
+                'mat-sand-title': 'Pasir (Agregat Halus)',
+                'mat-conversion': 'Penukaran:',
+                'mat-price-ref2': 'Harga Rujukan:',
+                'mat-brick-title': 'Bata (Standard)',
+                'mat-size': 'Saiz:',
+                'mat-face-area': 'Luas Muka:',
+                'mat-tile-title': 'Jubin',
+                'mat-tile-1ft': 'Saiz 1ft:',
+                'mat-tile-2ft': 'Saiz 2ft:',
+                'mat-adhesive-title': 'Simen Pelekat',
+                'mat-bag-weight2': 'Berat Beg:',
+                'mat-bags-per-m3b': 'Beg per m³:',
+                'mat-bags2': 'beg',
+                'mat-aggregate-title': 'Batu (Batu 3/4)',
+                'mat-price-ref3': 'Harga Rujukan:',
+                'mat-mix-ratio': 'Nisbah Campuran:',
+                'mat-mix-ratio-val': '2 bahagian dalam konkrit 1:2:2',
+                'mat-brc-title': 'BRC (Jejaring Pengukuhan)',
+                'mat-type': 'Jenis:',
+                'mat-size2': 'Saiz:',
+                'mat-price-ref4': 'Harga Rujukan:',
+                'mat-paint-title': 'Liputan Cat',
+                // Formula Guide section
+                'ref-title': 'Panduan Rujukan Formula',
+                'ref-desc': 'Pecahan terperinci setiap persamaan yang digunakan dalam kalkulator. Memahami ini membolehkan anda menyesuaikan untuk keadaan tapak tertentu.',
+                'ref-wall-header': 'DINDING & PLASTER',
+                'ref-wall-f1': 'Luas Kasar Dinding = Panjang × Tinggi (m²)',
+                'ref-wall-f2': 'Luas Bersih Dinding = Luas Kasar − Luas Tingkap (m²)',
+                'ref-wall-f3': 'Kiraan Bata = Luas Bersih ÷ Luas Muka Bata',
+                'ref-wall-f4': 'Isipadu Simen = Luas Bersih × Ketebalan Mortar × Pecahan Simen',
+                'ref-wall-f5': 'Beg Simen = Isipadu Simen × Ketumpatan ÷ Berat Beg',
+                'ref-wall-f6': 'Isipadu Pasir = Isipadu Simen × (Pecahan Pasir ÷ Pecahan Simen)',
+                'ref-wall-f7': 'Pasir Ela = Isipadu Pasir ÷ 1.308',
+                'ref-floor-header': 'JUBIN LANTAI',
+                'ref-floor-f1': 'Kiraan Jubin = Luas Lantai ÷ Luas Satu Jubin',
+                'ref-floor-f2': 'Beg Simen Mortar = Luas Lantai × Ketebalan Lapisan × Pecahan Simen × Ketumpatan',
+                'ref-floor-f3': 'Simen Pelekat = Luas Lantai × Ketebalan Pelekat × Ketumpatan ÷ Berat Beg Pelekat',
+                'ref-conc-header': 'KONKRIT',
+                'ref-conc-f1': 'Isipadu Konkrit = P × L × T (m³)',
+                'ref-conc-f2': 'Beg Simen = Isipadu × (Nisbah Simen ÷ Jumlah Nisbah) × Beg per m³',
+                'ref-conc-f3': 'Pasir / Batu = Isipadu × Nisbah Bahan',
+                'ref-conc-f4': 'Kuantiti BRC = Luas Papak ÷ (2.2m × 6m)',
+                'ref-conc-f5': 'Jumlah Kos = Σ(Kuantiti × Harga Unit)',
+                'ref-paint-header': 'CAT',
+                'ref-paint-f1': 'Luas Permukaan = Panjang Dinding × Tinggi Dinding (kps)',
+                'ref-paint-f2': 'Liter Pengedap = Luas Permukaan ÷ Kadar Liputan',
+                'ref-paint-f3': 'Liter Cat = (Luas Permukaan × Lapisan) ÷ Kadar Liputan',
+                'ref-tip': '<b>Tip:</b> Tambah 5–10% lebihan pada semua kuantiti bahan untuk pembaziran, kerosakan, dan permukaan tidak rata di tapak pembinaan sebenar.',
+                // Footer
+                'footer': 'Kalkulator Bahan Binaan &copy; 2024. Alat pendidikan untuk kontraktor, pembina, dan peminat DIY. Digunakan di GitHub Pages.',
+                // Placeholders
+                'ph-wall-length': 'Masukkan panjang dinding',
+                'ph-wall-height': 'Masukkan tinggi dinding',
+                'ph-window-length': 'Masukkan panjang tingkap',
+                'ph-window-height': 'Masukkan tinggi tingkap',
+                'ph-floor-length': 'Masukkan panjang lantai',
+                'ph-floor-width': 'Masukkan lebar lantai',
+                'ph-conc-length': 'Masukkan panjang',
+                'ph-conc-width': 'Masukkan lebar',
+                'ph-conc-height': 'Masukkan tinggi',
+                'ph-paint-length': 'Masukkan panjang dinding',
+                'ph-paint-height': 'Masukkan tinggi dinding',
+                'ph-paint-coats': 'Masukkan bilangan lapisan',
+                // Result strings
+                'res-results': 'Keputusan:',
+                'res-error': 'Ralat:',
+                'res-wall-area': 'Luas Dinding',
+                'res-window-area': 'Luas Tingkap',
+                'res-total-area': 'Jumlah Luas',
+                'res-wall-construction': '--- Pembinaan Dinding ---',
+                'res-bricks-needed': 'Bata Diperlukan',
+                'res-cement': 'Simen',
+                'res-sand': 'Pasir',
+                'res-plastering': '--- Plaster ---',
+                'res-bags': 'beg',
+                'res-floor-area': 'Luas Lantai',
+                'res-tiles-1ft': 'Jubin Diperlukan (1ft)',
+                'res-tiles-2ft': 'Jubin Diperlukan (2ft)',
+                'res-adhesive-cement': 'Simen Pelekat',
+                'res-total-volume': 'Jumlah Isipadu',
+                'res-readymix-price': 'Harga Sedia Campur',
+                'res-manual-mix': '--- Campuran Manual ---',
+                'res-aggregate': 'Batu',
+                'res-grand-total': 'Jumlah Besar',
+                'res-surface-area': 'Luas Permukaan',
+                'res-sealer-needed': 'Pengedap Diperlukan',
+                'res-paint-needed': 'Cat Diperlukan',
+                'res-coats': 'lapisan',
+                'res-litres': 'liter',
+                'res-unit': 'unit',
+                // Error messages
+                'err-wall': 'Panjang dan tinggi mestilah lebih daripada sifar.',
+                'err-floor': 'Panjang dan lebar mestilah lebih daripada sifar.',
+                'err-concrete': 'Panjang, lebar, dan tinggi mestilah > 0.',
+                'err-paint': 'Nilai mestilah lebih daripada sifar.'
+            },
+            en: {
+                // Page title
+                'page-title': 'Construction Material Calculator | Learn & Calculate',
+                // Header
+                'title': 'Construction Material Calculator',
+                'subtitle': 'Estimate materials for <b>walls</b>, <b>flooring</b>, <b>concrete</b>, and <b>paint</b>. Learn the science behind every number.',
+                'tag-contract': 'Contracts',
+                'tag-materials': 'Materials',
+                'tag-costing': 'Costing',
+                'tag-diy': 'DIY',
+                // Nav
+                'nav-calculators': 'Calculators',
+                'nav-materials': 'Material Data',
+                'nav-formulas': 'Formula Guide',
+                // Learning steps
+                'learn-title': ' How Construction Estimation Works',
+                'step1-title': 'Measure Areas and Volumes:',
+                'step1-text': ' Every material estimate starts with geometry — area for walls/floors, volume for concrete. Always subtract openings like windows and doors.',
+                'step2-title': 'Apply Mix Ratios:',
+                'step2-text': ' Mortar and concrete are never pure cement. Standard ratios like 1:4 (cement:sand) determine how much of each material is needed per cubic meter.',
+                'step3-title': 'Account for Wastage & Bond:',
+                'step3-text': ' Real-world projects add 5–10% extra for spillage, uneven surfaces, and mortar joint thickness (usually 10–20mm).',
+                'step4-title': 'Convert to Usable Units:',
+                'step4-text': ' Cement is sold in 50kg bags, sand in local volumetric units (ela/brass), and tiles in piece counts. Conversion factors bridge the gap.',
+                // Wall card
+                'wall-title': 'Wall Material Calculation',
+                'btn-formula': 'Formula',
+                'wall-legend': 'Wall Construction',
+                'wall-formula1': 'Bricks = Wall Area ÷ (0.22m × 0.07m)',
+                'wall-formula2': 'Cement (bags) = Wall Area × 0.03m × (1/5) × 28.8 bags/m³',
+                'wall-formula3': 'Sand (ela) = Wall Area × 0.03m × (4/5) ÷ 1.308',
+                'wall-note': 'Assumes 230mm × 70mm brick, 30mm mortar thickness, 1:4 cement:sand ratio. 1m³ cement = 28.8 bags (1440kg ÷ 50kg).',
+                'plaster-legend': 'Plastering',
+                'plaster-formula1': 'Cement (bags) = Wall Area × 0.019m × (1/5) × 28.8',
+                'plaster-formula2': 'Sand (ela) = Wall Area × 0.019m × (4/5) ÷ 1.308',
+                'plaster-note': 'Plaster thickness assumed at 19mm with same 1:4 mix ratio.',
+                'wall-length': 'Wall Length (m):',
+                'wall-height': 'Wall Height (m):',
+                'window-length': 'Window Length (m):',
+                'window-height': 'Window Height (m):',
+                'btn-calculate': 'Calculate',
+                'btn-reset': 'Reset',
+                // Floor card
+                'floor-title': 'Floor Tile Calculation',
+                'btn-formula2': 'Formula',
+                'floor-legend1': 'Tile Estimation',
+                'floor-formula1': 'Tiles Needed = Floor Area ÷ (0.3m × 0.3m)',
+                'floor-note1': 'Standard tile size 300mm × 300mm (1ft). For 600mm tiles, divide by 2 pieces.',
+                'floor-legend2': 'Mortar Bed',
+                'floor-formula2': 'Cement (bags) = Floor Area × 0.02m × (1/5) × 28.8',
+                'floor-formula3': 'Sand (ela) = Floor Area × 0.02m × (4/5) ÷ 1.308',
+                'floor-note2': 'Mortar bed thickness: 20mm. 1:4 cement-sand mix.',
+                'floor-legend3': 'Adhesive',
+                'floor-formula4': 'Adhesive Cement = Floor Area × 0.005m × (1440 ÷ 25)',
+                'floor-note3': 'Adhesive bed thickness: 5mm. Uses 25kg adhesive bags.',
+                'floor-length': 'Floor Length (m):',
+                'floor-width': 'Floor Width (m):',
+                'btn-calculate2': 'Calculate',
+                'btn-reset2': 'Reset',
+                // Concrete card
+                'conc-title': 'Concrete Calculation',
+                'btn-formula3': 'Formula',
+                'conc-legend1': 'Volume',
+                'conc-formula1': 'Volume = Length × Width × Height (m³)',
+                'conc-legend2': 'Manual Mix (1:2:2 ratio)',
+                'conc-formula2': 'Cement = Volume × (1/7) × 28.25 bags',
+                'conc-formula3': 'Sand (ela) = Volume × (2/7) ÷ 1.308',
+                'conc-formula4': 'Aggregate (m³) = Volume × (2/7)',
+                'conc-formula5': 'BRC = Area ÷ (2.2m × 6m)',
+                'conc-note1': '1:2:2 concrete mix. 1 bag = 28.25 units. BRC standard size 2.2m × 6m. Prices per unit in RM.',
+                'conc-legend3': 'Ready-mix Alternative',
+                'conc-formula6': 'Ready-mix Cost = Volume × RM 300/m³',
+                'conc-note2': 'Use lorri gred 25 ready-mix as benchmark.',
+                'conc-length': 'Length (m):',
+                'conc-width': 'Width (m):',
+                'conc-height': 'Height (m):',
+                'btn-calculate3': 'Calculate',
+                'btn-reset3': 'Reset',
+                // Paint card
+                'paint-title': 'Paint Calculation',
+                'btn-formula4': 'Formula',
+                'paint-legend1': 'Coverage Rates (per litre)',
+                'paint-formula1': 'Nippon EasyWash / Court: 107 sq ft / litre',
+                'paint-formula2': 'Dulux EasyClean: 124 sq ft / litre',
+                'paint-formula3': 'Jotun Essence: 113 sq ft / litre',
+                'paint-note1': 'Coverage based on 2-coat application on primed walls.',
+                'paint-legend2': 'Calculations',
+                'paint-formula4': 'Sealer = Surface Area ÷ Coverage Rate',
+                'paint-formula5': 'Paint = (Surface Area × Coats) ÷ Coverage Rate',
+                'paint-note2': 'Sealer/primer assumed as 1 coat regardless of paint coats.',
+                'paint-length': 'Wall Length (ft):',
+                'paint-height': 'Wall Height (ft):',
+                'paint-coats': 'Number of Coats:',
+                'paint-nippon': 'Nippon Paint',
+                'paint-dulux': 'Dulux Paint',
+                'paint-jotun': 'Jotun Paint',
+                'paint-nippon-court': 'Nippon Court Paint',
+                'btn-calculate4': 'Calculate',
+                'btn-reset4': 'Reset',
+                // Material Data section
+                'mat-title': 'Material Reference Data',
+                'mat-desc': 'Standard values used in all calculations below. Local variations exist — always verify with suppliers.',
+                'mat-cement-title': 'Cement (Portland)',
+                'mat-bulk-density': 'Bulk Density:',
+                'mat-bag-weight': 'Bag Weight:',
+                'mat-bags-per-m3': 'Bags per m³:',
+                'mat-bags': 'bags',
+                'mat-price-ref': 'Price Ref:',
+                'mat-per-bag': 'bag',
+                'mat-sand-title': 'Sand (Fine Aggregate)',
+                'mat-conversion': 'Conversion:',
+                'mat-price-ref2': 'Price Ref:',
+                'mat-brick-title': 'Brick (Standard)',
+                'mat-size': 'Size:',
+                'mat-face-area': 'Face Area:',
+                'mat-tile-title': 'Tile',
+                'mat-tile-1ft': '1ft Size:',
+                'mat-tile-2ft': '2ft Size:',
+                'mat-adhesive-title': 'Adhesive Cement',
+                'mat-bag-weight2': 'Bag Weight:',
+                'mat-bags-per-m3b': 'Bags per m³:',
+                'mat-bags2': 'bags',
+                'mat-aggregate-title': 'Aggregate (Batu 3/4)',
+                'mat-price-ref3': 'Price Ref:',
+                'mat-mix-ratio': 'Mix Ratio:',
+                'mat-mix-ratio-val': '2 parts in 1:2:2 concrete',
+                'mat-brc-title': 'BRC (Reinforcing Mesh)',
+                'mat-type': 'Type:',
+                'mat-size2': 'Size:',
+                'mat-price-ref4': 'Price Ref:',
+                'mat-paint-title': 'Paint Coverage',
+                // Formula Guide section
+                'ref-title': 'Formula Reference Guide',
+                'ref-desc': 'Detailed breakdown of every equation used in the calculators. Understanding these lets you adjust for site-specific conditions.',
+                'ref-wall-header': 'WALL & PLASTER',
+                'ref-wall-f1': 'Gross Wall Area = Length × Height (m²)',
+                'ref-wall-f2': 'Net Wall Area = Gross Area − Window Area (m²)',
+                'ref-wall-f3': 'Brick Count = Net Area ÷ Brick Face Area',
+                'ref-wall-f4': 'Cement Volume = Net Area × Mortar Thickness × Cement Fraction',
+                'ref-wall-f5': 'Cement Bags = Cement Volume × Density ÷ Bag Weight',
+                'ref-wall-f6': 'Sand Volume = Cement Volume × (Sand Fraction ÷ Cement Fraction)',
+                'ref-wall-f7': 'Sand Ela = Sand Volume ÷ 1.308',
+                'ref-floor-header': 'FLOOR TILES',
+                'ref-floor-f1': 'Tile Count = Floor Area ÷ Single Tile Area',
+                'ref-floor-f2': 'Mortar Cement Bags = Floor Area × Bed Thickness × Cement Fraction × Density',
+                'ref-floor-f3': 'Adhesive Cement = Floor Area × Adh Thickness × Density ÷ Adh Bag Weight',
+                'ref-conc-header': 'CONCRETE',
+                'ref-conc-f1': 'Concrete Volume = L × W × H (m³)',
+                'ref-conc-f2': 'Cement Bags = Volume × (Cement Ratio ÷ Total Ratio) × Bags per m³',
+                'ref-conc-f3': 'Sand / Aggregate = Volume × Material Ratio',
+                'ref-conc-f4': 'BRC Quantity = Slab Area ÷ (2.2m × 6m)',
+                'ref-conc-f5': 'Total Cost = Σ(Quantity × Unit Price)',
+                'ref-paint-header': 'PAINT',
+                'ref-paint-f1': 'Surface Area = Wall Length × Wall Height (sq ft)',
+                'ref-paint-f2': 'Sealer Litres = Surface Area ÷ Coverage Rate',
+                'ref-paint-f3': 'Paint Litres = (Surface Area × Coats) ÷ Coverage Rate',
+                'ref-tip': '<b>Tip:</b> Add 5–10% overrun to all material quantities for wastage, breakage, and irregular surfaces in real construction sites.',
+                // Footer
+                'footer': 'Construction Material Calculator &copy; 2024. Educational tool for contractors, builders, and DIY enthusiasts. Deployed on GitHub Pages.',
+                // Placeholders
+                'ph-wall-length': 'Enter wall length',
+                'ph-wall-height': 'Enter wall height',
+                'ph-window-length': 'Enter window length',
+                'ph-window-height': 'Enter window height',
+                'ph-floor-length': 'Enter floor length',
+                'ph-floor-width': 'Enter floor width',
+                'ph-conc-length': 'Enter length',
+                'ph-conc-width': 'Enter width',
+                'ph-conc-height': 'Enter height',
+                'ph-paint-length': 'Enter wall length',
+                'ph-paint-height': 'Enter wall height',
+                'ph-paint-coats': 'Enter number of coats',
+                // Result strings
+                'res-results': 'Results:',
+                'res-error': 'Error:',
+                'res-wall-area': 'Wall Area',
+                'res-window-area': 'Window Area',
+                'res-total-area': 'Total Area',
+                'res-wall-construction': '--- Wall Construction ---',
+                'res-bricks-needed': 'Bricks Needed',
+                'res-cement': 'Cement',
+                'res-sand': 'Sand',
+                'res-plastering': '--- Plastering ---',
+                'res-bags': 'bags',
+                'res-floor-area': 'Floor Area',
+                'res-tiles-1ft': 'Tiles Needed (1ft)',
+                'res-tiles-2ft': 'Tiles Needed (2ft)',
+                'res-adhesive-cement': 'Adhesive Cement',
+                'res-total-volume': 'Total Volume',
+                'res-readymix-price': 'Ready-mix Price',
+                'res-manual-mix': '--- Manual Mix ---',
+                'res-aggregate': 'Aggregate',
+                'res-grand-total': 'Grand Total',
+                'res-surface-area': 'Surface Area',
+                'res-sealer-needed': 'Sealer Needed',
+                'res-paint-needed': 'Paint Needed',
+                'res-coats': 'coats',
+                'res-litres': 'litres',
+                'res-unit': 'unit',
+                // Error messages
+                'err-wall': 'Length and height must be greater than zero.',
+                'err-floor': 'Length and width must be greater than zero.',
+                'err-concrete': 'Length, width, and height must be > 0.',
+                'err-paint': 'Values must be greater than zero.'
+            }
+        };
+
+        // Default language is Malay
+        let currentLang = localStorage.getItem('lang') || 'ms';
+
+        function t(key) {
+            return translations[currentLang][key] || key;
+        }
+
+        function applyLanguage() {
+            // Update html lang attribute
+            document.documentElement.lang = currentLang;
+
+            // Update page title
+            document.title = t('page-title');
+
+            // Update all elements with data-key
+            document.querySelectorAll('[data-key]').forEach(function(el) {
+                var key = el.getAttribute('data-key');
+                if (translations[currentLang][key] !== undefined) {
+                    el.innerHTML = translations[currentLang][key];
+                }
+            });
+
+            // Update all placeholders with data-ph
+            document.querySelectorAll('[data-ph]').forEach(function(el) {
+                var key = el.getAttribute('data-ph');
+                if (translations[currentLang][key] !== undefined) {
+                    el.placeholder = translations[currentLang][key];
+                }
+            });
+
+            // Update toggle button text
+            var btn = document.getElementById('langToggle');
+            btn.textContent = currentLang === 'ms' ? 'EN' : 'BM';
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ms' ? 'en' : 'ms';
+            localStorage.setItem('lang', currentLang);
+            applyLanguage();
+        }
+
+        // Apply language on page load
+        applyLanguage();
+
+        // ==================== APP LOGIC ====================
         const MATERIAL_CONSTANTS = {
             cementDensity: 1440,
             bagWeight: 50,
@@ -695,7 +1175,7 @@
             const windowHeight = parseFloat(document.getElementById('windowHeight').value) || 0;
 
             if (isNaN(length) || isNaN(height) || length <= 0 || height <= 0) {
-                document.getElementById('wallResult').innerHTML = '<span class="result-title">Error:</span> Length and height must be greater than zero.';
+                document.getElementById('wallResult').innerHTML = '<span class="result-title">' + t('res-error') + '</span> ' + t('err-wall');
                 return;
             }
 
@@ -717,18 +1197,18 @@
             const plasterSandEla = plasterMortar * (4 / 5) / c.elaToM3;
 
             const resultText = 
-                `Wall Area: ${wallArea.toFixed(2)} m²\n` +
-                `Window Area: ${windowArea.toFixed(2)} m²\n` +
-                `Total Area: ${totalArea.toFixed(2)} m²\n\n` +
-                `--- Wall Construction ---\n` +
-                `Bricks Needed: ${Math.floor(bricks)}\n` +
-                `Cement: ${cementBags.toFixed(2)} bags\n` +
-                `Sand: ${sandEla.toFixed(2)} ela\n\n` +
-                `--- Plastering ---\n` +
-                `Cement: ${plasterCementBags.toFixed(2)} bags\n` +
-                `Sand: ${plasterSandEla.toFixed(2)} ela`;
+                `${t('res-wall-area')}: ${wallArea.toFixed(2)} m²\n` +
+                `${t('res-window-area')}: ${windowArea.toFixed(2)} m²\n` +
+                `${t('res-total-area')}: ${totalArea.toFixed(2)} m²\n\n` +
+                `${t('res-wall-construction')}\n` +
+                `${t('res-bricks-needed')}: ${Math.floor(bricks)}\n` +
+                `${t('res-cement')}: ${cementBags.toFixed(2)} ${t('res-bags')}\n` +
+                `${t('res-sand')}: ${sandEla.toFixed(2)} ela\n\n` +
+                `${t('res-plastering')}\n` +
+                `${t('res-cement')}: ${plasterCementBags.toFixed(2)} ${t('res-bags')}\n` +
+                `${t('res-sand')}: ${plasterSandEla.toFixed(2)} ela`;
 
-            document.getElementById('wallResult').innerHTML = `<span class="result-title">Results:</span>\n${resultText}`;
+            document.getElementById('wallResult').innerHTML = `<span class="result-title">${t('res-results')}</span>\n${resultText}`;
         }
 
         function calculateFloor() {
@@ -736,7 +1216,7 @@
             const width = parseFloat(document.getElementById('floorWidth').value);
 
             if (isNaN(length) || isNaN(width) || length <= 0 || width <= 0) {
-                document.getElementById('floorResult').innerHTML = '<span class="result-title">Error:</span> Length and width must be greater than zero.';
+                document.getElementById('floorResult').innerHTML = '<span class="result-title">' + t('res-error') + '</span> ' + t('err-floor');
                 return;
             }
 
@@ -750,14 +1230,14 @@
             const adhesiveCementBags = (area * 0.005) * (c.cementDensity / 25);
 
             const resultText = 
-                `Floor Area: ${area.toFixed(2)} m²\n` +
-                `Tiles Needed (1ft): ${Math.floor(tiles)}\n` +
-                `Tiles Needed (2ft): ${Math.floor(tiles / 2)}\n\n` +
-                `Cement: ${simenMortarBags.toFixed(2)} bags\n` +
-                `Sand: ${sandMortarEla.toFixed(2)} ela\n` +
-                `Adhesive Cement: ${adhesiveCementBags.toFixed(2)} bags`;
+                `${t('res-floor-area')}: ${area.toFixed(2)} m²\n` +
+                `${t('res-tiles-1ft')}: ${Math.floor(tiles)}\n` +
+                `${t('res-tiles-2ft')}: ${Math.floor(tiles / 2)}\n\n` +
+                `${t('res-cement')}: ${simenMortarBags.toFixed(2)} ${t('res-bags')}\n` +
+                `${t('res-sand')}: ${sandMortarEla.toFixed(2)} ela\n` +
+                `${t('res-adhesive-cement')}: ${adhesiveCementBags.toFixed(2)} ${t('res-bags')}`;
 
-            document.getElementById('floorResult').innerHTML = `<span class="result-title">Results:</span>\n${resultText}`;
+            document.getElementById('floorResult').innerHTML = `<span class="result-title">${t('res-results')}</span>\n${resultText}`;
         }
 
         function calculateConcrete() {
@@ -766,7 +1246,7 @@
             const height = parseFloat(document.getElementById('concHeight').value);
 
             if (isNaN(length) || isNaN(width) || isNaN(height) || length <= 0 || width <= 0 || height <= 0) {
-                document.getElementById('concreteResult').innerHTML = '<span class="result-title">Error:</span> Length, width, and height must be &gt; 0.';
+                document.getElementById('concreteResult').innerHTML = '<span class="result-title">' + t('res-error') + '</span> ' + t('err-concrete');
                 return;
             }
 
@@ -786,16 +1266,16 @@
             const readymix = volume * prices.concrete;
 
             const resultText = 
-                `Total Volume: ${volume.toFixed(2)} m³\n\n` +
-                `Ready-mix Price: RM ${readymix.toFixed(2)}\n\n` +
-                `--- Manual Mix ---\n` +
-                `Cement: ${cementBags.toFixed(2)} bags (RM ${(cementBags*prices.cement).toFixed(2)})\n` +
-                `Sand: ${sandEla.toFixed(2)} ela (RM ${(sandEla*prices.sand).toFixed(2)})\n` +
-                `Aggregate: ${aggVol.toFixed(2)} m³ (RM ${(aggVol*prices.batu).toFixed(2)})\n` +
-                `BRC: ${brcQty.toFixed(2)} unit (RM ${(brcQty*prices.brc).toFixed(2)})\n\n` +
-                `Grand Total: RM ${total.toFixed(2)}`;
+                `${t('res-total-volume')}: ${volume.toFixed(2)} m³\n\n` +
+                `${t('res-readymix-price')}: RM ${readymix.toFixed(2)}\n\n` +
+                `${t('res-manual-mix')}\n` +
+                `${t('res-cement')}: ${cementBags.toFixed(2)} ${t('res-bags')} (RM ${(cementBags*prices.cement).toFixed(2)})\n` +
+                `${t('res-sand')}: ${sandEla.toFixed(2)} ela (RM ${(sandEla*prices.sand).toFixed(2)})\n` +
+                `${t('res-aggregate')}: ${aggVol.toFixed(2)} m³ (RM ${(aggVol*prices.batu).toFixed(2)})\n` +
+                `BRC: ${brcQty.toFixed(2)} ${t('res-unit')} (RM ${(brcQty*prices.brc).toFixed(2)})\n\n` +
+                `${t('res-grand-total')}: RM ${total.toFixed(2)}`;
 
-            document.getElementById('concreteResult').innerHTML = `<span class="result-title">Results:</span>\n${resultText}`;
+            document.getElementById('concreteResult').innerHTML = `<span class="result-title">${t('res-results')}</span>\n${resultText}`;
         }
 
         let paintCov = 107;
@@ -823,20 +1303,21 @@
             const coats = parseFloat(document.getElementById('coats').value);
 
             if (isNaN(length) || isNaN(height) || isNaN(coats) || length <= 0 || height <= 0 || coats <= 0) {
-                document.getElementById('paintResult').innerHTML = '<span class="result-title">Error:</span> Values must be greater than zero.';
+                document.getElementById('paintResult').innerHTML = '<span class="result-title">' + t('res-error') + '</span> ' + t('err-paint');
                 return;
             }
 
             const area = length * height;
             const sealer = area / paintCov;
             const paint = (area * coats) / paintCov;
+            const areaUnit = currentLang === 'ms' ? 'kps' : 'sq ft';
 
             const resultText = 
-                `Surface Area: ${area.toFixed(2)} sq ft\n` +
-                `Sealer Needed: ${sealer.toFixed(2)} litres\n` +
-                `Paint Needed (${Math.floor(coats)} coats): ${paint.toFixed(2)} litres`;
+                `${t('res-surface-area')}: ${area.toFixed(2)} ${areaUnit}\n` +
+                `${t('res-sealer-needed')}: ${sealer.toFixed(2)} ${t('res-litres')}\n` +
+                `${t('res-paint-needed')} (${Math.floor(coats)} ${t('res-coats')}): ${paint.toFixed(2)} ${t('res-litres')}`;
 
-            document.getElementById('paintResult').innerHTML = `<span class="result-title">Results:</span>\n${resultText}`;
+            document.getElementById('paintResult').innerHTML = `<span class="result-title">${t('res-results')}</span>\n${resultText}`;
         }
 
         function resetWall() {
