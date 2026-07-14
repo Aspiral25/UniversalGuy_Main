@@ -181,6 +181,10 @@
       gap: 4px;
     }
 
+    .tab-bar.hidden {
+      display: none;
+    }
+
     .tab-btn {
       padding: 16px 20px;
       background: none;
@@ -225,6 +229,80 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Home / Central Page */
+    .home-hero {
+      margin-bottom: 48px;
+    }
+
+    .home-hero h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.04em;
+    }
+
+    .home-hero p {
+      color: var(--text-secondary);
+      font-size: 1.15rem;
+      line-height: 1.6;
+      max-width: 640px;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 28px;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+      border-color: var(--accent);
+    }
+
+    .project-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .project-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0;
+      flex: 1;
+    }
+
+    .project-card .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .project-card .tag {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
     }
 
     /* Documentation Styles */
@@ -387,6 +465,14 @@
       .iframe-container {
         height: calc(100vh - 120px);
       }
+
+      .home-hero h2 {
+        font-size: 1.8rem;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (min-width: 769px) {
@@ -445,7 +531,7 @@
         <button class="hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
       </div>
 
-      <div class="tab-bar">
+      <div class="tab-bar hidden" id="tabBar">
         <button class="tab-btn active" data-tab="docs">Documentation</button>
         <button class="tab-btn" data-tab="live">Live App</button>
       </div>
@@ -511,7 +597,7 @@
       }
     ];
 
-    let currentProject = 0;
+    let currentProject = -1; // -1 = home
     let currentTab = 'docs';
 
     // DOM Elements
@@ -523,18 +609,54 @@
     const overlay = document.getElementById('overlay');
     const hamburger = document.getElementById('hamburger');
     const mobileTitle = document.getElementById('mobileTitle');
+    const tabBar = document.getElementById('tabBar');
     const tabBtns = document.querySelectorAll('.tab-btn');
 
-    // Render sidebar navigation
+    // Render sidebar navigation (with Home item)
     function renderSidebar() {
       sidebarNav.innerHTML = '';
+
+      // Home button
+      const homeBtn = document.createElement('button');
+      homeBtn.className = 'nav-item' + (currentProject === -1 ? ' active' : '');
+      homeBtn.textContent = 'Home';
+      homeBtn.onclick = () => loadHome();
+      sidebarNav.appendChild(homeBtn);
+
+      // Project buttons
       projects.forEach((project, index) => {
         const btn = document.createElement('button');
-        btn.className = 'nav-item' + (index === currentProject ? ' active' : '');
+        btn.className = 'nav-item' + (currentProject === index ? ' active' : '');
         btn.textContent = project.label;
         btn.onclick = () => loadProject(index);
         sidebarNav.appendChild(btn);
       });
+    }
+
+    // Render home / central overview page
+    function renderHome() {
+      let html = `
+        <div class="home-hero">
+          <h2>My Dev Hub</h2>
+          <p>Welcome to my central portfolio. Browse through the projects below to explore documentation, source code, and live demos of my web tools.</p>
+        </div>
+        <div class="projects-grid">
+      `;
+
+      projects.forEach((project, index) => {
+        html += `
+          <div class="project-card" onclick="loadProject(${index})">
+            <h3>${project.label}</h3>
+            <p>${project.docs.description}</p>
+            <div class="card-tags">
+              ${project.docs.techStack.map(t => `<span class="tag">${t}</span>`).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      docsPanel.innerHTML = html;
     }
 
     // Render documentation content
@@ -612,6 +734,18 @@
       `;
     }
 
+    // Load home / central page
+    function loadHome() {
+      currentProject = -1;
+      renderSidebar();
+      mobileTitle.textContent = 'My Dev Hub';
+      tabBar.classList.add('hidden');
+      renderHome();
+      docsPanel.classList.add('active');
+      livePanel.classList.remove('active');
+      closeSidebar();
+    }
+
     // Load a project
     function loadProject(index) {
       currentProject = index;
@@ -623,12 +757,15 @@
       // Update mobile title
       mobileTitle.textContent = project.label;
 
+      // Show tab bar
+      tabBar.classList.remove('hidden');
+
       // Render content
       renderDocs(project);
       renderLiveApp(project);
 
       // Ensure correct tab is shown
-      switchTab(currentTab);
+      switchTab('docs');
 
       // Close mobile sidebar
       closeSidebar();
@@ -699,7 +836,7 @@
 
     // Initialize
     renderSidebar();
-    loadProject(0);
+    loadHome();
   </script>
 </body>
 </html>
