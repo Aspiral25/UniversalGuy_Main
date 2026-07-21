@@ -451,9 +451,9 @@
         </header>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('calculators')" data-key="nav-calculators">Kalkulator</button>
-            <button class="nav-tab" onclick="showSection('materials')" data-key="nav-materials">Data Bahan</button>
-            <button class="nav-tab" onclick="showSection('formulas')" data-key="nav-formulas">Panduan Formula</button>
+            <button class="nav-tab active" onclick="showSection('calculators', event)" data-key="nav-calculators">Kalkulator</button>
+            <button class="nav-tab" onclick="showSection('materials', event)" data-key="nav-materials">Data Bahan</button>
+            <button class="nav-tab" onclick="showSection('formulas', event)" data-key="nav-formulas">Panduan Formula</button>
         </div>
 
         <div id="section-calculators" class="section">
@@ -1183,7 +1183,7 @@
             cementBagPerM3: 1440 / 50
         };
 
-        function showSection(section) {
+        function showSection(section, event) {
             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
             document.getElementById('section-' + section).style.display = 'block';
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -1287,9 +1287,10 @@
             const cementBags = volume * cementRatio * 28.25;
             const sandEla = (volume * sandRatio) / 1.308;
             const aggVol = volume * aggRatio;
+            const aggEla = aggVol / 1.308;
             const brcQty = area / (2.2 * 6);
 
-            const total = cementBags*prices.cement + sandEla*prices.sand + aggVol*prices.batu + brcQty*prices.brc;
+            const total = cementBags*prices.cement + sandEla*prices.sand + aggEla*prices.batu + brcQty*prices.brc;
             const readymix = volume * prices.concrete;
 
             const resultText = 
@@ -1298,7 +1299,7 @@
                 `${t('res-manual-mix')}\n` +
                 `${t('res-cement')}: ${cementBags.toFixed(2)} ${t('res-bags')} (RM ${(cementBags*prices.cement).toFixed(2)})\n` +
                 `${t('res-sand')}: ${sandEla.toFixed(2)} ela (RM ${(sandEla*prices.sand).toFixed(2)})\n` +
-                `${t('res-aggregate')}: ${aggVol.toFixed(2)} m³ (RM ${(aggVol*prices.batu).toFixed(2)})\n` +
+                `${t('res-aggregate')}: ${aggEla.toFixed(2)} ela (RM ${(aggEla*prices.batu).toFixed(2)})\n` +
                 `BRC: ${brcQty.toFixed(2)} ${t('res-unit')} (RM ${(brcQty*prices.brc).toFixed(2)})\n\n` +
                 `${t('res-grand-total')}: RM ${total.toFixed(2)}`;
 

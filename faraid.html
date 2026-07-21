@@ -757,7 +757,7 @@
             
             let motherShareAdded = false;
             if (hasMother) {
-                let share = (hasAnyChild || (fullBrs + fullSis) >= 2) ? new Fraction(1, 6) : new Fraction(1, 3);
+                let share = (hasAnyChild || (fullBros + fullSis) >= 2) ? new Fraction(1, 6) : new Fraction(1, 3);
                 totalFixedFractions = totalFixedFractions.add(share);
                 distributions.push({ name: t('mother'), role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
                 motherShareAdded = true;

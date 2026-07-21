@@ -3,3 +3,6 @@ housecal_vB1.py
 housecal.py
 AGENTS.md
 .kilo/
+__pycache__/housecal_vA1.cpython-313.pyc
+__pycache__/housecal_vB1.cpython-313.pyc
+__pycache__/housecal.cpython-313.pyc
