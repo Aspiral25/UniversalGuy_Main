@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faraid Calculator</title>
-    <!-- Lightweight Fraction Library for exact Islamic math -->
-    <script src="https://cdn.jsdelivr.net/npm/fraction.js@4.3.4/fraction.min.js">
-    </script>
+    <title>Comprehensive Faraid Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/fraction.js@4.3.4/fraction.min.js"></script>
     
     <style>
-        /* Scoped styles to prevent overriding your main website */
         .faraid-wrapper {
-            --faraid-bg: #f2f9f5;
+            --faraid-bg: #9cf0d4;
             --faraid-card-bg: #ffffff;
-            --faraid-text: #333;
-            --faraid-primary: #2b7a64;
-            --faraid-border: #d0e3da;
+            --faraid-text: #2d3748;
+            --faraid-text-muted: #718096;
+            --faraid-primary: #2c7a7b;
+            --faraid-primary-light: #e6fffa;
+            --faraid-border: #e2e8f0;
+            --faraid-disabled: #edf2f7;
+            --faraid-danger: #e53e3e;
             
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--faraid-bg);
@@ -23,127 +24,155 @@
             padding: 20px;
             box-sizing: border-box;
             border-radius: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        .faraid-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .faraid-header { text-align: center; margin-bottom: 30px; position: relative; }
+        .faraid-header h1 { color: #234e52; margin: 0 0 10px 0; }
+        .faraid-header p { color: var(--faraid-text-muted); margin: 0; }
 
-        .faraid-header h1 {
-            color: #1a4a3c;
-            margin: 0 0 10px 0;
+        .lang-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--faraid-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        .lang-btn:hover { background-color: #285e61; }
 
         .faraid-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: flex-start;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+            align-items: start;
+            flex-grow: 1;
         }
 
         .faraid-card {
             background: var(--faraid-card-bg);
             border: 1px solid var(--faraid-border);
             border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            flex: 1;
-            min-width: 300px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            overflow-x: auto;
         }
 
-        .faraid-input-group {
+        .faraid-section-title {
+            margin-top: 25px;
             margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--faraid-border);
+            font-size: 1.05em;
+            color: #234e52;
+            font-weight: 700;
         }
 
-        .faraid-input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            font-size: 0.9em;
+        .faraid-input-group { margin-bottom: 12px; }
+        .faraid-input-group label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.85em; }
+        .faraid-input-group input[type="number"], .faraid-input-group select {
+            width: 100%; padding: 8px 12px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box; font-size: 0.95em;
         }
 
-        .faraid-input-group input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
+        .faraid-radio-group { display: flex; gap: 15px; margin-top: 5px; margin-bottom: 15px; font-size: 0.9em; }
+        .faraid-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .faraid-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+        .faraid-checkbox-label {
+            display: flex; align-items: center; gap: 8px; font-size: 0.85em; font-weight: 500; cursor: pointer;
         }
 
-        .faraid-checkbox-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
+        /* Blocking Styles */
+        .faraid-blocked { opacity: 0.4; pointer-events: none; filter: grayscale(100%); transition: all 0.3s ease; }
+        .faraid-blocked input[type="number"] { background-color: var(--faraid-disabled); color: transparent; }
+        .faraid-block-msg { font-size: 0.7em; color: var(--faraid-danger); display: none; margin-top: 2px; font-weight: 600; line-height: 1.2; }
+        .faraid-blocked .faraid-block-msg { display: block; }
+        .heir-group-container { padding: 10px; border: 1px dashed var(--faraid-border); border-radius: 8px; margin-bottom: 12px; }
 
         .faraid-btn {
-            background-color: var(--faraid-primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 12px;
-            width: 100%;
-            font-size: 1.05em;
-            cursor: pointer;
-            transition: opacity 0.2s;
-            font-weight: bold;
+            background-color: var(--faraid-primary); color: white; border: none; border-radius: 8px;
+            padding: 14px; width: 100%; font-size: 1.05em; cursor: pointer; font-weight: 700; margin-top: 20px;
         }
+        .faraid-btn:hover { background-color: #285e61; }
 
-        .faraid-btn:hover {
-            opacity: 0.9;
+        /* Tree Styles */
+        .faraid-tree-container { display: flex; align-items: center; justify-content: center; gap: 30px; min-width: 600px; padding: 20px 0; }
+        .faraid-tree-column { display: flex; flex-direction: column; gap: 12px; position: relative; }
+        .faraid-heir-card {
+            display: flex; align-items: center; background: #fff; border: 1px solid var(--faraid-border);
+            border-radius: 10px; padding: 10px 10px; width: 200px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); position: relative; z-index: 2;
         }
-
-        /* Tree Visualization Styles */
-        .faraid-tree-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
+        .faraid-avatar {
+            width: 36px; height: 36px; background: var(--faraid-primary-light); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 12px;
         }
+        .faraid-heir-info { display: flex; flex-direction: column; }
+        .faraid-heir-role { font-weight: 600; font-size: 0.85rem; line-height: 1.2;}
+        .faraid-heir-fraction { color: var(--faraid-primary); font-weight: bold; font-size: 0.8rem; }
+        .faraid-heir-value { font-weight: 700; font-size: 0.95rem; margin-top: 2px; }
 
-        .faraid-node {
-            display: flex;
-            align-items: center;
-            border: 2px solid var(--faraid-border);
-            border-radius: 10px;
-            padding: 12px 20px;
-            background: white;
-            width: 80%;
-            justify-content: space-between;
+        .faraid-estate-node {
+            background: #e6fffa; border: 2px solid var(--faraid-primary); border-radius: 12px; padding: 20px;
+            text-align: center; width: 100px; z-index: 2; position: relative;
         }
+        .faraid-estate-node .faraid-icon { font-size: 2rem; margin-bottom: 8px; }
+        .faraid-estate-node .faraid-label { font-size: 0.8rem; color: var(--faraid-primary); font-weight: 600; text-transform: uppercase; }
+        .faraid-estate-node .faraid-value { font-size: 1.3rem; font-weight: 600; color: #234e52; }
 
-        .faraid-node.central {
-            background-color: #e6f2ec;
-            border-color: var(--faraid-primary);
-            font-size: 1.1em;
-            font-weight: bold;
-            justify-content: center;
-            flex-direction: column;
-        }
+        /* Tree Styles */
+        .faraid-tree-container { position: relative; }
+        .faraid-tree-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: visible; }
 
-        .faraid-node-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .faraid-fraction {
-            color: var(--faraid-primary);
-            font-weight: bold;
-            font-size: 1.1em;
+        /* --- Educational Explanation & Footer Styles --- */
+        .faraid-explanation {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--faraid-primary);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+            color: #4a5568;
+            line-height: 1.6;
         }
         
-        .faraid-value {
-            font-weight: bold;
+        .faraid-explanation h4 {
+            margin-top: 0;
+            color: #2d3748;
+            margin-bottom: 12px;
+            font-size: 1.1em;
         }
 
-        .faraid-total-distributed {
-            margin-top: 20px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 1.1em;
+        .faraid-footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.85em;
+            color: var(--faraid-text-muted);
+            padding-top: 20px;
+            border-top: 1px solid var(--faraid-border);
+        }
+
+        .faraid-footer a {
             color: var(--faraid-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .faraid-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1024px) {
+            .faraid-container { grid-template-columns: 1fr; }
+            .faraid-tree-container { flex-direction: column; }
+            .faraid-tree-svg { display: none; }
         }
     </style>
 </head>
@@ -151,182 +180,721 @@
 
 <div class="faraid-wrapper">
     <div class="faraid-header">
-        <h1>Faraid Calculator</h1>
-        <p>Accurate & Syariah-Compliant Estate Distribution</p>
+        <button id="langToggle" class="lang-btn" onclick="toggleLanguage()">EN</button>
+        <h1 data-key="title">Comprehensive Faraid Calculator</h1>
+        <p data-key="subtitle">Advanced Syariah Estate Distribution Engine</p>
     </div>
 
     <div class="faraid-container">
         <!-- LEFT PANEL: Inputs -->
-        <div class="faraid-card">
-            <h3>1. Estate Details</h3>
+        <div class="faraid-card" style="max-height: 270vh; overflow-y: auto;">
             <form id="faraidForm">
+                <h3 class="faraid-section-title" data-key="section-estate">1. Deceased Details & Estate</h3>
                 <div class="faraid-input-group">
-                    <label>Gross Estate (RM)</label>
-                    <input type="number" id="grossEstate" placeholder="0.00" required>
-                </div>
-                <div class="faraid-input-group">
-                    <label>Funeral Expenses (RM)</label>
-                    <input type="number" id="funeralExpenses" placeholder="0.00" value="0">
-                </div>
-                <div class="faraid-input-group">
-                    <label>Debts (RM)</label>
-                    <input type="number" id="debts" placeholder="0.00" value="0">
-                </div>
-                
-                <h3>2. Add Heirs</h3>
-                <div class="faraid-checkbox-grid">
-                    <label><input type="checkbox" id="hasMother"> Mother</label>
-                    <label><input type="checkbox" id="hasFather"> Father</label>
-                    <label><input type="checkbox" id="hasWife"> Wife</label>
-                </div>
-                
-                <div class="faraid-checkbox-grid">
-                    <div class="faraid-input-group">
-                        <label>Sons</label>
-                        <input type="number" id="sonCount" min="0" value="0">
+                    <label data-key="label-gender">Deceased Gender</label>
+                    <div class="faraid-radio-group">
+                        <label><input type="radio" name="deceasedGender" value="M" checked> <span data-key="label-male">Male</span></label>
+                        <label><input type="radio" name="deceasedGender" value="F"> <span data-key="label-female">Female</span></label>
                     </div>
-                    <div class="faraid-input-group">
-                        <label>Daughters</label>
-                        <input type="number" id="daughterCount" min="0" value="0">
+                </div>
+                <div class="faraid-grid-3">
+                    <div class="faraid-input-group"><label data-key="label-gross">Gross (RM)</label><input type="number" id="grossEstate" placeholder="0" required data-ph="placeholder-gross"></div>
+                    <div class="faraid-input-group"><label data-key="label-funeral">Funeral (RM)</label><input type="number" id="funeralExpenses" placeholder="0" value="0" data-ph="placeholder-funeral"></div>
+                    <div class="faraid-input-group"><label data-key="label-debts">Debts (RM)</label><input type="number" id="debts" placeholder="0" value="0" data-ph="placeholder-debts"></div>
+                </div>
+
+                <h3 class="faraid-section-title" data-key="section-primary-heirs">2. Primary Heirs (Waris Utama)</h3>
+                <div class="faraid-grid-2">
+                    <label class="faraid-checkbox-label"><input type="checkbox" id="hasMother" class="trigger-input"> <span data-key="label-mother">Mother (Ibu)</span></label>
+                    <label class="faraid-checkbox-label"><input type="checkbox" id="hasFather" class="trigger-input"> <span data-key="label-father">Father (Bapa)</span></label>
+                    <div id="wifeGroup">
+                        <div class="faraid-input-group" style="margin:0;"><label data-key="label-wives">Wives (Isteri)</label><select id="wifeCount" data-key-option="label-wives"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div>
+                    </div>
+                    <div id="husbandGroup" style="display: none;">
+                        <label class="faraid-checkbox-label" style="margin-top: 20px;"><input type="checkbox" id="hasHusband"> <span data-key="label-husband">Husband (Suami)</span></label>
                     </div>
                 </div>
                 
-                <button type="submit" class="faraid-btn">Calculate Distribution</button>
+                <div class="faraid-grid-2">
+                    <div class="faraid-input-group"><label data-key="label-sons">Sons (Anak Lelaki)</label><input type="number" id="sonCount" min="0" value="0" class="trigger-input" data-ph="placeholder-sons"></div>
+                    <div class="faraid-input-group"><label data-key="label-daughters">Daughters (Anak Perempuan)</label><input type="number" id="daughterCount" min="0" value="0" class="trigger-input" data-ph="placeholder-daughters"></div>
+                </div>
+
+                <h3 class="faraid-section-title" data-key="section-substitute-heirs">3. Substitute Heirs (Waris Ganti)</h3>
+                <div class="heir-group-container">
+                    <div class="faraid-grid-2">
+                        <div id="matGrandmaBlock">
+                            <label class="faraid-checkbox-label"><input type="checkbox" id="hasMatGrandma"> <span data-key="label-mat-grandma">Maternal Grandma</span></label>
+                            <div class="faraid-block-msg" data-key="blocked-mother">Blocked by Mother.</div>
+                        </div>
+                        <div id="patGrandmaBlock">
+                            <label class="faraid-checkbox-label"><input type="checkbox" id="hasPatGrandma"> <span data-key="label-pat-grandma">Paternal Grandma</span></label>
+                            <div class="faraid-block-msg" data-key="blocked-mother-father">Blocked by Mother or Father.</div>
+                        </div>
+                    </div>
+                    <div id="grandpaBlock" style="margin-top:10px;">
+                        <label class="faraid-checkbox-label"><input type="checkbox" id="hasGrandfather" class="trigger-input"> <span data-key="label-grandfather">Paternal Grandfather</span></label>
+                        <div class="faraid-block-msg" data-key="blocked-father">Blocked by Father.</div>
+                    </div>
+                </div>
+                
+                <div class="heir-group-container" id="grandchildBlock">
+                    <div class="faraid-grid-2">
+                        <div class="faraid-input-group"><label data-key="label-grandsons">Grandsons</label><input type="number" id="grandsonCount" min="0" value="0" class="trigger-input" data-ph="placeholder-grandsons"></div>
+                        <div class="faraid-input-group"><label data-key="label-granddaughters">Granddaughters</label><input type="number" id="granddaughterCount" min="0" value="0" data-ph="placeholder-granddaughters"></div>
+                    </div>
+                    <div class="faraid-block-msg" data-key="blocked-son">Blocked completely by existence of a Son.</div>
+                </div>
+
+                <h3 class="faraid-section-title" data-key="section-siblings">4. Siblings (Waris Sisi)</h3>
+                <div class="heir-group-container" id="fullSiblingBlock">
+                    <div class="faraid-grid-2">
+                        <div class="faraid-input-group"><label data-key="label-full-bros">Full Brothers</label><input type="number" id="fullBroCount" min="0" value="0" class="trigger-input" data-ph="placeholder-full-bro"></div>
+                        <div class="faraid-input-group"><label data-key="label-full-sis">Full Sisters</label><input type="number" id="fullSisCount" min="0" value="0" class="trigger-input" data-ph="placeholder-full-sis"></div>
+                    </div>
+                    <div class="faraid-block-msg" id="fullSiblingMsg" data-key="blocked-full-sibling">Blocked by Father, Son, or Grandson.</div>
+                </div>
+                
+                <div class="heir-group-container" id="patSiblingBlock">
+                    <div class="faraid-grid-2">
+                        <div class="faraid-input-group"><label data-key="label-pat-bros">Paternal Half-Bros</label><input type="number" id="patBroCount" min="0" value="0" data-ph="placeholder-pat-bro"></div>
+                        <div class="faraid-input-group"><label data-key="label-pat-sis">Paternal Half-Sis</label><input type="number" id="patSisCount" min="0" value="0" data-ph="placeholder-pat-sis"></div>
+                    </div>
+                    <div class="faraid-block-msg" id="patSiblingMsg" data-key="blocked-pat-sibling">Blocked by Father, Son, Grandson, or Full Brother.</div>
+                </div>
+
+                <div class="heir-group-container" id="matSiblingBlock">
+                    <div class="faraid-grid-2">
+                        <div class="faraid-input-group"><label data-key="label-mat-bros">Maternal Half-Bros</label><input type="number" id="matBroCount" min="0" value="0" data-ph="placeholder-mat-bro"></div>
+                        <div class="faraid-input-group"><label data-key="label-mat-sis">Maternal Half-Sis</label><input type="number" id="matSisCount" min="0" value="0" data-ph="placeholder-mat-sis"></div>
+                    </div>
+                    <div class="faraid-block-msg" id="matSiblingMsg" data-key="blocked-mat-sibling">Blocked by Father, Grandfather, Child, or Grandchild.</div>
+                </div>
+
+                <h3 class="faraid-section-title" data-key="section-extended">5. Paternal Relatives & Cousins (Waris Bapa Saudara & Sepupu)</h3>
+                <div class="heir-group-container" id="extendedBlock">
+                    <div class="faraid-grid-2">
+                        <div class="faraid-input-group"><label data-key="label-nephews">Nephews</label><input type="number" id="nephewFullCount" min="0" value="0" data-ph="placeholder-nephew"></div>
+                        <div class="faraid-input-group"><label data-key="label-uncles">Uncles</label><input type="number" id="uncleFullCount" min="0" value="0" data-ph="placeholder-uncle"></div>
+                    </div>
+                    <div class="faraid-block-msg" id="extendedMsg" data-key="blocked-extended">Only inherit if NO direct males or brothers exist.</div>
+                </div>
+                
+                <button type="submit" class="faraid-btn" data-key="btn-calculate">Calculate Exact Distribution</button>
             </form>
         </div>
 
         <!-- RIGHT PANEL: Output Visualization -->
-        <div class="faraid-card" style="flex: 1.5;">
-            <h3>Faraid Distribution Breakdown</h3>
-            <div id="faraidOutput" class="faraid-tree-container">
-                <p style="color: #777;">Enter estate details and heirs, then click Calculate to see the exact breakdown.</p>
+        <div class="faraid-card">
+            <h3 class="faraid-section-title" style="margin-top:0;" data-key="section-results">Faraid Distribution Breakdown</h3>
+            <div id="faraidOutput">
+                <p style="color: #a0aec0; text-align: center; padding: 60px 0; font-style: italic;">
+                    <span style="font-size: 3rem; display:block; margin-bottom: 10px;">⚖️</span>
+                    Enter estate details and heirs on the left.<br>The system will automatically apply Al-Hajb (Blocking) rules.
+                </p>
             </div>
         </div>
     </div>
+
+    <!-- PAGE FOOTER -->
+    <footer class="faraid-footer">
+        <strong data-key="footer-ref-title">Reference & Methodology:</strong> <span data-key="footer-ref-body">The algorithms and blocking rules (Al-Hajb) applied in this calculator are based on the rulings of <em>Hukum Syarak</em> (Islamic Law) derived from <strong>Surah An-Nisa (Verses 11, 12, and 176)</strong>. The calculation structure adheres strictly to the Faraid principles utilized by Malaysian Islamic authorities, matching the framework provided by the <a href="https://efaraid.mais.gov.my/" target="_blank">Majlis Agama Islam Selangor (MAIS)</a> and <a href="https://myland.gov.my/myland-adm/waris/WarisFaraidForm.xhtml" target="_blank">MyLand (Kalkulator Faraid)</a>.</span>
+        <br><br>
+        <strong data-key="footer-disclaimer">Disclaimer:</strong> <span data-key="footer-disclaimer-content">This tool provides theoretical distributions for educational and planning purposes. For official estate execution, please consult a certified Syariah lawyer or your state's Islamic Religious Council.</span>
+    </footer>
 </div>
 
 <script>
-    if (typeof Fraction === 'undefined') {
-        document.getElementById('faraidOutput').innerHTML =
-            '<p style="color:red;">Error: Required library (fraction.js) failed to load. Please check your internet connection and reload.</p>';
-    } else {
-        document.getElementById('faraidForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        console.log("DEBUG: Form submitted, starting Faraid calculation...");
-        
-        try {
-            // 1. Get financial inputs
-            const gross = parseFloat(document.getElementById('grossEstate').value) || 0;
-            const funeral = parseFloat(document.getElementById('funeralExpenses').value) || 0;
-            const debts = parseFloat(document.getElementById('debts').value) || 0;
-            
-            const nettEstate = gross - funeral - debts;
-            console.log("DEBUG: Nett Estate calculated as RM", nettEstate);
+    // --- TRANSLATION SYSTEM ---
+    const translations = {
+        ms: {
+            'title': 'Kalkulator Faraid',
+            'subtitle': 'Pengiraan Pengagihan Harta Pusaka Syariah Komprehensif',
+            'section-estate': '1. Maklumat Arwah & Harta',
+            'section-primary-heirs': '2. Waris Utama (Pewaris Utama)',
+            'section-substitute-heirs': '3. Waris Ganti (Pewaris Ganti)',
+            'section-siblings': '4. Waris Sisi (Saudara Kandung)',
+            'section-extended': '5. Waris Bapa Saudara & Sepupu',
+            'section-results': 'Pecahan Pengagihan Faraid',
+            'label-gender': 'Jantina Arwah',
+            'label-male': 'Lelaki',
+            'label-female': 'Perempuan',
+            'label-gross': 'Kasar (RM)',
+            'label-funeral': 'Jenazah (RM)',
+            'label-debts': 'Hutang (RM)',
+            'label-mother': 'Ibu',
+            'label-father': 'Bapa',
+            'label-wives': 'Isteri',
+            'label-husband': 'Suami',
+            'label-sons': 'Anak Lelaki',
+            'label-daughters': 'Anak Perempuan',
+            'label-mat-grandma': 'Nenek Ibu',
+            'label-pat-grandma': 'Nenek Bapa',
+            'label-grandfather': 'Nenek Bapa',
+            'label-grandsons': 'Cucu Lelaki',
+            'label-granddaughters': 'Cucu Perempuan',
+            'label-full-bros': 'Saudara Lelaki Kandung',
+            'label-full-sis': 'Saudara Perempuan Kandung',
+            'label-pat-bros': 'Saudara Sepupu Lelaki (Sebapa)',
+            'label-pat-sis': 'Saudara Sepupu Perempuan (Sebapa)',
+            'label-mat-bros': 'Saudara Sepupu Lelaki (Sebapa)',
+            'label-mat-sis': 'Saudara Sepupu Perempuan (Sebapa)',
+            'label-nephews': 'Anak Saudara (Lelaki)',
+            'label-uncles': 'Pakcik (Lelaki)',
+            'blocked-mother': 'Disekat oleh Ibu.',
+            'blocked-mother-father': 'Disekat oleh Ibu atau Bapa.',
+            'blocked-father': 'Disekat oleh Bapa.',
+            'blocked-son': 'Disekat sepenuhnya oleh kewujudan Anak Lelaki.',
+            'blocked-full-sibling': 'Disekat oleh Bapa, Anak Lelaki, atau Cucu Lelaki.',
+            'blocked-pat-sibling': 'Disekat oleh Bapa, Anak Lelaki, Cucu Lelaki, atau Saudara Lelaki Kandung.',
+            'blocked-mat-sibling': 'Disekat oleh Bapa, Nenek Bapa, Anak, atau Cucu.',
+            'blocked-extended': 'Hanya mewarisi jika TIADA lelaki langsung atau saudara kandung wujud.',
+            'btn-calculate': 'Kira Pengagihan Faraid',
+            'placeholder-gross': '0',
+            'placeholder-funeral': '0',
+            'placeholder-debts': '0',
+            'placeholder-sons': '0',
+            'placeholder-daughters': '0',
+            'placeholder-grandsons': '0',
+            'placeholder-granddaughters': '0',
+            'placeholder-full-bro': '0',
+            'placeholder-full-sis': '0',
+            'placeholder-pat-bro': '0',
+            'placeholder-pat-sis': '0',
+            'placeholder-mat-bro': '0',
+            'placeholder-mat-sis': '0',
+            'placeholder-nephew': '0',
+            'placeholder-uncle': '0',
+            'footer-ref-title': 'Rujukan & Metodologi:',
+            'footer-ref-body': 'Algoritma dan hukum Al-Hajb (halangan) yang digunakan dalam pengiraan ini adalah berdasarkan <em>Hukum Syarak</em> seperti yang termaktub di dalam <strong>Surah An-Nisa (Ayat 11, 12, dan 176)</strong>. Struktur pengiraan ini mematuhi prinsip Faraid yang diguna pakai oleh pihak berkuasa agama Islam di Malaysia, selaras dengan rujukan daripada <a href="https://efaraid.mais.gov.my/" target="_blank">Majlis Agama Islam Selangor (MAIS)</a> dan <a href="https://myland.gov.my/myland-adm/waris/WarisFaraidForm.xhtml" target="_blank">MyLand (Kalkulator Faraid)</a>.',
+            'footer-disclaimer': 'Penafian:',
+             'footer-disclaimer-content': 'Kalkulator ini menyediakan anggaran pengiraan untuk tujuan pendidikan dan perancangan awal sahaja. Ia tidak sah digunakan sebagai dokumen sokongan dalam sebarang tuntutan harta pusaka atau perbicaraan di Mahkamah. Untuk urusan pentadbiran harta pusaka yang rasmi, pengguna dinasihatkan untuk merujuk kepada peguam Syarie yang bertauliah, Mahkamah Syariah, atau Majlis Agama Islam negeri masing-masing.',
+            'err-liabilities': 'Liabiliti melebihi Harta Kasar.',
+            'err-calculation': 'Ralat Pengiraan.',
+            'wife': 'Isteri',
+            'husband': 'Suami',
+            'mother': 'Ibu',
+            'father': 'Bapa',
+            'grandmothers': 'Nenek',
+            'grandfather': 'Nenek Bapa',
+            'daughters': 'Anak Perempuan',
+            'granddaughters': 'Cucu Perempuan',
+            'sons': 'Anak Lelaki',
+            'grandsons': 'Cucu Lelaki',
+            'full-brothers': 'Saudara Lelaki Kandung',
+            'full-sisters': 'Saudara Perempuan Kandung',
+            'nephews': 'Anak Saudara',
+            'uncles': 'Pakcik',
+            'role-fixed': 'Ashabul Furud (Bahagian Tetap)',
+            'role-residuary': 'Asabah (Baki)',
+            'blocked-by': 'Disekat oleh',
+           'exp-step1': 'Langkah 1: Tentukan Harta Bersih (Tirkah)',
+            'exp-step1-text': 'Sebelum pengagihan Faraid, harta pusaka kasar sebanyak RM ${gross} perlu ditolak dengan segala tanggungan. Selepas menolak Kos Pengurusan Jenazah (RM ${funeral}) dan Hutang (RM ${debts}), baki Harta Bersih (Tirkah) adalah <strong>RM ${nett}</strong>.',
+            'exp-step2': 'Langkah 2: Aplikasi Kaedah Al-Hajb (Halangan)',
+            'exp-step2-text': 'Undang-undang Islam menetapkan hierarki waris yang tersusun. Waris yang lebih dekat (seperti Bapa atau Anak Lelaki) akan menghalang sepenuhnya waris yang lebih jauh (seperti Nenek atau Saudara Kandung) daripada mewarisi harta.',
+            'exp-step3': 'Langkah 3: Ashabul Furud (Bahagian Tetap)',
+            'exp-step3-text': 'Waris-waris tertentu mempunyai pecahan bahagian tetap yang telah ditetapkan di dalam Surah An-Nisa (cth., 1/8, 1/4, 1/6, 1/2). Kadar pecahan ini boleh berubah bergantung kepada kewujudan zuriat (anak). Sistem akan mengira bahagian ini terlebih dahulu.',
+            'exp-step4-remainder': 'Langkah 4: Asabah (Bahagian Baki)',
+            'exp-step4-remainder-text': 'Selepas bahagian tetap (furud) diagihkan, baki pecahan (${remainder}) akan diberikan kepada penerima Asabah. Dalam senario ini, penerima Asabah ialah: <strong>${asabah}</strong>. Jika waris lelaki dan perempuan daripada taraf yang sama berkongsi Asabah (cth., anak lelaki dan anak perempuan), pembahagian adalah mengikut nisbah 2:1.',
+            'exp-step4-none': 'Langkah 4: Asabah (Bahagian Baki)',
+            'exp-step4-none-text': 'Dalam senario ini, pembahagian kepada Ashabul Furud telah menghabiskan keseluruhan harta (100%), maka tiada baki yang tinggal untuk waris Asabah.',
+            'total-distributed': 'Jumlah Diagihkan: RM',
+            'placeholder-emoji': '⚖️',
+            'placeholder-line1': 'Masukkan maklumat harta dan waris di ruangan sebelah kiri.',
+            'placeholder-line2': 'Sistem akan mengaplikasikan hukum Al-Hajb (Halangan) secara automatik.',
+            'blocked-full-sibling-father': 'Disekat oleh Bapa.',
+            'blocked-full-sibling-son': 'Disekat oleh Anak Lelaki.',
+            'blocked-full-sibling-grandson': 'Disekat oleh Cucu Lelaki.',
+        },
+        en: {
+            'title': 'Comprehensive Faraid Calculator',
+            'subtitle': 'Advanced Syariah Estate Distribution Engine',
+            'section-estate': '1. Deceased Details & Estate',
+            'section-primary-heirs': '2. Primary Heirs (Waris Utama)',
+            'section-substitute-heirs': '3. Substitute Heirs (Waris Ganti)',
+            'section-siblings': '4. Siblings (Waris Sisi)',
+            'section-extended': '5. Paternal Relatives & Cousins (Waris Bapa Saudara & Sepupu)',
+            'section-results': 'Faraid Distribution Breakdown',
+            'label-gender': 'Deceased Gender',
+            'label-male': 'Male',
+            'label-female': 'Female',
+            'label-gross': 'Gross (RM)',
+            'label-funeral': 'Funeral (RM)',
+            'label-debts': 'Debts (RM)',
+            'label-mother': 'Mother (Ibu)',
+            'label-father': 'Father (Bapa)',
+            'label-wives': 'Wives (Isteri)',
+            'label-husband': 'Husband (Suami)',
+            'label-sons': 'Sons (Anak Lelaki)',
+            'label-daughters': 'Daughters (Anak Perempuan)',
+            'label-mat-grandma': 'Maternal Grandma',
+            'label-pat-grandma': 'Paternal Grandma',
+            'label-grandfather': 'Paternal Grandfather',
+            'label-grandsons': 'Grandsons',
+            'label-granddaughters': 'Granddaughters',
+            'label-full-bros': 'Full Brothers',
+            'label-full-sis': 'Full Sisters',
+            'label-pat-bros': 'Paternal Half-Bros',
+            'label-pat-sis': 'Paternal Half-Sis',
+            'label-mat-bros': 'Maternal Half-Bros',
+            'label-mat-sis': 'Maternal Half-Sis',
+            'label-nephews': 'Nephews',
+            'label-uncles': 'Uncles',
+            'blocked-mother': 'Blocked by Mother.',
+            'blocked-mother-father': 'Blocked by Mother or Father.',
+            'blocked-father': 'Blocked by Father.',
+            'blocked-son': 'Blocked completely by existence of a Son.',
+            'blocked-full-sibling': 'Blocked by Father, Son, or Grandson.',
+            'blocked-pat-sibling': 'Blocked by Father, Son, Grandson, or Full Brother.',
+            'blocked-mat-sibling': 'Blocked by Father, Grandfather, Child, or Grandchild.',
+            'blocked-extended': 'Only inherit if NO direct males or brothers exist.',
+            'btn-calculate': 'Calculate Exact Distribution',
+            'placeholder-gross': '0',
+            'placeholder-funeral': '0',
+            'placeholder-debts': '0',
+            'placeholder-sons': '0',
+            'placeholder-daughters': '0',
+            'placeholder-grandsons': '0',
+            'placeholder-granddaughters': '0',
+            'placeholder-full-bro': '0',
+            'placeholder-full-sis': '0',
+            'placeholder-pat-bro': '0',
+            'placeholder-pat-sis': '0',
+            'placeholder-mat-bro': '0',
+            'placeholder-mat-sis': '0',
+            'placeholder-nephew': '0',
+            'placeholder-uncle': '0',
+            'footer-ref-title': 'Reference & Methodology:',
+            'footer-ref-body': 'The algorithms and blocking rules (Al-Hajb) applied in this calculator are based on the rulings of <em>Hukum Syarak</em> (Islamic Law) derived from <strong>Surah An-Nisa (Verses 11, 12, and 176)</strong>. The calculation structure adheres strictly to the Faraid principles utilized by Malaysian Islamic authorities, matching the framework provided by the <a href="https://efaraid.mais.gov.my/" target="_blank">Majlis Agama Islam Selangor (MAIS)</a> and <a href="https://myland.gov.my/myland-adm/waris/WarisFaraidForm.xhtml" target="_blank">MyLand (Kalkulator Faraid)</a>.',
+            'footer-disclaimer': 'Disclaimer:',
+             'footer-disclaimer-content': 'This tool provides theoretical distributions for educational and planning purposes. For official estate execution, please consult a certified Syariah lawyer or your state\'s Islamic Religious Council.',
+            'err-liabilities': 'Liabilities exceed Gross Estate.',
+            'err-calculation': 'Calculation Error.',
+            'wife': 'Wife',
+            'husband': 'Husband',
+            'mother': 'Mother',
+            'father': 'Father',
+            'grandmothers': 'Grandmothers',
+            'grandfather': 'Grandfather',
+            'daughters': 'Daughters',
+            'granddaughters': 'Granddaughters',
+            'sons': 'Sons',
+            'grandsons': 'Grandsons',
+            'full-brothers': 'Full Brothers',
+            'full-sisters': 'Full Sisters',
+            'nephews': 'Nephews',
+            'uncles': 'Uncles',
+            'role-fixed': 'Ashabul Furud (Fixed)',
+            'role-residuary': 'Asabah (Residuary)',
+            'blocked-by': 'Blocked by',
+            'exp-step1': 'Step 1: Determine the Nett Estate (Tirkah)',
+            'exp-step1-text': 'Before any Faraid distribution, the gross estate of RM ${gross} must be cleared of liabilities. After deducting Funeral Expenses (RM ${funeral}) and Debts (RM ${debts}), the remaining Nett Estate is <strong>RM ${nett}</strong>.',
+            'exp-step2': 'Step 2: Apply Al-Hajb (The Rule of Blocking)',
+            'exp-step2-text': 'Islamic law dictates a strict hierarchy to prevent fragmentation. Closer relatives (like a Father or Son) completely block extended relatives (like Grandparents or Siblings) from inheriting.',
+            'exp-step3': 'Step 3: Ashabul Furud (Fixed Shares)',
+            'exp-step3-text': 'Certain heirs have fixed fractions stated directly in Surah An-Nisa (e.g., 1/8, 1/4, 1/6, 1/2). These fractions change based on the presence of children. The system calculates these first.',
+            'exp-step4-remainder': 'Step 4: Asabah (Residuary Allocation)',
+            'exp-step4-remainder-text': 'After the fixed shares are given, the remaining fraction (${remainder}) goes to the Asabah. In this specific scenario, the Asabah right belongs to: <strong>${asabah}</strong>. If males and females of the same rank share the Asabah (e.g., sons and daughters), it is distributed at a 2:1 ratio.',
+            'exp-step4-none': 'Step 4: Asabah (Residuary Allocation)',
+            'exp-step4-none-text': 'In this scenario, the fixed shares perfectly consumed the entire estate (100%), leaving no remainder for any Asabah heirs.',
+            'total-distributed': 'Total Distributed: RM',
+            'placeholder-emoji': '⚖️',
+            'placeholder-line1': 'Enter estate details and heirs on the left.',
+            'placeholder-line2': 'The system will automatically apply Al-Hajb (Blocking) rules.',
+            'blocked-full-sibling-father': 'Blocked by Father.',
+            'blocked-full-sibling-son': 'Blocked by Son.',
+            'blocked-full-sibling-grandson': 'Blocked by Grandson.',
+        }
+    };
 
-            if (nettEstate < 0) {
-                alert("Liabilities exceed Gross Estate. No Faraid distribution possible.");
-                return;
+    let currentLang = localStorage.getItem('lang') || 'ms';
+
+    function t(key) {
+        return translations[currentLang][key] || key;
+    }
+
+    function applyLanguage() {
+        document.documentElement.lang = currentLang;
+        document.title = t('title');
+
+        document.querySelectorAll('[data-key]').forEach(function(el) {
+            var key = el.getAttribute('data-key');
+            if (translations[currentLang][key] !== undefined) {
+                el.innerHTML = translations[currentLang][key];
             }
+        });
 
-            // 2. Get heir inputs
+        document.querySelectorAll('[data-ph]').forEach(function(el) {
+            var key = el.getAttribute('data-ph');
+            if (translations[currentLang][key] !== undefined) {
+                el.placeholder = translations[currentLang][key];
+            }
+        });
+
+        var btn = document.getElementById('langToggle');
+        btn.textContent = currentLang === 'ms' ? 'EN' : 'BM';
+    }
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'ms' ? 'en' : 'ms';
+        localStorage.setItem('lang', currentLang);
+        applyLanguage();
+    }
+
+    applyLanguage();
+
+    // --- 1. ADVANCED UI BLOCKING ENGINE (Al-Hajb) ---
+    function getAvatar(type) {
+        switch(type) {
+            case 'wife': case 'husband': return '🧕';
+            case 'mother': case 'mat-grandma': return '👵';
+            case 'father': case 'pat-grandfather': return '👴';
+            case 'son': case 'grandson': case 'full-brother': case 'pat-brother': case 'nephew': case 'uncle': return '👦';
+            case 'daughter': case 'granddaughter': case 'full-sister': case 'pat-sister': return '👧';
+            default: return '👤';
+        }
+    }
+
+    function getBlockedByMsg() {
+        const hasFather = document.getElementById('hasFather').checked;
+        const sonCount = parseInt(document.getElementById('sonCount').value) || 0;
+        const grandsonCount = parseInt(document.getElementById('grandsonCount').value) || 0;
+        if (hasFather) return t('blocked-full-sibling-father');
+        if (sonCount > 0) return t('blocked-full-sibling-son');
+        return t('blocked-full-sibling-grandson');
+    }
+
+    function getHeirAvatar(name) {
+        if (name.includes('Wife') || name.includes('Wiv') || name.includes('Isteri')) return '🧕';
+        if (name.includes('Husband') || name.includes('Suami')) return '👨';
+        if (name.includes('Mother') || name.includes('Moth') || name.includes('Ibu')) return '👵';
+        if (name.includes('Father') || name.includes('Fath') || name.includes('Bapa')) return '👴';
+        if (name.includes('Grandm') || (name.includes('Nenek') && !name.includes('Bapa'))) return '👵';
+        if (name.includes('Grandf') || (name.includes('Nenek') && name.includes('Bapa'))) return '👴';
+        if (name.includes('Son') || name.includes('Bro') || name.includes('Neph') || name.includes('Uncl') || name.includes('Lelaki') || name.includes('Anak Saudara') || name.includes('Pakcik')) return '👦';
+        if (name.includes('Daugh') || name.includes('Sis') || name.includes('Perempuan')) return '👧';
+        return '👤';
+    }
+
+    function applyComprehensiveBlockingRules() {
+        const isMale = document.querySelector('input[name="deceasedGender"]:checked').value === 'M';
+        const hasMother = document.getElementById('hasMother').checked;
+        const hasFather = document.getElementById('hasFather').checked;
+        const hasGrandfather = document.getElementById('hasGrandfather').checked;
+        
+        const sonCount = parseInt(document.getElementById('sonCount').value) || 0;
+        const daughterCount = parseInt(document.getElementById('daughterCount').value) || 0;
+        const grandsonCount = parseInt(document.getElementById('grandsonCount').value) || 0;
+        const granddaughterCount = parseInt(document.getElementById('granddaughterCount').value) || 0;
+        const fullBroCount = parseInt(document.getElementById('fullBroCount').value) || 0;
+        const fullSisCount = parseInt(document.getElementById('fullSisCount').value) || 0;
+
+        document.getElementById('wifeGroup').style.display = isMale ? 'block' : 'none';
+        document.getElementById('husbandGroup').style.display = isMale ? 'none' : 'block';
+        if(isMale) document.getElementById('hasHusband').checked = false;
+        if(!isMale) document.getElementById('wifeCount').value = "0";
+
+        const matGrandmaBlock = document.getElementById('matGrandmaBlock');
+        if (hasMother) { matGrandmaBlock.classList.add('faraid-blocked'); document.getElementById('hasMatGrandma').checked = false; } 
+        else matGrandmaBlock.classList.remove('faraid-blocked');
+
+        const patGrandmaBlock = document.getElementById('patGrandmaBlock');
+        if (hasMother || hasFather) { patGrandmaBlock.classList.add('faraid-blocked'); document.getElementById('hasPatGrandma').checked = false; } 
+        else patGrandmaBlock.classList.remove('faraid-blocked');
+
+        const grandpaBlock = document.getElementById('grandpaBlock');
+        if (hasFather) { grandpaBlock.classList.add('faraid-blocked'); document.getElementById('hasGrandfather').checked = false; } 
+        else grandpaBlock.classList.remove('faraid-blocked');
+
+        const grandchildBlock = document.getElementById('grandchildBlock');
+        if (sonCount > 0) { grandchildBlock.classList.add('faraid-blocked'); document.getElementById('grandsonCount').value = 0; document.getElementById('granddaughterCount').value = 0; } 
+        else grandchildBlock.classList.remove('faraid-blocked');
+
+        const fullSiblingBlock = document.getElementById('fullSiblingBlock');
+        if (hasFather || sonCount > 0 || grandsonCount > 0) {
+            fullSiblingBlock.classList.add('faraid-blocked');
+            document.getElementById('fullBroCount').value = 0; document.getElementById('fullSisCount').value = 0;
+            document.getElementById('fullSiblingMsg').innerText = getBlockedByMsg();
+        } else fullSiblingBlock.classList.remove('faraid-blocked');
+
+        const patSiblingBlock = document.getElementById('patSiblingBlock');
+        if (hasFather || sonCount > 0 || grandsonCount > 0 || fullBroCount > 0 || (fullSisCount > 0 && daughterCount > 0)) {
+            patSiblingBlock.classList.add('faraid-blocked');
+            document.getElementById('patBroCount').value = 0; document.getElementById('patSisCount').value = 0;
+        } else patSiblingBlock.classList.remove('faraid-blocked');
+
+        const matSiblingBlock = document.getElementById('matSiblingBlock');
+        const hasAnyChild = (sonCount > 0 || daughterCount > 0 || grandsonCount > 0 || granddaughterCount > 0);
+        if (hasFather || hasGrandfather || hasAnyChild) {
+            matSiblingBlock.classList.add('faraid-blocked');
+            document.getElementById('matBroCount').value = 0; document.getElementById('matSisCount').value = 0;
+        } else matSiblingBlock.classList.remove('faraid-blocked');
+
+        const extendedBlock = document.getElementById('extendedBlock');
+        if (hasFather || hasGrandfather || sonCount > 0 || grandsonCount > 0 || fullBroCount > 0 || parseInt(document.getElementById('patBroCount').value) > 0) {
+            extendedBlock.classList.add('faraid-blocked');
+            document.getElementById('nephewFullCount').value = 0; document.getElementById('uncleFullCount').value = 0;
+        } else extendedBlock.classList.remove('faraid-blocked');
+    }
+
+    document.querySelectorAll('input[name="deceasedGender"], .trigger-input').forEach(el => {
+        el.addEventListener('change', applyComprehensiveBlockingRules);
+        el.addEventListener('input', applyComprehensiveBlockingRules); 
+    });
+    applyComprehensiveBlockingRules();
+
+    // --- 2. CALCULATION ENGINE ---
+    if (typeof Fraction === 'undefined') {
+        document.getElementById('faraidOutput').innerHTML = '<p style="color:red;">Error: fraction.js failed to load.</p>';
+    } else {
+        function drawConnectors() {
+        const container = document.querySelector('.faraid-tree-container');
+        if (!container) return;
+
+        let svg = document.getElementById('faraidTreeSvg');
+        if (!svg) {
+            svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'faraid-tree-svg');
+            svg.setAttribute('id', 'faraidTreeSvg');
+            container.insertBefore(svg, container.firstChild);
+        }
+        svg.innerHTML = '';
+
+        const containerRect = container.getBoundingClientRect();
+        const estateNode = container.querySelector('.faraid-estate-node');
+        if (!estateNode) return;
+
+        const estateRect = estateNode.getBoundingClientRect();
+        const estateCY = estateRect.top + estateRect.height / 2 - containerRect.top;
+        const estateLeft = estateRect.left - containerRect.left;
+        const estateRight = estateRect.right - containerRect.left;
+
+        svg.setAttribute('viewBox', `0 0 ${containerRect.width} ${containerRect.height}`);
+
+        const cards = container.querySelectorAll('.faraid-heir-card');
+        cards.forEach(card => {
+            const cardRect = card.getBoundingClientRect();
+            const side = card.getAttribute('data-side') || 'left';
+
+            let startX, endX;
+            if (side === 'left') {
+                startX = cardRect.right - containerRect.left;
+                endX = estateLeft;
+            } else {
+                startX = cardRect.left - containerRect.left;
+                endX = estateRight;
+            }
+            const startY = cardRect.top + cardRect.height / 2 - containerRect.top;
+            const endY = estateCY;
+
+            const midX = (startX + endX) / 2;
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', `M ${startX},${startY} C ${midX},${startY} ${midX},${endY} ${endX},${endY}`);
+            path.setAttribute('stroke', '#2c7a7b');
+            path.setAttribute('stroke-width', '2');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('opacity', '0.45');
+            path.setAttribute('stroke-linecap', 'round');
+            svg.appendChild(path);
+        });
+    }
+
+    document.getElementById('faraidForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        try {
+            const grossEstate = parseFloat(document.getElementById('grossEstate').value) || 0;
+            const funeralExp = parseFloat(document.getElementById('funeralExpenses').value) || 0;
+            const debtsExp = parseFloat(document.getElementById('debts').value) || 0;
+            const nettEstate = grossEstate - funeralExp - debtsExp;
+
+            if (nettEstate < 0) { alert(t('err-liabilities')); return; }
+
+            const wifeCount = parseInt(document.getElementById('wifeCount').value) || 0;
+            const hasHusband = document.getElementById('hasHusband').checked;
             const hasMother = document.getElementById('hasMother').checked;
             const hasFather = document.getElementById('hasFather').checked;
-            const hasWife = document.getElementById('hasWife').checked;
+            
             const sons = parseInt(document.getElementById('sonCount').value) || 0;
             const daughters = parseInt(document.getElementById('daughterCount').value) || 0;
-            const hasChildren = (sons > 0 || daughters > 0);
+            const grandsons = parseInt(document.getElementById('grandsonCount').value) || 0;
+            const granddaughters = parseInt(document.getElementById('granddaughterCount').value) || 0;
+            const hasAnyChild = (sons > 0 || daughters > 0 || grandsons > 0 || granddaughters > 0);
 
-            // 3. Mathematical Logic 
+            const hasMatGrandma = document.getElementById('hasMatGrandma').checked;
+            const hasPatGrandma = document.getElementById('hasPatGrandma').checked;
+            const hasGrandfather = document.getElementById('hasGrandfather').checked;
+
+            const fullBros = parseInt(document.getElementById('fullBroCount').value) || 0;
+            const fullSis = parseInt(document.getElementById('fullSisCount').value) || 0;
+            const nephews = parseInt(document.getElementById('nephewFullCount').value) || 0;
+            const uncles = parseInt(document.getElementById('uncleFullCount').value) || 0;
+
             let distributions = [];
             let totalFixedFractions = new Fraction(0);
 
-            if (hasWife) {
-                let share = hasChildren ? new Fraction(1, 8) : new Fraction(1, 4);
-                totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: 'Wife', fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
-            }
+            // -- Fixed Shares --
+            if (wifeCount > 0) {
+                let totalSpouseShare = hasAnyChild ? new Fraction(1, 8) : new Fraction(1, 4);
+                totalFixedFractions = totalFixedFractions.add(totalSpouseShare);
+                
+                let sharePerWife = totalSpouseShare.div(wifeCount);
+                let valuePerWife = (nettEstate * totalSpouseShare.valueOf()) / wifeCount;
 
-            if (hasMother) {
-                let share = hasChildren ? new Fraction(1, 6) : new Fraction(1, 3);
+                for (let i = 1; i <= wifeCount; i++) {
+                    distributions.push({ 
+                        name: wifeCount > 1 ? `${t('wife')} ${i}` : t('wife'), 
+                        role: t('role-fixed'), 
+                        fraction: sharePerWife.toFraction(true), 
+                        val: valuePerWife 
+                    });
+                }
+            }
+            if (hasHusband) {
+                let share = hasAnyChild ? new Fraction(1, 4) : new Fraction(1, 2);
                 totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: 'Mother', fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                distributions.push({ name: t('husband'), role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
             }
             
-            if (hasFather) {
-                let share = hasChildren ? new Fraction(1, 6) : new Fraction(0); 
+            let motherShareAdded = false;
+            if (hasMother) {
+                let share = (hasAnyChild || (fullBrs + fullSis) >= 2) ? new Fraction(1, 6) : new Fraction(1, 3);
                 totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: 'Father', fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                distributions.push({ name: t('mother'), role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                motherShareAdded = true;
+            } 
+            if (!motherShareAdded && (hasMatGrandma || hasPatGrandma)) {
+                let grandmaCount = (hasMatGrandma ? 1 : 0) + (hasPatGrandma ? 1 : 0);
+                let share = new Fraction(1, 6);
+                totalFixedFractions = totalFixedFractions.add(share);
+                distributions.push({ name: t('grandmothers') + ` (${grandmaCount})`, role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
             }
 
-            // Asabah (Remainder) for Children
+            if (hasFather) {
+                let share = hasAnyChild ? new Fraction(1, 6) : new Fraction(0); 
+                totalFixedFractions = totalFixedFractions.add(share);
+                distributions.push({ name: t('father'), role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+            } else if (hasGrandfather) {
+                let share = hasAnyChild ? new Fraction(1, 6) : new Fraction(0);
+                totalFixedFractions = totalFixedFractions.add(share);
+                distributions.push({ name: t('grandfather'), role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+            }
+            
+            if (daughters > 0 && sons === 0) {
+                let share = daughters === 1 ? new Fraction(1, 2) : new Fraction(2, 3);
+                totalFixedFractions = totalFixedFractions.add(share);
+                distributions.push({ name: t('daughters') + ` (${daughters})`, role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+            }
+            if (granddaughters > 0 && grandsons === 0 && sons === 0 && daughters === 0) {
+                let share = granddaughters === 1 ? new Fraction(1, 2) : new Fraction(2, 3);
+                totalFixedFractions = totalFixedFractions.add(share);
+                distributions.push({ name: t('granddaughters') + ` (${granddaughters})`, role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+            }
+
+            // -- Asabah (Remainder) --
             let remainderFraction = new Fraction(1).sub(totalFixedFractions);
             let remainderValue = nettEstate * remainderFraction.valueOf();
-            console.log("DEBUG: Remainder value for Asabah RM", remainderValue);
+            let asabahAssignedTo = t('exp-step4-none-text');
 
-            if (hasChildren && remainderFraction.valueOf() > 0) {
-                let totalChildParts = (sons * 2) + daughters;
-                let valuePerPart = remainderValue / totalChildParts;
-                let fractionPerPart = remainderFraction.div(totalChildParts);
+            const distributeAsabah = (mCount, fCount, mLabel, fLabel) => {
+                let totalParts = (mCount * 2) + fCount;
+                let valPerPart = remainderValue / totalParts;
+                let fracPerPart = remainderFraction.div(totalParts);
+                if (mCount > 0) distributions.push({ name: `${mLabel} (${mCount})`, role: t('role-residuary'), fraction: `${fracPerPart.mul(2).toFraction(true)} ea`, val: valPerPart * 2 * mCount });
+                if (fCount > 0) distributions.push({ name: `${fLabel} (${fCount})`, role: t('role-residuary'), fraction: `${fracPerPart.toFraction(true)} ea`, val: valPerPart * fCount });
+                asabahAssignedTo = `${mCount > 0 ? mLabel : ''} ${fCount > 0 ? fLabel : ''}`.trim();
+            };
 
-                if (sons > 0) {
-                    let sonFraction = fractionPerPart.mul(2);
-                    distributions.push({ 
-                        name: `Sons (${sons})`, 
-                        fraction: `${sonFraction.toFraction(true)} each`, 
-                        val: valuePerPart * 2 * sons 
-                    });
+            if (remainderFraction.valueOf() > 0) {
+                if (sons > 0) distributeAsabah(sons, daughters, t('sons'), t('daughters'));
+                else if (grandsons > 0) distributeAsabah(grandsons, granddaughters, t('grandsons'), t('granddaughters'));
+                else if (hasFather) {
+                    let existing = distributions.find(d => d.name === t('father'));
+                    existing.val += remainderValue; existing.fraction += ` + Asabah`;
+                    asabahAssignedTo = t('father');
                 }
-                if (daughters > 0) {
-                    distributions.push({ 
-                        name: `Daughters (${daughters})`, 
-                        fraction: `${fractionPerPart.toFraction(true)} each`, 
-                        val: valuePerPart * daughters 
-                    });
+                else if (hasGrandfather) {
+                    let existing = distributions.find(d => d.name === t('grandfather'));
+                    existing.val += remainderValue; existing.fraction += ` + Asabah`;
+                    asabahAssignedTo = t('grandfather');
                 }
+                else if (fullBros > 0 || (fullSis > 0 && daughters === 0 && granddaughters === 0)) {
+                    distributeAsabah(fullBros, fullSis, t('full-brothers'), t('full-sisters'));
+                }
+                else if (nephews > 0) distributeAsabah(nephews, 0, t('nephews'), '');
+                else if (uncles > 0) distributeAsabah(uncles, 0, t('uncles'), '');
             }
 
-            // 4. Render HTML Output
-            const outputDiv = document.getElementById('faraidOutput');
-            let htmlContent = `
-                <div class="faraid-node central">
-                    <span>NETT ESTATE VALUE</span>
-                    <span class="faraid-value">RM ${nettEstate.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-                </div>
-            `;
-
+            // --- 3. RENDER GRAPHIC TREE ---
+            let leftColHTML = ''; let rightColHTML = '';
+            let hasLeft = false; let hasRight = false;
             let distributedTotal = 0;
 
             distributions.forEach(d => {
                 if(d.val > 0) {
                     distributedTotal += d.val;
-                    htmlContent += `
-                        <div class="faraid-node">
-                            <div class="faraid-node-info">
-                                <strong>${d.name}</strong>
-                                <span class="faraid-fraction">${d.fraction}</span>
+                    const isAsabah = d.role.includes('Asabah');
+                    const avatar = getHeirAvatar(d.name);
+                    
+                    const cardHTML = `
+                        <div class="faraid-heir-card" data-side="${isAsabah ? 'right' : 'left'}">
+                            <div class="faraid-avatar">${avatar}</div>
+                            <div class="faraid-heir-info">
+                                <span class="faraid-heir-role">${d.name} <span style="font-size:0.75em; font-weight:normal; color:#718096">(${d.role})</span></span>
+                                <span class="faraid-heir-fraction">${d.fraction}</span>
+                                <span class="faraid-heir-value">RM ${d.val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
                             </div>
-                            <div class="faraid-value">RM ${d.val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
-                        </div>
-                    `;
+                        </div>`;
+
+                    if (isAsabah) { rightColHTML += cardHTML; hasRight = true; } 
+                    else { leftColHTML += cardHTML; hasLeft = true; }
                 }
             });
 
-            htmlContent += `
-                <div class="faraid-total-distributed">
-                    Total Distributed: RM ${distributedTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+            // Dynamic Explainer Generation
+            let expHTML = `<h4>📖 How this was calculated</h4>`;
+            expHTML += `<strong>Step 1: Determine the Nett Estate (Tirkah)</strong><br>`;
+            expHTML += `Before any Faraid distribution, the gross estate of RM ${grossEstate.toLocaleString()} must be cleared of liabilities. After deducting Funeral Expenses (RM ${funeralExp}) and Debts (RM ${debtsExp}), the remaining Nett Estate is <strong>RM ${nettEstate.toLocaleString()}</strong>.<br><br>`;
+            
+            expHTML += `<strong>Step 2: Apply Al-Hajb (The Rule of Blocking)</strong><br>`;
+            expHTML += `Islamic law dictates a strict hierarchy to prevent fragmentation. Closer relatives (like a Father or Son) completely block extended relatives (like Grandparents or Siblings) from inheriting.<br><br>`;
+            
+            expHTML += `<strong>Step 3: Ashabul Furud (Fixed Shares)</strong><br>`;
+            expHTML += `Certain heirs have fixed fractions stated directly in Surah An-Nisa (e.g., 1/8, 1/4, 1/6, 1/2). These fractions change based on the presence of children. The system calculates these first.<br><br>`;
+            
+            if (remainderFraction.valueOf() > 0) {
+                expHTML += `<strong>Step 4: Asabah (Residuary Allocation)</strong><br>`;
+                expHTML += `After the fixed shares are given, the remaining fraction (${remainderFraction.toFraction(true)}) goes to the Asabah. In this specific scenario, the Asabah right belongs to: <strong>${asabahAssignedTo}</strong>. If males and females of the same rank share the Asabah (e.g., sons and daughters), it is distributed at a 2:1 ratio.`;
+            } else if (remainderFraction.valueOf() === 0) {
+                expHTML += `<strong>Step 4: Asabah (Residuary Allocation)</strong><br>`;
+                expHTML += `In this scenario, the fixed shares perfectly consumed the entire estate (100%), leaving no remainder for any Asabah heirs.`;
+            }
+
+            document.getElementById('faraidOutput').innerHTML = `
+                <div class="faraid-tree-container">
+                    <svg class="faraid-tree-svg" id="faraidTreeSvg"></svg>
+                    <div class="faraid-tree-column">${leftColHTML}</div>
+                    <div class="faraid-tree-column" style="z-index: 10;">
+                        <div class="faraid-estate-node">
+                            <div class="faraid-icon">📜</div><div class="faraid-label">Nett Estate</div>
+                            <div class="faraid-value">RM ${nettEstate.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                        </div>
+                    </div>
+                    <div class="faraid-tree-column">${rightColHTML}</div>
                 </div>
-            `;
+                
+                <div style="text-align: right; margin-top: 24px; font-weight: bold; color: #2c7a7b; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                    ${t('total-distributed')} RM ${distributedTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                </div>
+                
+                <div class="faraid-explanation">
+                    ${expHTML}
+                </div>`;
 
-            outputDiv.innerHTML = htmlContent;
-            console.log("DEBUG: Rendering complete.");
-
-        } catch (error) {
-            console.error("DEBUG: A calculation error occurred: ", error);
-            alert("An error occurred during calculation. Check the browser console for details.");
-        }
+            drawConnectors();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (error) { console.error(error); alert(t('err-calculation')); }
     });
-}
+    }
 </script>
-
 </body>
 </html>

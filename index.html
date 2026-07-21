@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Dev Hub</title>
+  <meta name="description" content="Wafi Dev Hub - A central portfolio showcasing construction calculators, Islamic inheritance tools, and web demos. Browse documentation and live apps.">
+  <meta name="theme-color" content="#635bff">
+  <title>Wafi Dev Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,7 +26,7 @@
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
       --transition: 0.2s ease;
-      --sidebar-width: 280px;
+      --sidebar-width: 250px;
       --topnav-height: 64px;
     }
 
@@ -60,23 +62,27 @@
     }
 
     .topnav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .topnav-logo .site-name {
       font-size: 1.1rem;
       font-weight: 700;
       color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
+    }
+
+    .topnav .logo-img {
+      height: 40px;
+      width: auto;
+      display: block;
     }
 
     .topnav-logo::before {
-      content: '';
-      display: inline-block;
-      width: 28px;
-      height: 28px;
-      background: var(--accent);
-      border-radius: 6px;
+      display: none;
     }
 
     .topnav-links {
@@ -210,20 +216,47 @@
       padding: 16px;
       border-top: 1px solid var(--border-color);
       font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
 
-    .sidebar-footer a {
-      color: var(--accent);
-      text-decoration: none;
+    .sidebar-footer .theme-toggle {
+      width: 100%;
+    }
+
+    .coffee-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      transition: color var(--transition);
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #ff9933 0%, #ffcc00 100%);
+      color: #3e2723;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      font-family: var(--font-sans);
+      box-shadow: 0 2px 8px rgba(255, 153, 51, 0.3);
+      transition: all var(--transition);
+      border: none;
+      cursor: pointer;
     }
 
-    .sidebar-footer a:hover {
-      color: var(--accent-hover);
-      text-decoration: underline;
+    .coffee-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(255, 153, 51, 0.4);
+      color: #3e2723;
+      text-decoration: none;
+    }
+
+    .coffee-btn svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
     }
 
     .main-content {
@@ -327,15 +360,21 @@
       overflow-y: auto;
       padding: 40px;
       max-width: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     .content-panel {
       display: none;
       animation: fadeIn 0.3s ease;
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      min-height: 0;
     }
 
     .content-panel.active {
-      display: block;
+      display: flex;
     }
 
     @keyframes fadeIn {
@@ -542,8 +581,8 @@
     }
 
     .iframe-container {
-      width: 100%;
-      height: calc(100vh - 200px);
+      flex: 1;
+      min-height: 0;
       border: 1px solid var(--border-color);
       border-radius: 8px;
       overflow: hidden;
@@ -643,6 +682,10 @@
       border-color: var(--border-color);
     }
 
+    [data-theme="dark"] .coffee-btn {
+      color: #3e2723;
+    }
+
     @media (max-width: 768px) {
       .sidebar {
         transform: translateX(-100%);
@@ -682,7 +725,8 @@
       }
 
       .iframe-container {
-        height: calc(100vh - 200px);
+        flex: 1;
+        min-height: 0;
       }
 
       .home-hero h2 {
@@ -736,10 +780,12 @@
     <div class="overlay" id="overlay"></div>
 
     <nav class="topnav" id="topnav">
-      <a href="#" class="topnav-logo" onclick="loadHome(); return false;">My Dev Hub</a>
+      <a href="#" class="topnav-logo" onclick="loadHome(); return false;">
+        <img src="universal.png" alt="Universal Logo" class="logo-img">
+        <img src="Ns.png" alt="WAFI Dev Hub Logo" class="logo-img">
+        <span class="site-name">WAFI Dev Hub</span>
+      </a>
       <div class="topnav-links">
-        <a href="#" onclick="loadHome(); return false;">Docs</a>
-        <a href="#" onclick="switchTab('live'); return false;">Live Demo</a>
         <a href="https://github.com/Aspiral25/BuildingHouseCalculator" target="_blank" rel="noopener noreferrer" class="cta-btn">GitHub</a>
       </div>
     </nav>
@@ -748,15 +794,18 @@
       <nav class="sidebar-nav" id="sidebarNav"></nav>
       <div class="sidebar-footer">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙 Dark</button>
-        <a href="https://ko-fi.com/nsdotmy" target="_blank" rel="noopener noreferrer" style="margin-top: 8px; display: inline-flex;">
-          <span>☕</span> Buy me a coffee
+        <a href="https://ko-fi.com/nsdotmy" target="_blank" rel="noopener noreferrer" class="coffee-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 21h18v-2H2v2zM20 8h-2V5H2v10c0 2.21 1.79 4 4 4h10c2.21 0 4-1.79 4-4V8zm-2 7c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V5h14v10zm-3-3h-2v-2h2v2z"/>
+          </svg>
+          Buy me a coffee
         </a>
       </div>
     </aside>
 
     <main class="main-content">
       <div class="mobile-header">
-        <h2 id="mobileTitle">My Dev Hub</h2>
+        <h2 id="mobileTitle">WAFI Dev Hub</h2>
         <button class="hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
       </div>
 
@@ -779,7 +828,7 @@
       {
         id: 'construction-calculator',
         label: 'Construction Calculator',
-        section: 'Get started',
+        section: 'Web Project',
         docs: {
           title: 'Construction Material Calculator',
           description: 'A web and desktop tool to estimate construction materials for walls, flooring, concrete, and paint. Built for Malaysian contractors, builders, and DIY enthusiasts.',
@@ -805,30 +854,9 @@
         hasIframe: true
       },
       {
-        id: 'regex-playground',
-        label: 'Regex Playground',
-        section: 'Tools',
-        docs: {
-          title: 'Regex Playground',
-          description: 'A lightweight, browser-based regular expression tester. Write patterns, test against sample text, and get instant match results with explanation support.',
-          techStack: ['HTML5', 'CSS3', 'JavaScript'],
-          features: [
-            'Real-time pattern matching against input text',
-            'Match highlighting with color-coded groups',
-            'Common pattern library for quick insertion',
-            'Flag support (g, i, m, s)',
-            'Copy pattern and match results to clipboard'
-          ],
-          formulas: [],
-          notes: 'Built with vanilla JavaScript and Regex engine. No external dependencies. Useful for developers, data analysts, and students learning regular expressions.'
-        },
-        iframeSrc: 'about:blank',
-        hasIframe: true
-      },
-      {
         id: 'faraid-calculator',
         label: 'Faraid Calculator',
-        section: 'Tools',
+        section: 'Web Project',
         docs: {
           title: 'Faraid Calculator',
           description: 'An accurate and Syariah-compliant Islamic inheritance calculator. Enter estate details and heirs to get exact distribution breakdown with fraction-precision mathematics.',
@@ -850,6 +878,193 @@
         },
         iframeSrc: 'faraid.html',
         hasIframe: true
+      },
+      {
+        id: 'erp-training-guide',
+        label: 'ERP Guide',
+        section: 'Notes',
+        docs: {
+          title: 'ERP System Training Notes',
+          description: 'Detailed Q&A and workflow procedures for the Monitor G5 ERP system.',
+          techStack: [],
+          features: [],
+          formulas: [],
+          notes: `
+            <div class="erp-notes" style="margin-top: 16px;">
+              
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 24px;">// ERP User Flows</h3>
+              
+              <h4 style="margin-top: 16px; margin-bottom: 8px;">[Sheryl / Sales & CS]</h4>
+              <ol style="margin-left: 20px; margin-bottom: 16px; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>Create Quotation:</strong> Go to ERP > Register Quote.</li>
+                <li><strong>Create PO/SO:</strong> Normally, if a quotation is accepted by the customer, convert the Quotation to an SO. If you want to create an SO manually: Go to ERP > Register Customer > Header: Set related settings and input > Rows: Choose Row Type 1. The part needs to be a Finished Good (FGS). If there is no FGS (e.g., a new tester), you need to register new parts in Part Register. If it is a repeat order, just choose the FGS from the list. (Leave the Order Number blank; the system will auto-generate the latest running number).</li>
+                <li><strong>Create Finished Good Number:</strong> Go to ERP > Part Register > Click Create New+ > Choose the latest FGS running number + 1 > Set related settings/inputs > Stock tab: Set location to Finished Good Loc > Save.</li>
+              </ol>
+
+              <h4 style="margin-top: 16px; margin-bottom: 8px;">[Albert / Design EE]</h4>
+              <ol style="margin-left: 20px; margin-bottom: 16px; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>Create Engineering BOM for Semi-Finished Goods (IFG0, IFG1, SUB-C, etc.):</strong> This assumes that all component-level parts are already imported. Semi-finished goods will link all components using ERP > BOM and Routing.</li>
+              </ol>
+
+              <h4 style="margin-top: 16px; margin-bottom: 8px;">[Cheah / Manufacturing EE]</h4>
+              <ol style="margin-left: 20px; margin-bottom: 16px; color: var(--text-secondary); line-height: 1.6;">
+                <li>Check the BOM and routing to verify the goods. Make sure everything is correct before creating an MO.</li>
+                <li>Create a Manufacturing Order (MO). Link the part/semi-finished good and PO to trigger the Purchase Order (PO) for the parts. Note: The PO suggestion is actually created during BOM routing.</li>
+                <li value="4"><strong>Ms. How (Electrical):</strong> Look up part selection and create a PO for the parts required to fulfill the MO.</li>
+                <li><strong>Mechanical:</strong> Look up part selection.</li>
+                <li><strong>CP:</strong> Obtain management approval for the part purchase PO.</li>
+                <li>Parts received from the supplier go to the Store or Incoming QC for Part Delivery Reporting.</li>
+                <li>EE & Mech Manufacturing will issue a Picklist to collect the items from the store and start operations. Once finished, report on the finished product.</li>
+              </ol>
+
+              <h4 style="margin-top: 16px; margin-bottom: 8px;">[Zhong]</h4>
+              <ol style="margin-left: 20px; margin-bottom: 16px; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>Report Delivery:</strong> Load the SO > Row tab > On the right-hand side under the Location section, update the reporting value.</li>
+              </ol>
+
+              <h4 style="margin-top: 16px; margin-bottom: 8px;">// Additional Mechanical Flow</h4>
+              <ol style="margin-left: 20px; margin-bottom: 24px; color: var(--text-secondary); line-height: 1.6;">
+                <li>The Mechanical Designer designs the part with a specific part number > Import the part using Excel > Import the BOM to create a module with all those parts. Next, link the drawings to all single fabrication parts. Then SAVE the BOM.</li>
+                <li>Mechanical Manufacturing defines the operations for all modules created by the Designer.</li>
+                <li>Mechanical Manufacturing creates an MO for M01 modules. Go to Manufacturing > Register Manufacturing Order > Under the Orders section, click the add symbol > Input the part number of the M01 part > Save.</li>
+                <li>The Mechanical Designer links the M00 to FGSxxx using BOM Routing > Load the FGS > Navigate to the top main FGS > Add the M00 material to the FGS > Define the operation for the FGS (this should be Integration M00 & IFG0).</li>
+              </ol>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Sales</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to link PO/SO to Quotation]</strong><br>Once a quotation (QUO) is created and sent to the customer, and the customer accepts it, the QUO can be converted to an SO using the Customer Order function in Quote.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Quote same quotation item to different customer]</strong><br>Open the Quotation > Save As first > Load the new Quotation > Change the customer details in the customer section.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Attach Calibration Cert for FGSxxx given that it has a batch number]</strong><br>Go to Stock > Traceability > Serial Number/Batch > On the General tab under Information, the certificate can be attached.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Warranty for Machine]</strong><br>Go to Stock > Traceability > Serial Number/Batch > Warranty.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[2 SO under 1 delivery DO]</strong><br>Go to Customer Register > Load the customer > Settings tab > Delivery/Shipping > Apply comprehensive delivery note.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How much sales already done for the same customer]</strong><br>Use the selection and filter tools in sorting.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to handle on-loan item to customer but want to record in system]</strong><br>Create an order type > Create an on-loan type > Set price = 0 > Do report delivery when sending to the customer.<br>During SO creation, use Row Type 1 to deduct stock. If the customer decides to purchase it, use Row Type 2 to record the value for finance tracking.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[If for On-loan, it is not converted to purchase, and the part is returned]</strong><br>Register case > Case type = Customer Nonconformity > Initial delivery = Choose the SO > Choose Cause Code > A case is now created.<br>Then go to Direct Stock Reporting > Add Arrival.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Return/reject PO item which already report receiving]</strong><br>Register case > Choose PO from initial PO > Register the case > Go to Report Arrival > On the right side, report the returned quantity > Direct Stock Reporting to deduct stock.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[What if the returned item came back?]</strong><br>Option 1: Create a new PO just to report the arrival.<br>Option 2: Create a case for the returning item > Direct Stock Reporting to add stock.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Blanket order]</strong><br>1 PO from the customer = 1 Blanket order. Inside the list, determine how many systems are in a row (e.g., each row = 12) > Adjust the requirement date.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Blanket order sales only service]</strong><br>Option 1: Order type = Blanket order sales, Part type = Manufactured > Number series = Blanket order number > Register blanket order > Register customer order = Find the blanket order column > Report delivery (if just a service) > Get DO.<br>Option 2: Create 12 rows in the blanket order row. Then adjust the 'Valid To' date.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Blanket order sales service + part]</strong><br>Register a blanket order (e.g., 12 job qty) > Every month, create an SO > Register an MO if parts are required > Report delivery.<br>Monitor this blanket order in the Blanket Order List > Under this blanket order number, you can find the related SOs.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to close blanket order]</strong><br>Option 1: Register blanket order > Change status to 9-Historical.<br>Option 2: Change the 'Valid To' date, or wait for the date to pass naturally.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[QAV order same amount invoice every month]</strong><br>We have an option to use an Agreement Order. This will post the invoice monthly based on the settings.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to undo SO part delivery report]</strong><br>Go to Delivery > Undo Delivery Order.<br>Note: The DO part number is consumed. If you report it again, it will use a new DO running number.</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Manufacturing</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to cancel MO]</strong><br>Open Report Manufacturing Order > Load the MO > At the operation level, set the remaining qty to 0 > For material, also set the qty to 0.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Pre-Calculation & Post Calculation]</strong><br>Pre-calculation can be run to view if the price is on the higher or lower side compared to the quoted price.<br>Post-calculation can be done for the MO to see if the actual manufacturing cost aligns with the planned cost. Saving the post-calculation will change the MO status to Post-Calculation.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Subcontract Operation]</strong><br>1. The supplier needs to be registered as a Subcontractor.<br>2. The work center needs to be updated with the subcontract supplier and other related settings.<br>3. In the MO, you must define the Operation unit time, or change the unit to MYR and set the value to 1.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Subcontract PCB with MOQ]</strong><br>1. Create a manual MO for this subcontract project.<br>2. Perform a pre-calculation to calculate the manufacturing cost. Then, save the manufacturing cost to the Standard Price (Add to Selection > Saving > Save section, List > Tick Save Price > Save). Check the Part Register to ensure the Standard Price is updated.<br>3. Go to Pre-calculation and run it for the complete PCB part (main part).<br>4. Go to Manufacturing > Subcontract > Subcontract Documents/Shipped > Input the part number > Printout = PO and Delivery note.<br>5. Report arrival once received from the supplier. Once the arrival report is done, the MO will automatically be reported.<br>6. This part will be linked into the material of the Link-requirement MO. The cost will be the standard price per piece × qty.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[MO Costing-Operation]</strong><br>Setup time = The time taken before starting the job (setup cost will be divided by the main part quantity).<br>Unit time = The actual time used for the operation.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Final Reporting]</strong><br>This is the final step, best done to lock the MO after the part is delivered and the invoice is issued.<br>Final reporting will show if there is any abnormal status on the reported finished MO. This allows us to clear any issues before reporting as Final and changing the status to Historical.<br>After Final Reporting, we can run a Post-Calculation and update the standard price.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Issue part after SO is shipped and MO reported]</strong><br>1. Add the material inside the MO.<br>2. Generate a Picklist.<br>3. Purchase part: Go to Requirement Calculation > Load with part selection > Apply order suggestion > Generate PO > Report arrival.<br>4. Store/IQC needs to report the picklist.</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Purchaser</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How To Delete PO]</strong><br>Users with PO access can delete "Approved" POs using the Order Receive function. Register PO > Load PO number > Click the Link symbol button on the top ribbon > Select Report Arrival > Select Selection tab > Scroll down to the bottom section > Set the suggested quantity for the material row to ZERO > Reload the PO > In the received section, ensure the value is zero, tick delete, then Save > Reload the PO > Ensure the status has changed to 9-Final Delivery Made.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Where to view previously cancelled PO]</strong><br>Purchase > Arrival Log.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to change delivery date for PO if the supplier didn't commit on delivery date]</strong><br>Even when a PO is approved, if there is a change in the date, the Purchaser can change the delivery date on the Order List - Purchase > Load the PO > List > Click the 'updatable' symbol, and the delivery date can now be changed.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to purchase a part with abnormal flow not following MO]</strong><br>Use the PR website.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to requote]</strong><br>Use Related Quotes and create a new one. Choose the correct one to convert to an SO.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Using phrases to ease document editing]</strong><br>Save phrases for future repeated use throughout all documents.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Reject a PO with comment]</strong><br>Comments will go to the Additional Info section.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Delivery date tracking]</strong><br>The Manufacturing side can always see the actual delivery date if the Purchaser updates it.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Approval]</strong><br>If any amendments are made, resending for approval will only trigger if the setting at General Approval Setting > Resend Settings tab is configured correctly.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[If there is no SO and no MO, but want to purchase item, then the item arrive at store]</strong><br>Use Stock > Direct Stock Reporting > Choose either withdrawal or arrival.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[If there is SO but still want to issue extra part for example resistor for repair]</strong><br>Use Direct Stock Reporting and indicate the SO in the specific column.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[If user want to receive notification on the raised PR part purchased]</strong><br>Go to Part Register > Planning Window > Select the part > On the left icon, choose the CCTV icon (Create manufacturing task) > Arrival.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Subcontract]</strong><br>If a part needs to be sent for subcontracting (e.g., PCB SMT): In Part Register (e.g., IFG0) > Material will be divided into two (material sent to subcon and material assembled in-house). Operations also need to be set up as two operations (Subcon and In-house assembly).<br>Create an MO to build the PCB > Go to Manufacturing > Subcontract Document Shipped > In selection, input the MO number and load.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[What if PO is rejected by management]</strong><br>When a PO is rejected, the status will become DENIED. Change the supplier, quantity, or price as needed, then resubmit the PO for approval.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Another way similar to PO suggestion but much better with view of planning window]</strong><br>Use Requirement Calculation. First, go to PO Suggestion with the default value of EE suggestion or ME suggestion > Load > Copy the part to the clipboard using the small icon on the left > Open Requirement Calculation > Under Selection, at Part, tick the clipboard box > Load. From here, you can see all related parts in the PO suggestion with more info. At the bottom, you can use the Planning Window to view requirements and click Apply PO to create a PO directly.</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Store</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to issue extra parts without reporting or using a pick list]</strong><br>(e.g., taking 100 first, using 50, and returning 50). Use Direct Part Reporting.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[If M00 item has items from the store instead of Incoming QC Receiving, how to create a Picklist specific for items in store]</strong><br>In Part Register > Stock tab > Bottom section, find Traceability > Untick it for all electronic parts.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Stock Count]</strong><br>For monthly or yearly stock counts, use Stock Count in List:<br>1. Selection > List types > Create stock count basis. Settings > Stock count status > Stock count in progress with saved balance > Load > Include > Save. The system will create a stock count basis number.<br>2. Print out the stock count document for manual counting in the store. When complete, proceed to the next step.<br>3. Stock Count in List > List types > Manage stock count > Enter the stock count basis number or just load to view the list.<br>4. Open the stock count basis number to report > Select and load > Reporting tab > Report the balance qty.<br>5. You can also export the list to Excel and edit it there. If there is a part with a quantity that is not in the same location as the list, use the 'Add in line' button to add the same part with a different location.<br>6. Use Stock Count Differences to view the stock count summary report.</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Finance</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Copy Latest purchased price to Standard Price]</strong><br>Go to Stock > Price Adjustment > List Type = Copy Price > Settings = Copy from (most recent purchased price), Copy to (Standard price).</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Mark-up Calculation]</strong><br>1. Set Calculation Mark-up at Settings > Calculation Markup. This will pre-set the percentage of markup.<br>2. Markup can also be set at the Part Register level > Manufacturing, or under Pre/Post Calculation > Selection > Bottom section (Markup section).</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Setting no 22 = Valuation method = FIFO price]</strong><br>If the setting is set to FIFO price, the system will capture the part price from the PO price.<br>If the part balance is adjusted using Balance Import, the system will not capture the price; instead, it will leave the part price as 0.<br>The correct method to have the system set the price is to use Direct Stock Reporting > Arrival. This way, if a quantity is adjusted in the balance stock, the system will automatically capture the price based on our settings (Settings > Stock > No. 22.1-22.3).</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[WIP Value]</strong><br>This will list all MOs currently in progress and detail all material values (in progress, reported, and planned).<br>It is also a good list to monitor work-in-progress and identify any old MOs that have not yet been closed.</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// BOM Adaptation Website (http://10.11.60.225:8100/authentication/login)</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6;">
+                <p>BOMIMPORT1 12345 EE<br>BOMIMPORT2 12345 ME</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Engineering</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[What happen if Engineering add a new material into the BOM that already finish picked by store]</strong><br>The additional material should be added inside the BOM routing by Engineering.<br>The MO needs to be synchronized: Go to Orders > Synchronize BOM routing > Choose the part > Synchronize > Run. It will show the newly added items > Tick the items that have changes and SAVE.<br>Go to Register MO > Load the MO and verify if the new part has a sync logo beside it.<br>Go to Manufacturing > Planning > Picklist > Load MO > Generate the picklist (it should show the remaining items not yet picked).</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Why SUB-C is set as Part type Fictitious]</strong><br>Sub-C is a grouping of purchased parts, not manufactured in-house. This part is grouped as Sub-C (or Sub-V). For example, if an SMU has the ERP part number IFG0, under this IFG0 there will be a few Sub-C groups of components. This makes it easier to adjust only a specific group of components for different sourcing outputs on the same SMU board.<br>Another option is using Quick Reporting; if there are no subcon operations inside the MO, you can use this to delete or cancel the MO.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to deal with a part manufactured in house using 3D printer, then using the same part to manufacture by vendor?]</strong><br>Use the same M02 part template to add the part. Then, manually change the part to 'Manufactured' instead of 'Purchased'. When the part is ready for vendor manufacturing, change it back to 'Purchased'. Remember to add a remark for future reference. A 'Manufactured' part will not trigger a PO; it requires an MO and an operation.</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Design</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <ol style="margin-left: 20px; line-height: 1.6;">
+                  <li>Create a drawing with the part number and quantity.</li>
+                  <li>Set it as either stock-driven or order-oriented.</li>
+                  <li>When the MO is already created and changes are made to the BOM: Add the part first, then synchronize it with BOM and Routing.</li>
+                </ol>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// PR Website (http://10.11.60.225/home)</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[PR Flow]</strong><br>1. Any user can request a PR on the PR website.<br>2. The Approver selects the PR from the list, sets the Price, Supplier, Account, and Project, then clicks APPROVE.<br>3. The Approver goes back to the Header, scrolls down, ticks 'Part Purchase', and clicks Save.<br>4. The status will change to Approved.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Row Type]</strong><br>1. Part Row: A part already registered in G5.<br>2. Additional Order Row: A part that we do not want to register but still want to proceed with a PO.<br>4. A remark for the PR item or a note for the purchaser.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Date Setting and Format]</strong><br>The date format follows the user's PC settings.<br>Use T+1 to set the date to tomorrow.<br>Use M+1 to set the month to the 1st day of the next month.</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Admin</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Updating system version]</strong><br>- Use the Monitor Installation Manager software.<br>- Open the manager and let it update itself automatically (leave it for 10+ mins).<br>- On the 'Installed Version' tab, you can view the G5 and other component versions.<br>- Download the update first before installing. Downloading won't affect user logins, but the installation process will log everyone out.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[If the license suddenly gets an error]</strong><br>- Open the Monitor Installation Manager to let it reconnect to the Sweden server.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Task Manager services]</strong><br>- Monitor has 4 services + 1 SQL G5 service.<br>- Restart all services if the user client software cannot log in.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Uploading database]</strong><br>- Log in to the ERP, go to Database Administration > Uploading of database > Paste the URL link provided by the Monitor support team.<br>- Uploading the database will not affect active users.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Block all invoicing generated for finance]</strong><br>- Go to Order Types > Customer Order tab > Find 'Create Invoice Basis'. Unticking all options will stop the creation of invoice data.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Creating Agent task scheduler]</strong><br>1. Go to System Setting > System Overall > Complete the email settings and test.<br>2. Agent Task > Create an agent task > Find the procedure > Under the Settings section, choose the default values. Under the Communication section, set the document type and the receiver (via email).<br>3. On any page, you can create a default value.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[If a signer is absent and wants to pass the approval to another signer]</strong><br>- Use Signer Settings > Absence.</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Project</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[P&L Income]</strong><br>- Derived from the SO.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[PO item consolidate many project purchases into 1 order]</strong><br>- The purchaser needs to separate the purchase into multiple rows to ensure the purchase cost goes to the correct project.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Change setting for cost capture/calculation in a project]</strong><br>- Go to Basic Data - Project > Project Types > Costs column.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Pre-calculation & Post-Calculation]</strong><br>- The material price in this calculation always uses the available consumption stock based on the FIFO price.</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[How to exclude double cost in Project cost calculation]</strong><br>- By default, the purchased item cost is captured inside the Cost/Income at the Project level.<br>- To avoid double counting, configure the settings at Chart of Account > General > Dimensions > Project > Applied = Yes, C/I type = [Leave blank].<br>- With this setting, the PO cost will not be included in the Project calculation once the PO is converted into an invoice.</p>
+              </div>
+
+
+              <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-top: 32px;">// Document Setting</h3>
+              <div style="color: var(--text-secondary); margin-bottom: 24px;">
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Paper Size]</strong><br>A4</p>
+                <p style="margin-bottom: 12px; line-height: 1.6;"><strong>[Margins]</strong><br>Left = 13mm<br>Right = 10mm<br>Top = 5mm<br>Bottom = 5mm</p>
+              </div>
+
+            </div>
+          `
+        },
+        hasIframe: false
       }
     ];
 
@@ -891,7 +1106,7 @@
       const sections = getSections();
       Object.keys(sections).forEach(sectionName => {
         const section = document.createElement('div');
-        section.className = 'nav-section' + (projects.some((p, i) => p.section === sectionName && i === currentProject) ? ' open' : '');
+        section.className = 'nav-section open';
 
         const sectionHeader = document.createElement('button');
         sectionHeader.className = 'nav-section-header';
@@ -920,12 +1135,11 @@
     function renderHome() {
       let html = `
         <div class="home-hero">
-          <h2>My Dev Hub</h2>
+          <h2>Wafi Dev Hub</h2>
           <p>Welcome to my central portfolio. Browse through the projects below to explore documentation, source code, and live demos of my web tools.</p>
           <div class="home-cta">
-            <button class="btn-primary" onclick="loadProject(0)">Explore Construction Calculator →</button>
-            <button class="btn-secondary" onclick="loadProject(1)">Try Regex Playground →</button>
-            <button class="btn-secondary" onclick="loadProject(2)">Try Faraid Calculator →</button>
+             <button class="btn-secondary" onclick="loadProject(0)">Explore Construction Calculator →</button>
+             <button class="btn-secondary" onclick="loadProject(1)">Explore Faraid Calculator →</button>
           </div>
         </div>
         <div class="projects-grid">
@@ -987,7 +1201,7 @@
         html += `
           <div class="doc-section">
             <h3>Notes</h3>
-            <p>${d.notes}</p>
+            <div class="doc-notes-content">${d.notes}</div>
           </div>
         `;
       }
@@ -1039,7 +1253,14 @@
       tabBar.classList.remove('hidden');
       renderDocs(project);
       renderLiveApp(project);
-      switchTab('live');
+      
+      // SMART TAB SWITCHING:
+      if (project.hasIframe) {
+        switchTab('live');
+      } else {
+        switchTab('docs');
+      }
+      
       closeSidebar();
     }
 
@@ -1111,7 +1332,9 @@
       applyTheme(current === 'dark' ? 'light' : 'dark');
     });
 
-    applyTheme(localStorage.getItem('theme') || 'light');
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
 
     renderSidebar();
     loadHome();
