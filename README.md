@@ -49,11 +49,6 @@ Detailed Q&A and workflow procedures for the Monitor G5 ERP system.
 *   **Workflows:** Covers Sales & CS, Design EE, Manufacturing EE, Store, and Finance departments.
 *   **Procedures:** Step-by-step guides for Purchasers (POs, subcontracting, blanket orders) and Admins (updates, licensing, agent schedulers).
 
-### 🔍 4. Regex Playground
-*Coming soon!* 🚧
-
----
-
 ## 💻 Tech Stack
 
 Keeping it fast, clean, and dependency-light:
@@ -81,34 +76,6 @@ All calculations in the Construction app strictly follow local Malaysian buildin
 | **Adhesive** | 25 kg bag | Standard tile adhesive packaging |
 | **BRC Mesh** | 2.2m × 6m | A6 JKR Spec reinforcing mesh |
 | **Paint** | Nippon (107), Dulux (124), Jotun (113) sq ft/L | Assumes a 2-coat finish on primed walls |
-
----
-
-## 🚀 Getting Started
-
-Want to run this locally? It's incredibly simple!
-
-### 1. Run the Web Hub
-Because it's built with pure HTML/JS, you can simply double-click `index.html` to open it in your browser. Alternatively, you can spin up a local server from the repo root:
-
-```bash
-# Option A: Serve via Python
-python -m http.server 8080
-
-# Option B: Serve via Node
-npx serve .
-```
-
-### 2. Run the Desktop App (Legacy)
-If you prefer a native desktop experience, I've also included my original **PyQt6** Python application!
-
-```bash
-# Install PyQt6
-pip install pyqt6
-
-# Run the app
-python housecal.py
-```
 
 ---
 
