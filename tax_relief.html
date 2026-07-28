@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LHDN Tax Refund Calculator (YA 2026)</title>
+    
+    <!-- Import Modern Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Modern Vibe Color Palette */
+            --bg-gradient: linear-gradient(135deg, #f6f8fd 0%, #f1f5f9 100%);
+            --panel-bg: rgba(255, 255, 255, 0.85);
+            --panel-border: rgba(255, 255, 255, 0.6);
+            --primary: #4f46e5; /* Indigo */
+            --primary-glow: rgba(79, 70, 229, 0.15);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --input-bg: #f8fafc;
+            --input-border: #e2e8f0;
+            --radius-panel: 24px;
+            --radius-input: 12px;
+            
+            /* Status Colors */
+            --success-bg: #ecfdf5;
+            --success-text: #059669;
+            --success-border: #a7f3d0;
+            --error-bg: #fef2f2;
+            --error-text: #dc2626;
+            --error-border: #fecaca;
+            --neutral-bg: #f1f5f9;
+            --neutral-text: #475569;
+            --neutral-border: #e2e8f0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        h1 { 
+            color: var(--text-main); 
+            font-size: 1.25rem; 
+            margin-bottom: 1rem; 
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* Bento Grid Core Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr auto;
+            gap: 1rem;
+            flex-grow: 1;
+            height: calc(100vh - 4rem);
+            min-height: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .panel { grid-column: span 1; }
+        .panel:last-child {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-rows: auto;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+        .panel:last-child > h2 {
+            grid-column: 1 / -1;
+        }
+        .panel:last-child > .metrics-stack {
+            grid-column: unset;
+            display: contents;
+        }
+        .panel:last-child > .metric {
+            grid-column: span 1;
+            gap: 0.75rem;
+            flex: none;
+        }
+        .panel:last-child > #refundStatus {
+            grid-column: span 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius-panel);
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05),
+                        inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+        }
+
+        h2 { 
+            color: var(--text-main); 
+            font-size: 0.95rem; 
+            margin-bottom: 0.75rem; 
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h2::before {
+            content: "";
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--primary-glow);
+        }
+
+        .scrollable-content {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 6px;
+        }
+
+        .scrollable-content::-webkit-scrollbar { width: 4px; }
+        .scrollable-content::-webkit-scrollbar-track { background: transparent; }
+        .scrollable-content::-webkit-scrollbar-thumb { 
+            background: #cbd5e1; 
+            border-radius: 4px; 
+        }
+        .scrollable-content:hover::-webkit-scrollbar-thumb { background: #94a3b8; }
+
+        .form-group {
+            margin-bottom: 0.6rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        input {
+            padding: 0.4rem 0.75rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-input);
+            font-size: 0.85rem;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        input:hover:not([readonly]) { border-color: #cbd5e1; }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        input[readonly] {
+            background-color: transparent;
+            color: var(--text-muted);
+            border-color: dashed var(--input-border);
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+
+        .info-box {
+            background-color: var(--primary-glow);
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            padding: 0.6rem 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: var(--radius-input);
+            font-size: 0.75rem;
+            color: var(--primary);
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .section-divider {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: var(--input-bg);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 0.5rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            width: max-content;
+        }
+
+        .metrics-stack {
+            display: flex;
+            flex-direction: row;
+            gap: 0.75rem;
+            flex-grow: 1;
+        }
+
+        .metric {
+            background: var(--input-bg);
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid var(--input-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1 1 0;
+        }
+
+        .metric h3 { 
+            margin: 0 0 0.25rem 0; 
+            font-size: 0.75rem; 
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .metric p { 
+            margin: 0; 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+        
+        .metric-bracket p { 
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .refund-status {
+            margin-top: auto;
+            padding: 1rem;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1rem;
+            gap: 0.75rem;
+            text-align: center;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .status-text { line-height: 1.2; }
+
+        .mytax-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.6rem 1.2rem;
+            background-color: var(--text-main);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: transform 0.1s ease, background-color 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .mytax-btn:hover { background-color: #000000; transform: translateY(-1px); }
+        .mytax-btn:active { transform: translateY(1px); }
+
+        .status-success { background-color: var(--success-bg); color: var(--success-text); border-color: var(--success-border); }
+        .status-error { background-color: var(--error-bg); color: var(--error-text); border-color: var(--error-border); }
+        .status-neutral { background-color: var(--neutral-bg); color: var(--neutral-text); border-color: var(--neutral-border); }
+
+        /* Modern Glass Tooltip */
+        .tooltip-container { position: relative; display: inline-flex; align-items: center; cursor: help; }
+        .help-icon { width: 14px; height: 14px; fill: #94a3b8; transition: fill 0.2s;}
+        .tooltip-container:hover .help-icon { fill: var(--text-main); }
+
+        .tooltip-content {
+            visibility: hidden;
+            width: 240px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #f8fafc;
+            text-align: left;
+            border-radius: 12px;
+            padding: 12px;
+            position: absolute;
+            z-index: 50;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            opacity: 0;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tooltip-container:hover .tooltip-content { 
+            visibility: visible; 
+            opacity: 1; 
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .bracket-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        .bracket-table th { text-align: left; color: #94a3b8; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: 500;}
+        .bracket-table td { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; }
+        .bracket-table tr:last-child td { border-bottom: none; }
+        .bracket-table td:last-child { text-align: right; font-weight: 600; color: #38bdf8; }
+
+        @media (max-width: 1024px) {
+            body { overflow: auto; height: auto; }
+            .dashboard { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; overflow: visible; }
+            .panel { grid-column: 1 / -1 !important; }
+            .panel:last-child { grid-template-rows: auto auto auto; grid-template-columns: 1fr; }
+            .panel:last-child > h2 { grid-column: 1; }
+            .panel:last-child > .metrics-stack,
+            .panel:last-child > #refundStatus { grid-column: 1; flex-wrap: wrap; }
+            .metrics-stack { flex-wrap: wrap; }
+            .metric { flex: 1 1 calc(33% - 1rem); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>LHDN Tax Refund Calculator (YA 2026)</h1>
+
+    <div class="dashboard">
+        
+        <!-- PANEL 1: INCOME & BASIC DETAILS -->
+        <div class="panel">
+            <h2>Income & Deductions</h2>
+            <div class="scrollable-content">
+                <div class="form-group">
+                    <label for="income">Gross Annual Income (RM)</label>
+                    <input type="number" id="income" class="tax-input" min="0" placeholder="e.g. 75000" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="pcb">Total Monthly Tax Paid (PCB) (RM)</label>
+                    <input type="number" id="pcb" class="tax-input" min="0" placeholder="e.g. 2000" value="0">
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <div class="section-divider">Auto Deduction</div>
+                    <div class="form-group">
+                        <label>Individual Base Relief</label>
+                        <input type="number" value="9000" readonly>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <div class="section-divider">Tax Rebates</div>
+                    <div class="form-group">
+                        <label for="zakat">Zakat & Fitrah (RM)</label>
+                        <input type="number" id="zakat" class="tax-input" min="0" placeholder="Deducted directly from tax" value="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL 2: TAX RELIEFS (3-COLUMN COMPACT FORM) -->
+        <div class="panel">
+            <h2>Claims & Relief Deductions</h2>
+            <div class="scrollable-content">
+                <div class="info-box">
+                    Max limits enforced based on LHDN YA 2026 guidelines. Zakat acts as a tax rebate and is applied in the calculation engine.
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0 1rem;">
+                    
+                    <!-- Col 1: Individual & Medical -->
+                    <div>
+                        <div class="section-divider">Individual</div>
+                        <div class="form-group">
+                            <label for="education">Self Education (Max 7k)</label>
+                            <input type="number" id="education" class="tax-input" min="0" max="7000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="disabledInd">Disabled Individual (Max 7k)</label>
+                            <input type="number" id="disabledInd" class="tax-input" min="0" max="7000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="localTravel">Local Travel (Max 1k)</label>
+                            <input type="number" id="localTravel" class="tax-input" min="0" max="1000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="housingLoan">First-Time Housing Loan (Max 7k)</label>
+                            <input type="number" id="housingLoan" class="tax-input" min="0" max="7000" value="0">
+                        </div>
+                        
+                        <div class="section-divider">Medical & Devices</div>
+                        <div class="form-group">
+                            <label for="medSelf">Critical Illness / Checkup (Max 10k)</label>
+                            <input type="number" id="medSelf" class="tax-input" min="0" max="10000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="basicDisability">Basic Disability Equip (Max 6k)</label>
+                            <input type="number" id="basicDisability" class="tax-input" min="0" max="6000" value="0">
+                        </div>
+                    </div>
+                    
+                    <!-- Col 2: Family & Child -->
+                    <div>
+                        <div class="section-divider">Parents & Spouse</div>
+                        <div class="form-group">
+                            <label for="spouse">Unemployed Spouse (Max 4k)</label>
+                            <input type="number" id="spouse" class="tax-input" min="0" max="4000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="disabledSpouse">Disabled Spouse (Max 6k)</label>
+                            <input type="number" id="disabledSpouse" class="tax-input" min="0" max="6000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="medParents">Parents' Med Expenses (Max 8k)</label>
+                            <input type="number" id="medParents" class="tax-input" min="0" max="8000" value="0">
+                        </div>
+
+                        <div class="section-divider">Children</div>
+                        <div class="form-group">
+                            <label for="childUnder18">Unmarried Child <18 (Total RM)</label>
+                            <input type="number" id="childUnder18" class="tax-input" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="childTertiary">Child 18+ in Tertiary (Total RM)</label>
+                            <input type="number" id="childTertiary" class="tax-input" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="disabledChild">Disabled Child (Total RM)</label>
+                            <input type="number" id="disabledChild" class="tax-input" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="childcare">Childcare / Preschool (Max 3k)</label>
+                            <input type="number" id="childcare" class="tax-input" min="0" max="3000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="breastfeeding">Breastfeeding Equip (Max 1k)</label>
+                            <input type="number" id="breastfeeding" class="tax-input" min="0" max="1000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="sspn">SSPN Scheme (Max 8k)</label>
+                            <input type="number" id="sspn" class="tax-input" min="0" max="8000" value="0">
+                        </div>
+                    </div>
+
+                    <!-- Col 3: Lifestyle & Contributions -->
+                    <div>
+                        <div class="section-divider">Lifestyle</div>
+                        <div class="form-group">
+                            <label for="lifestyle">Lifestyle (Books, Net) (Max 2.5k)</label>
+                            <input type="number" id="lifestyle" class="tax-input" min="0" max="2500" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="sports">Sports Equipment (Max 1k)</label>
+                            <input type="number" id="sports" class="tax-input" min="0" max="1000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="ev">EV / Food Waste / CCTV (Max 2.5k)</label>
+                            <input type="number" id="ev" class="tax-input" min="0" max="2500" value="0">
+                        </div>
+
+                        <div class="section-divider">Insurance & EPF</div>
+                        <div class="form-group">
+                            <label for="lifeIns">Life Ins. / EPF Contribution (Max 3k)</label>
+                            <input type="number" id="lifeIns" class="tax-input" min="0" max="3000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="medIns">Ed. or Medical Insurance (Max 4k)</label>
+                            <input type="number" id="medIns" class="tax-input" min="0" max="4000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="socso">SOCSO & EIS (Max 350)</label>
+                            <input type="number" id="socso" class="tax-input" min="0" max="350" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="epfVoluntary">EPF (Statutory/Voluntary) (Max 4k)</label>
+                            <input type="number" id="epfVoluntary" class="tax-input" min="0" max="4000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="prs">PRS (Max 3k)</label>
+                            <input type="number" id="prs" class="tax-input" min="0" max="3000" value="0">
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL 3: REAL-TIME ENGINE RESULTS -->
+        <div class="panel">
+            <h2>Live Results</h2>
+            <div class="metrics-stack">
+                <div class="metric">
+                    <h3>Chargeable Income</h3>
+                    <p id="outChargeable">RM 0.00</p>
+                </div>
+                <div class="metric metric-bracket">
+                    <h3>
+                        Highest Tax Bracket
+                        <span class="tooltip-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="help-icon">
+                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14h-2v-2h2zm1.07-5.59-1.2 1.2c-.37.38-.63.78-.7 1.39h-1.92v-.23c.09-.9.46-1.55 1.1-2.2l1.32-1.32c.2-.21.36-.5.36-.85a1.27 1.27 0 0 0-1.33-1.2 1.34 1.34 0 0 0-1.22.86l-1.74-.75A3.26 3.26 0 0 1 12 5.5a3.17 3.17 0 0 1 3.23 3.17c0 1.05-.44 1.76-1.16 2.54z"/>
+                            </svg>
+                            <span class="tooltip-content">
+                                <table class="bracket-table">
+                                    <thead>
+                                        <tr><th>Income Bracket (RM)</th><th>Rate</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>0 - 5k</td><td>0%</td></tr>
+                                        <tr><td>5k - 20k</td><td>1%</td></tr>
+                                        <tr><td>20k - 35k</td><td>3%</td></tr>
+                                        <tr><td>35k - 50k</td><td>6%</td></tr>
+                                        <tr><td>50k - 70k</td><td>11%</td></tr>
+                                        <tr><td>70k - 100k</td><td>19%</td></tr>
+                                        <tr><td>100k - 400k</td><td>25%</td></tr>
+                                        <tr><td>400k - 600k</td><td>26%</td></tr>
+                                        <tr><td>600k - 2m</td><td>28%</td></tr>
+                                        <tr><td>&gt; 2m</td><td>30%</td></tr>
+                                    </tbody>
+                                </table>
+                            </span>
+                        </span>
+                    </h3>
+                    <p id="outBracket">0%</p>
+                </div>
+                <div class="metric">
+                    <h3>Total Tax Payable</h3>
+                    <p id="outTax">RM 0.00</p>
+                </div>
+            </div>
+            
+            <div id="refundStatus" class="refund-status status-neutral">
+                <span id="statusText" class="status-text">Awaiting input data...</span>
+                <a href="https://mytax.hasil.gov.my/" target="_blank" class="mytax-btn" id="mytaxBtn" style="display: none;">Go to MyTax &rarr;</a>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        function formatRM(number) {
+            return "RM " + number.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function calculateTax() {
+            const getVal = (id) => {
+                const el = document.getElementById(id);
+                if (!el) return 0;
+                let val = parseFloat(el.value) || 0;
+                let max = parseFloat(el.getAttribute('max'));
+                if (max && val > max) {
+                    val = max; 
+                    el.value = max; // Enforce max limit visually
+                }
+                return val;
+            };
+            
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const pcb = parseFloat(document.getElementById('pcb').value) || 0;
+            const zakat = parseFloat(document.getElementById('zakat').value) || 0;
+            
+            // INDIVIDUAL
+            const education = getVal('education');
+            const disabledInd = getVal('disabledInd');
+            const localTravel = getVal('localTravel');
+            const housingLoan = getVal('housingLoan');
+            const medSelf = getVal('medSelf');
+            const basicDisability = getVal('basicDisability');
+            
+            // FAMILY
+            const spouse = getVal('spouse');
+            const disabledSpouse = getVal('disabledSpouse');
+            const medParents = getVal('medParents');
+            const childUnder18 = getVal('childUnder18');
+            const childTertiary = getVal('childTertiary');
+            const disabledChild = getVal('disabledChild');
+            const childcare = getVal('childcare');
+            const breastfeeding = getVal('breastfeeding');
+            const sspn = getVal('sspn');
+
+            // LIFESTYLE & INS
+            const lifestyle = getVal('lifestyle');
+            const sports = getVal('sports');
+            const ev = getVal('ev');
+            const lifeIns = getVal('lifeIns');
+            const medIns = getVal('medIns');
+            const socso = getVal('socso');
+            const epfVoluntary = getVal('epfVoluntary');
+            const prs = getVal('prs');
+            
+            const totalReliefs = 9000 + education + disabledInd + localTravel + housingLoan + 
+                                 medSelf + basicDisability + spouse + disabledSpouse + medParents +
+                                 childUnder18 + childTertiary + disabledChild + childcare + breastfeeding + 
+                                 sspn + lifestyle + sports + ev + lifeIns + medIns + socso + epfVoluntary + prs;
+                                 
+            let chargeableIncome = Math.max(0, income - totalReliefs);
+            
+            const brackets = [
+                { limit: 5000, rate: 0.00 },
+                { limit: 15000, rate: 0.01 },
+                { limit: 15000, rate: 0.03 },
+                { limit: 15000, rate: 0.06 },
+                { limit: 20000, rate: 0.11 },
+                { limit: 30000, rate: 0.19 },
+                { limit: 300000, rate: 0.25 },
+                { limit: 200000, rate: 0.26 },
+                { limit: 1400000, rate: 0.28 },
+                { limit: Infinity, rate: 0.30 }
+            ];
+            
+            let tax = 0;
+            let remaining = chargeableIncome;
+            let highestBracket = 0;
+            
+            for (const b of brackets) {
+                if (remaining <= 0) break;
+                const taxable = Math.min(remaining, b.limit);
+                tax += taxable * b.rate;
+                remaining -= taxable;
+                highestBracket = b.rate * 100;
+            }
+            
+            // Standard rebate for chargeable income < 35k
+            const incomeRebate = (chargeableIncome > 0 && chargeableIncome < 35000) ? 400 : 0;
+            
+            // Final Tax applies rebates (Income Rebate and Zakat). Tax cannot be negative.
+            let taxAfterIncomeRebate = Math.max(0, tax - incomeRebate);
+            let finalTax = Math.max(0, taxAfterIncomeRebate - zakat); 
+            
+            // Refund is whatever PCB you paid minus your actual final tax liability
+            const refund = pcb - finalTax;
+            
+            document.getElementById('outChargeable').textContent = formatRM(chargeableIncome);
+            document.getElementById('outTax').textContent = formatRM(finalTax);
+            document.getElementById('outBracket').textContent = Math.round(highestBracket) + "%";
+            
+            const statusDiv = document.getElementById('refundStatus');
+            const statusText = document.getElementById('statusText');
+            const mytaxBtn = document.getElementById('mytaxBtn');
+            
+            if (income === 0) {
+                statusDiv.className = 'refund-status status-neutral';
+                statusText.textContent = 'Enter income data to begin.';
+                mytaxBtn.style.display = 'none';
+                return;
+            }
+
+            mytaxBtn.style.display = 'inline-flex';
+
+            if (refund > 0) {
+                statusDiv.className = 'refund-status status-success';
+                statusText.textContent = 'Estimated Refund: ' + formatRM(refund);
+            } else if (refund < 0) {
+                statusDiv.className = 'refund-status status-error';
+                statusText.textContent = 'Estimated Tax Owed: ' + formatRM(Math.abs(refund));
+            } else {
+                statusDiv.className = 'refund-status status-neutral';
+                statusText.textContent = 'Taxes are perfectly balanced.';
+            }
+        }
+
+        document.querySelectorAll('.tax-input').forEach(input => {
+            input.addEventListener('input', calculateTax);
+        });
+
+        calculateTax();
+    </script>
+</body>
+</html>

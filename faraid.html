@@ -731,6 +731,7 @@
 
             let distributions = [];
             let totalFixedFractions = new Fraction(0);
+            let fixedHeirs = []; // NEW: Temporarily hold fixed shares to check for 'Aul
 
             // -- Fixed Shares --
             if (wifeCount > 0) {
@@ -738,60 +739,79 @@
                 totalFixedFractions = totalFixedFractions.add(totalSpouseShare);
                 
                 let sharePerWife = totalSpouseShare.div(wifeCount);
-                let valuePerWife = (nettEstate * totalSpouseShare.valueOf()) / wifeCount;
-
                 for (let i = 1; i <= wifeCount; i++) {
-                    distributions.push({ 
+                    fixedHeirs.push({ 
                         name: wifeCount > 1 ? `${t('wife')} ${i}` : t('wife'), 
                         role: t('role-fixed'), 
-                        fraction: sharePerWife.toFraction(true), 
-                        val: valuePerWife 
+                        rawFraction: sharePerWife 
                     });
                 }
             }
             if (hasHusband) {
                 let share = hasAnyChild ? new Fraction(1, 4) : new Fraction(1, 2);
                 totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: t('husband'), role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                fixedHeirs.push({ name: t('husband'), role: t('role-fixed'), rawFraction: share });
             }
             
             let motherShareAdded = false;
             if (hasMother) {
                 let share = (hasAnyChild || (fullBros + fullSis) >= 2) ? new Fraction(1, 6) : new Fraction(1, 3);
                 totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: t('mother'), role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                fixedHeirs.push({ name: t('mother'), role: t('role-fixed'), rawFraction: share });
                 motherShareAdded = true;
             } 
             if (!motherShareAdded && (hasMatGrandma || hasPatGrandma)) {
                 let grandmaCount = (hasMatGrandma ? 1 : 0) + (hasPatGrandma ? 1 : 0);
                 let share = new Fraction(1, 6);
                 totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: t('grandmothers') + ` (${grandmaCount})`, role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                fixedHeirs.push({ name: t('grandmothers') + ` (${grandmaCount})`, role: t('role-fixed'), rawFraction: share });
             }
 
             if (hasFather) {
                 let share = hasAnyChild ? new Fraction(1, 6) : new Fraction(0); 
                 totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: t('father'), role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                if (share.valueOf() > 0) fixedHeirs.push({ name: t('father'), role: t('role-fixed'), rawFraction: share });
             } else if (hasGrandfather) {
                 let share = hasAnyChild ? new Fraction(1, 6) : new Fraction(0);
                 totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: t('grandfather'), role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                if (share.valueOf() > 0) fixedHeirs.push({ name: t('grandfather'), role: t('role-fixed'), rawFraction: share });
             }
             
             if (daughters > 0 && sons === 0) {
                 let share = daughters === 1 ? new Fraction(1, 2) : new Fraction(2, 3);
                 totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: t('daughters') + ` (${daughters})`, role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                fixedHeirs.push({ name: t('daughters') + ` (${daughters})`, role: t('role-fixed'), rawFraction: share });
             }
             if (granddaughters > 0 && grandsons === 0 && sons === 0 && daughters === 0) {
                 let share = granddaughters === 1 ? new Fraction(1, 2) : new Fraction(2, 3);
                 totalFixedFractions = totalFixedFractions.add(share);
-                distributions.push({ name: t('granddaughters') + ` (${granddaughters})`, role: t('role-fixed'), fraction: share.toFraction(true), val: nettEstate * share.valueOf() });
+                fixedHeirs.push({ name: t('granddaughters') + ` (${granddaughters})`, role: t('role-fixed'), rawFraction: share });
             }
 
+            // --- NEW: Apply 'Aul (Proportional Reduction) ---
+            // Check if the sum of all fractions exceeds 1 (100%)
+            let isAul = totalFixedFractions.valueOf() > 1;
+            
+            // If 'Aul occurs, the new denominator base is the inflated sum. Otherwise, it remains 1.
+            let baseTotal = isAul ? totalFixedFractions : new Fraction(1);
+
+            // Pass 2: Calculate the final adjusted values and push to the UI array
+            fixedHeirs.forEach(heir => {
+                // fraction.js handles the division beautifully (e.g., (1/8) / (27/24) = 3/27)
+                let finalFraction = heir.rawFraction.div(baseTotal);
+                let finalValue = nettEstate * finalFraction.valueOf();
+                
+                distributions.push({ 
+                    name: heir.name, 
+                    role: heir.role + (isAul ? ' (Aul)' : ''), 
+                    fraction: finalFraction.toFraction(true), 
+                    val: finalValue 
+                });
+            });
+
             // -- Asabah (Remainder) --
-            let remainderFraction = new Fraction(1).sub(totalFixedFractions);
+            // If 'Aul was applied, the remainder is forced to 0. Otherwise, it is 1 - total.
+            let remainderFraction = isAul ? new Fraction(0) : new Fraction(1).sub(totalFixedFractions);
             let remainderValue = nettEstate * remainderFraction.valueOf();
             let asabahAssignedTo = t('exp-step4-none-text');
 
@@ -822,6 +842,18 @@
                 }
                 else if (nephews > 0) distributeAsabah(nephews, 0, t('nephews'), '');
                 else if (uncles > 0) distributeAsabah(uncles, 0, t('uncles'), '');
+                
+                // --- NEW: BAITULMAL FALLBACK ---
+                else {
+                    let baitulmalName = currentLang === 'ms' ? 'Baitulmal' : 'Baitulmal (Treasury)';
+                    distributions.push({ 
+                        name: baitulmalName, 
+                        role: t('role-residuary'), 
+                        fraction: remainderFraction.toFraction(true), 
+                        val: remainderValue 
+                    });
+                    asabahAssignedTo = baitulmalName;
+                }
             }
 
             // --- 3. RENDER GRAPHIC TREE ---

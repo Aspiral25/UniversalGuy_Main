@@ -26,8 +26,8 @@
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
       --transition: 0.2s ease;
-      --sidebar-width: 250px;
-      --topnav-height: 64px;
+      --sidebar-width: 230px;
+      --topnav-height: 70px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -273,7 +273,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      height: calc(100vh - var(--topnav-height));
+      height: calc(105vh - var(--topnav-height));
       overflow: hidden;
       background: var(--bg-primary);
     }
@@ -366,7 +366,7 @@
     .content-area {
       flex: 1;
       overflow-y: auto;
-      padding: 40px;
+      padding: 20px;
       max-width: 100%;
       display: flex;
       flex-direction: column;
@@ -795,7 +795,7 @@
         <img src="universal.png" alt="Universal Logo" class="logo-img">
         <img src="Ns.png" alt="WAFI Dev Hub Logo" class="logo-img">
         <a href="https://github.com/Aspiral25/BuildingHouseCalculator" target="_blank" rel="noopener noreferrer" class="cta-btn" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.06-.02-2.08-3.34.73-4.04-1.61-4.04-1.61-.55-1.42-1.35-1.8-1.35-1.8-1.1-.75.09-.74.09-.74 1.22.09 1.86 1.25 1.86 1.25 1.08 1.86 2.83 1.32 3.52 1.01.11-.78.42-1.32.77-1.62-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.16 0 0 1-.32 3.3 1.23A11.43 11.43 0 0112 6.8c1.02.01 2-.32 3.3-1.23 2.3-1.55 3.3-1.23 3.3-1.23.66 1.64.24 2.86.12 3.16.78.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.9-.01 3.3 0 .32.22.7.82.58A12 12 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
         </a>
@@ -889,6 +889,31 @@
           notes: 'Uses Fraction.js for exact Islamic mathematics without floating-point rounding errors. This is a simplified demo version; consult a qualified Syariah practitioner for real-world estate distribution.'
         },
         iframeSrc: 'faraid.html',
+        hasIframe: true
+      },
+      {
+        id: 'lhdn-tax-calculator',
+        label: 'LHDN Tax Calculator',
+        section: 'Web Project',
+        docs: {
+          title: 'LHDN Tax Refund Calculator (YA 2025)',
+          description: 'An interactive Malaysia personal income tax calculator. Enter your gross income, PCB paid, and standard tax reliefs to estimate your final tax payable or refund amount.',
+          techStack: ['HTML5', 'CSS3', 'JavaScript'],
+          features: [
+            'Chargeable income calculation with enforced statutory maximums for each relief category',
+            'Integrated YA 2025 progressive tax brackets (0% up to 30% for incomes >RM2,000,000)',
+            'Automatic RM9,000 individual base relief and RM400 tax rebate for eligible income brackets',
+            'Real-time UI updates indicating estimated tax owed or refund amount'
+          ],
+          formulas: [
+            'Total Reliefs = RM9,000 (Individual Base) + EPF + Insurance + Lifestyle + SOCSO',
+            'Chargeable Income = Gross Annual Income - Total Reliefs',
+            'Tax Payable = Progressive Bracket Calculation on Chargeable Income - RM400 Rebate (if applicable)',
+            'Refund / Amount Owed = Total PCB Paid - Tax Payable'
+          ],
+          notes: 'Calculations are based on the Malaysia Year of Assessment 2025 tax rates. This is an estimation tool; actual tax assessments are determined by the Inland Revenue Board of Malaysia (LHDNM).'
+        },
+        iframeSrc: 'tax_relief.html',
         hasIframe: true
       },
       {
@@ -1152,6 +1177,7 @@
           <div class="home-cta">
              <button class="btn-secondary" onclick="loadProject(0)">Explore Construction Calculator →</button>
              <button class="btn-secondary" onclick="loadProject(1)">Explore Faraid Calculator →</button>
+             <button class="btn-secondary" onclick="loadProject(2)">Explore LHDN Tax Calculator →</button>
           </div>
         </div>
         <div class="projects-grid">
