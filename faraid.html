@@ -388,7 +388,8 @@
             'role-fixed': 'Ashabul Furud (Bahagian Tetap)',
             'role-residuary': 'Asabah (Baki)',
             'blocked-by': 'Disekat oleh',
-           'exp-step1': 'Langkah 1: Tentukan Harta Bersih (Tirkah)',
+             'exp-header': 'Cara pengiraan dilakukan..',
+             'exp-step1': 'Langkah 1: Tentukan Harta Bersih (Tirkah)',
             'exp-step1-text': 'Sebelum pengagihan Faraid, harta pusaka kasar sebanyak RM ${gross} perlu ditolak dengan segala tanggungan. Selepas menolak Kos Pengurusan Jenazah (RM ${funeral}) dan Hutang (RM ${debts}), baki Harta Bersih (Tirkah) adalah <strong>RM ${nett}</strong>.',
             'exp-step2': 'Langkah 2: Aplikasi Kaedah Al-Hajb (Halangan)',
             'exp-step2-text': 'Undang-undang Islam menetapkan hierarki waris yang tersusun. Waris yang lebih dekat (seperti Bapa atau Anak Lelaki) akan menghalang sepenuhnya waris yang lebih jauh (seperti Nenek atau Saudara Kandung) daripada mewarisi harta.',
@@ -487,7 +488,8 @@
             'role-fixed': 'Ashabul Furud (Fixed)',
             'role-residuary': 'Asabah (Residuary)',
             'blocked-by': 'Blocked by',
-            'exp-step1': 'Step 1: Determine the Nett Estate (Tirkah)',
+             'exp-header': 'How This Was Calculated',
+             'exp-step1': 'Step 1: Determine the Nett Estate (Tirkah)',
             'exp-step1-text': 'Before any Faraid distribution, the gross estate of RM ${gross} must be cleared of liabilities. After deducting Funeral Expenses (RM ${funeral}) and Debts (RM ${debts}), the remaining Nett Estate is <strong>RM ${nett}</strong>.',
             'exp-step2': 'Step 2: Apply Al-Hajb (The Rule of Blocking)',
             'exp-step2-text': 'Islamic law dictates a strict hierarchy to prevent fragmentation. Closer relatives (like a Father or Son) completely block extended relatives (like Grandparents or Siblings) from inheriting.',
@@ -565,6 +567,7 @@
     }
 
     function getHeirAvatar(name) {
+        if (name.includes('Baitulmal')) return '🏛️'; // NEW: Add a Treasury icon
         if (name.includes('Wife') || name.includes('Wiv') || name.includes('Isteri')) return '🧕';
         if (name.includes('Husband') || name.includes('Suami')) return '👨';
         if (name.includes('Mother') || name.includes('Moth') || name.includes('Ibu')) return '👵';
@@ -829,12 +832,34 @@
                 else if (grandsons > 0) distributeAsabah(grandsons, granddaughters, t('grandsons'), t('granddaughters'));
                 else if (hasFather) {
                     let existing = distributions.find(d => d.name === t('father'));
-                    existing.val += remainderValue; existing.fraction += ` + Asabah`;
+                    if (existing) {
+                        existing.val += remainderValue; 
+                        existing.fraction += ` + Asabah`;
+                    } else {
+                        // If Father didn't get a fixed share, create him purely as Asabah
+                        distributions.push({ 
+                            name: t('father'), 
+                            role: t('role-residuary'), 
+                            fraction: `Asabah (${remainderFraction.toFraction(true)})`, 
+                            val: remainderValue 
+                        });
+                    }
                     asabahAssignedTo = t('father');
                 }
                 else if (hasGrandfather) {
                     let existing = distributions.find(d => d.name === t('grandfather'));
-                    existing.val += remainderValue; existing.fraction += ` + Asabah`;
+                    if (existing) {
+                        existing.val += remainderValue; 
+                        existing.fraction += ` + Asabah`;
+                    } else {
+                        // If Grandfather didn't get a fixed share, create him purely as Asabah
+                        distributions.push({ 
+                            name: t('grandfather'), 
+                            role: t('role-residuary'), 
+                            fraction: `Asabah (${remainderFraction.toFraction(true)})`, 
+                            val: remainderValue 
+                        });
+                    }
                     asabahAssignedTo = t('grandfather');
                 }
                 else if (fullBros > 0 || (fullSis > 0 && daughters === 0 && granddaughters === 0)) {
@@ -883,22 +908,22 @@
             });
 
             // Dynamic Explainer Generation
-            let expHTML = `<h4>📖 How this was calculated</h4>`;
-            expHTML += `<strong>Step 1: Determine the Nett Estate (Tirkah)</strong><br>`;
-            expHTML += `Before any Faraid distribution, the gross estate of RM ${grossEstate.toLocaleString()} must be cleared of liabilities. After deducting Funeral Expenses (RM ${funeralExp}) and Debts (RM ${debtsExp}), the remaining Nett Estate is <strong>RM ${nettEstate.toLocaleString()}</strong>.<br><br>`;
-            
-            expHTML += `<strong>Step 2: Apply Al-Hajb (The Rule of Blocking)</strong><br>`;
-            expHTML += `Islamic law dictates a strict hierarchy to prevent fragmentation. Closer relatives (like a Father or Son) completely block extended relatives (like Grandparents or Siblings) from inheriting.<br><br>`;
-            
-            expHTML += `<strong>Step 3: Ashabul Furud (Fixed Shares)</strong><br>`;
-            expHTML += `Certain heirs have fixed fractions stated directly in Surah An-Nisa (e.g., 1/8, 1/4, 1/6, 1/2). These fractions change based on the presence of children. The system calculates these first.<br><br>`;
-            
+            let expHTML = `<h4>📖 ${t('exp-header')}</h4>`;
+            expHTML += `<strong>${t('exp-step1')}</strong><br>`;
+            expHTML += t('exp-step1-text').replace('${gross}', grossEstate.toLocaleString()).replace('${funeral}', funeralExp).replace('${debts}', debtsExp).replace('${nett}', nettEstate.toLocaleString()) + '<br><br>';
+
+            expHTML += `<strong>${t('exp-step2')}</strong><br>`;
+            expHTML += t('exp-step2-text') + '<br><br>';
+
+            expHTML += `<strong>${t('exp-step3')}</strong><br>`;
+            expHTML += t('exp-step3-text') + '<br><br>';
+
             if (remainderFraction.valueOf() > 0) {
-                expHTML += `<strong>Step 4: Asabah (Residuary Allocation)</strong><br>`;
-                expHTML += `After the fixed shares are given, the remaining fraction (${remainderFraction.toFraction(true)}) goes to the Asabah. In this specific scenario, the Asabah right belongs to: <strong>${asabahAssignedTo}</strong>. If males and females of the same rank share the Asabah (e.g., sons and daughters), it is distributed at a 2:1 ratio.`;
+                expHTML += `<strong>${t('exp-step4-remainder')}</strong><br>`;
+                expHTML += t('exp-step4-remainder-text').replace('${remainder}', remainderFraction.toFraction(true)).replace('${asabah}', asabahAssignedTo);
             } else if (remainderFraction.valueOf() === 0) {
-                expHTML += `<strong>Step 4: Asabah (Residuary Allocation)</strong><br>`;
-                expHTML += `In this scenario, the fixed shares perfectly consumed the entire estate (100%), leaving no remainder for any Asabah heirs.`;
+                expHTML += `<strong>${t('exp-step4-none')}</strong><br>`;
+                expHTML += t('exp-step4-none-text');
             }
 
             document.getElementById('faraidOutput').innerHTML = `
