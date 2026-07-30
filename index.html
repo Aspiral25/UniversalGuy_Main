@@ -81,6 +81,14 @@
       display: block;
     }
 
+    .topnav video.logo-img {
+      height: 40px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
     .topnav-logo::before {
       display: none;
     }
@@ -273,7 +281,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      height: calc(105vh - var(--topnav-height));
+      height: calc(100vh - var(--topnav-height));
       overflow: hidden;
       background: var(--bg-primary);
     }
@@ -392,11 +400,11 @@
 
     .home-hero {
       margin-bottom: 48px;
-      max-width: 720px;
+      max-width: 1000px;
     }
 
     .home-hero h2 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       font-weight: 800;
       margin-bottom: 16px;
       letter-spacing: -0.04em;
@@ -405,16 +413,9 @@
 
     .home-hero p {
       color: var(--text-secondary);
-      font-size: 1.15rem;
+      font-size: 1rem;
       line-height: 1.7;
-      max-width: 600px;
-    }
-
-    .home-cta {
-      margin-top: 24px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+      max-width: 1000px;
     }
 
     .btn-primary {
@@ -653,6 +654,10 @@
       border-bottom-color: var(--border-color);
     }
 
+    [data-theme="dark"] .topnav video.logo-img {
+      mix-blend-mode: screen;
+    }
+
     [data-theme="dark"] .project-card {
       background: var(--bg-primary);
       border-color: var(--border-color);
@@ -745,9 +750,6 @@
         grid-template-columns: 1fr;
       }
 
-      .home-cta {
-        flex-direction: column;
-      }
     }
 
     @media (min-width: 769px) {
@@ -792,6 +794,7 @@
         <span class="site-name">WAFI Dev Hub</span>
       </a>
       <div class="topnav-links">
+        <video src="mas.mp4" alt="Malaysia" class="logo-img" autoplay loop muted playsinline></video>
         <img src="universal.png" alt="Universal Logo" class="logo-img">
         <img src="Ns.png" alt="WAFI Dev Hub Logo" class="logo-img">
         <a href="https://github.com/Aspiral25/BuildingHouseCalculator" target="_blank" rel="noopener noreferrer" class="cta-btn" aria-label="GitHub">
@@ -914,6 +917,33 @@
           notes: 'Calculations are based on the Malaysia Year of Assessment 2025 tax rates. This is an estimation tool; actual tax assessments are determined by the Inland Revenue Board of Malaysia (LHDNM).'
         },
         iframeSrc: 'tax_relief.html',
+        hasIframe: true
+      },
+      {
+        id: 'malaysia_aircond_selector',
+        label: 'AC Buying Guide',
+        section: 'Web Project',
+        docs: {
+          title: 'Malaysia Air Conditioner Buying Guide',
+          description: 'An interactive tool to help users select the right air conditioner based on room size, technology type, and energy efficiency. Fetches live data from Google Sheets and includes a TNB monthly bill estimator.',
+          techStack: ['HTML5', 'CSS3', 'JavaScript', 'jQuery', 'DataTables'],
+          features: [
+            'Smart Assistant with filter pills for HP, Inverter/Non-Inverter, and Star Rating',
+            'Integrated keyword search across all columns with column selector',
+            'Live data fetching from Google Sheets with auto-refresh',
+            'TNB Monthly Bill Estimator supporting Normal Domestic and Time-of-Use (TOU) tariffs',
+            'Responsive dashboard grid layout with match counter and reset sorting'
+          ],
+          formulas: [
+            'Normal Domestic: Monthly kWh = Power(W)/1000 × Daily Hours × 30',
+            'TOU Peak Rate: Monthly kWh = Power(W)/1000 × Peak Hours × 22 (weekdays only)',
+            'TOU Off-Peak Rate: Monthly kWh = Power(W)/1000 × Off-Peak Hours × 30 + Peak Hours × 8 (weekends)',
+            'Below 1,500 kWh tier: Normal = RM0.4443/kWh, TOU Peak = RM0.4592/kWh, TOU Off-Peak = RM0.4183/kWh',
+            'Above 1,500 kWh tier: Normal = RM0.5443/kWh, TOU Peak = RM0.5592/kWh, TOU Off-Peak = RM0.5183/kWh'
+          ],
+          notes: 'Uses jQuery and DataTables for table rendering, sorting, and responsive design. Bill estimates cover AC unit consumption only and do not include fixed charges (RM10 Retail Charge, 1.6% KWTBB, 8% SST for >600kWh, AFA fluctuations). Google Sheets ID: 1nFhN5NKR88DsYMMTfiX6e9FiFECko1JtTmYxg2Eku3o.'
+        },
+        iframeSrc: 'aircond.html',
         hasIframe: true
       },
       {
@@ -1172,13 +1202,14 @@
     function renderHome() {
       let html = `
         <div class="home-hero">
-          <h2>Wafi Dev Hub</h2>
-          <p>Welcome to my central portfolio. Browse through the projects below to explore documentation, source code, and live demos of my web tools.</p>
-          <div class="home-cta">
-             <button class="btn-secondary" onclick="loadProject(0)">Explore Construction Calculator →</button>
-             <button class="btn-secondary" onclick="loadProject(1)">Explore Faraid Calculator →</button>
-             <button class="btn-secondary" onclick="loadProject(2)">Explore LHDN Tax Calculator →</button>
-          </div>
+          <h2>My fellow Malaysian !</h2>
+          <p>With my shallow experience being a Malaysian netizen, i sort of know what you guys want.</p>
+          <p>So, i created a few tools to help you guys out. I hope you guys find it useful.</p>
+          <p>All of these tools are free to use, and you can use it without any login or registration.</p>
+          <p>I will try to keep it updated as much as possible.</p>
+          <p>Feel free to share it with your friends and family, and if you have any feedback or suggestions, please let me know.</p>
+          <p>Contact me at <a href="mailto:aspiraltroziest@gmail.com">aspiraltroziest@gmail.com</a></p>
+          <p>You may also support me by donating to my KOFI account, and i will use the money to keep the website running and updated.</p>
         </div>
         <div class="projects-grid">
       `;
@@ -1373,6 +1404,15 @@
     const savedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+
+    const logoVideo = document.querySelector('.topnav video.logo-img');
+    if (logoVideo) {
+      logoVideo.addEventListener('timeupdate', () => {
+        if (logoVideo.currentTime >= 9) {
+          logoVideo.currentTime = 0;
+        }
+      });
+    }
 
     renderSidebar();
     loadHome();

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaysia Aircond Buying Guide</title>
+    
+    <!-- Include DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    
+    <style>
+        :root {
+            --primary: #0ea5e9; 
+            --primary-hover: #0284c7;
+            --bg-color: #f0f9ff;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0,100,200,0.1), 0 8px 10px -6px rgba(0,100,200,0.05);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* --- DASHBOARD: Grid Layout for Top Cards --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+            display: none; 
+        }
+
+        .dash-card {
+            background: #f8fafc;
+            border: 1px solid #bae6fd;
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dash-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: var(--primary-hover);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* --- CARD 1: Smart Assistant --- */
+        .match-counter {
+            font-weight: 600;
+            color: #0369a1;
+            background-color: #e0f2fe;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+
+        .filter-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        .filter-section.no-border { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+
+        .filter-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            min-width: 150px;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        .pill-container { display: flex; flex-wrap: wrap; gap: 6px; }
+
+        .filter-pill {
+            background-color: white;
+            border: 1px solid #cbd5e1;
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .filter-pill:hover { border-color: var(--primary); color: var(--primary); background-color: #f0f9ff; }
+        .filter-pill.active { background-color: var(--primary); color: white; border-color: var(--primary); }
+
+        .filter-pill-reset {
+            background-color: #f1f5f9;
+            color: var(--text-muted);
+            border: 1px dashed #cbd5e1;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .filter-pill-reset:hover { background-color: #e2e8f0; color: #334155; }
+
+        /* Integrated Keyword Search Styles */
+        .search-group {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+        .search-group select, .search-group input {
+            padding: 6px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 12px;
+            outline: none;
+            background: white;
+        }
+        .search-group select:focus, .search-group input:focus { border-color: var(--primary); }
+        .search-group input { flex: 1; }
+
+        /* --- CARD 2: TNB Calculator --- */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: auto;
+        }
+        .calc-item { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;}
+        .calc-item label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+        .calc-item select, .calc-item input {
+            padding: 6px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 12px;
+            outline: none;
+            background: white;
+        }
+        .calc-item select:focus, .calc-item input:focus { border-color: var(--primary); }
+        
+        .calc-note {
+            font-size: 10.5px;
+            color: #64748b;
+            margin: 8px 0 0 0;
+            line-height: 1.5;
+            background: #f1f5f9;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .calc-note strong { color: #334155; }
+
+        #wrap-peak-hrs, #wrap-offpeak-hrs { display: none; }
+
+        /* --- Table & General Styles --- */
+        .dataTables_wrapper .dataTables_filter { display: none; }
+
+        /* Style for the Show Entries wrapper & Reset Sort button */
+        .dataTables_length {
+            display: flex !important;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .reset-sort-btn {
+            background-color: #f8fafc;
+            color: var(--primary-hover);
+            border: 1px solid #bae6fd;
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .reset-sort-btn:hover { background-color: #e0f2fe; color: #0369a1; }
+
+        table.dataTable { border-collapse: collapse !important; margin-top: 4px !important; margin-bottom: 16px !important; width: 100% !important; }
+        table.dataTable th { background-color: #f8fafc !important; color: var(--text-main) !important; font-weight: 600 !important; padding: 10px !important; border-bottom: 2px solid var(--border-color) !important; font-size: 12px; text-transform: uppercase;}
+        table.dataTable td { padding: 10px !important; border-bottom: 1px solid var(--border-color) !important; vertical-align: middle; font-size: 13px; }
+        
+        table.dataTable th:nth-child(4), table.dataTable td:nth-child(4) { white-space: nowrap; }
+        table.dataTable td:last-child { font-weight: 700; color: #0284c7; } 
+
+        .loading-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 0; color: var(--text-muted); }
+        .spinner { width: 32px; height: 32px; border: 3px solid #e2e8f0; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 12px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .shop-icon { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background-color: #e0f2fe; border-radius: 50%; transition: transform 0.2s; text-decoration: none; font-size: 13px; }
+        .shop-icon:hover { transform: scale(1.1); background-color: #bae6fd; }
+
+        @media (max-width: 900px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .filter-section { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .search-group { flex-direction: column; }
+            .search-group select, .search-group input { width: 100%; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 id="sheet-title">❄️ Malaysia AC Buying Guide</h1>
+    
+    <!-- Top Dashboard Area -->
+    <div class="dashboard-grid" id="dashboard-grid">
+        
+        <!-- CARD 1: Compact Smart Assistant (Now Includes Search) -->
+        <div class="dash-card">
+            <h3>
+                <div>✨ Smart Assistant <span class="match-counter" id="match-counter">0 matches</span></div>
+                <button class="filter-pill-reset" id="reset-filters">🔄 Reset</button>
+            </h3>
+            
+            <div class="filter-section">
+                <div class="filter-label">Room Size / HP:</div>
+                <div class="pill-container">
+                    <button class="filter-pill" data-col="3" data-val="^1.0 hp$">🛏️ 1.0 HP</button>
+                    <button class="filter-pill" data-col="3" data-val="^1.5 hp$">🛋️ 1.5 HP</button>
+                    <button class="filter-pill" data-col="3" data-val="^(2.0|2.5) hp$">🏠 2.0 HP+</button>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-label">Technology:</div>
+                <div class="pill-container">
+                    <button class="filter-pill" data-col="2" data-val="^Inverter$">⚡ Inverter</button>
+                    <button class="filter-pill" data-col="2" data-val="^Non-Inverter$">🛑 Non-Inverter</button>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-label">Energy Rating:</div>
+                <div class="pill-container">
+                    <button class="filter-pill" data-col="6" data-val="^⭐⭐⭐⭐⭐$">⭐⭐⭐⭐⭐ 5-Star</button>
+                    <button class="filter-pill" data-col="6" data-val="^⭐⭐⭐⭐$">⭐⭐⭐⭐ 4-Star</button>
+                </div>
+            </div>
+
+            <!-- Integrated Keyword Search Bar -->
+            <div class="filter-section no-border" style="border-top: 1px dashed #e2e8f0; padding-top: 10px; margin-top: 2px;">
+                <div class="filter-label">Keyword Search:</div>
+                <div class="search-group">
+                    <select id="column-select">
+                        <option value="all">All Columns</option>
+                    </select>
+                    <input type="text" id="column-search" placeholder="Type brand, model, etc...">
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 2: TNB Calculator -->
+        <div class="dash-card">
+            <h3>⚡ AC Monthly Bill Estimation</h3>
+            <div class="calc-grid">
+                <div class="calc-item">
+                    <label>TNB Tariff Plan</label>
+                    <select id="calc-plan">
+                        <option value="normal">Normal Domestic</option>
+                        <option value="tou">Time of Use (TOU)</option>
+                    </select>
+                </div>
+                <div class="calc-item">
+                    <label>Household Usage Tier (Sets Rate)</label>
+                    <select id="calc-usage">
+                        <option value="below">&lt; 1,500 kWh</option>
+                        <option value="above">&gt; 1,500 kWh</option>
+                    </select>
+                </div>
+                
+                <div class="calc-item" id="wrap-normal-hrs">
+                    <label>Avg. Daily Usage (Hrs)</label>
+                    <input type="number" id="calc-normal-hrs" min="0" max="24" value="8">
+                </div>
+                
+                <div class="calc-item" id="wrap-peak-hrs">
+                    <label>Peak Hrs / Day (2pm-10pm)</label>
+                    <input type="number" id="calc-peak" min="0" max="24" value="2">
+                </div>
+                <div class="calc-item" id="wrap-offpeak-hrs">
+                    <label>Off-Peak Hrs / Day (Rest)</label>
+                    <input type="number" id="calc-offpeak" min="0" max="24" value="6">
+                </div>
+            </div>
+            <p class="calc-note">
+                *Estimates the running cost of the <strong>AC unit only</strong> based on current TNB All-in rates.<br>
+                <span id="tou-note" style="display: none;"><em>Note: TOU Peak applies only on Weekdays. Weekends are calculated as 100% Off-Peak.</em><br></span>
+                <strong>Fixed & Additional House Charges:</strong> Your full TNB bill will also include the RM10 Retail Charge, 1.6% KWTBB (RE Fund), 8% SST (for usage >600kWh), and monthly AFA rate fluctuations, which are not included here.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="table-container">
+        <div id="loading" class="loading-container">
+            <div class="spinner"></div>
+            <div>Fetching live AC data from Google Sheets...</div>
+        </div>
+        
+        <table id="data-table" class="display" style="width:100%; display: none;">
+            <thead id="table-head"></thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script>
+    const SHEET_ID = '1nFhN5NKR88DsYMMTfiX6e9FiFECko1JtTmYxg2Eku3o'; 
+    const SHEET_TITLE = 'Sheet1'; 
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_TITLE}`;
+
+    let table; 
+
+    function getCellUrl(cell) {
+        if (!cell) return null;
+        if (typeof cell.v === 'string' && cell.v.startsWith('http')) return cell.v;
+        if (cell.v && typeof cell.v.v === 'string' && cell.v.v.startsWith('http')) return cell.v.v;
+        if (typeof cell.f === 'string' && cell.f.startsWith('http')) return cell.f;
+        return null;
+    }
+
+    function updateMatchCounter() {
+        if (!table) return;
+        const info = table.page.info();
+        $('#match-counter').text(`${info.recordsDisplay} matches`);
+    }
+
+    function calculateCost(powerStr) {
+        if (!powerStr || powerStr === '-' || powerStr === '') return '-';
+        
+        let powerW = parseFloat(powerStr.toString().replace(/[^0-9.]/g, ''));
+        if (isNaN(powerW) || powerW === 0) return '-';
+
+        let plan = $('#calc-plan').val();
+        let usage = $('#calc-usage').val(); 
+        
+        const kW = powerW / 1000;
+        let peakKwh = 0;
+        let offPeakKwh = 0;
+        let ratePeak = 0;
+        let rateOffPeak = 0;
+
+        if (plan === 'normal') {
+            let dailyHrs = parseFloat($('#calc-normal-hrs').val()) || 0;
+            peakKwh = kW * dailyHrs * 30; 
+            
+            ratePeak = (usage === 'below') ? 0.4443 : 0.5443;
+            rateOffPeak = ratePeak; 
+        } else {
+            let peakHrs = parseFloat($('#calc-peak').val()) || 0;
+            let offPeakHrs = parseFloat($('#calc-offpeak').val()) || 0;
+            
+            peakKwh = kW * peakHrs * 22; 
+            offPeakKwh = (kW * offPeakHrs * 30) + (kW * peakHrs * 8); 
+
+            if (usage === 'below') {
+                ratePeak = 0.4592;
+                rateOffPeak = 0.4183;
+            } else {
+                ratePeak = 0.5592;
+                rateOffPeak = 0.5183;
+            }
+        }
+        
+        const totalRM = (peakKwh * ratePeak) + (offPeakKwh * rateOffPeak);
+        return 'RM ' + totalRM.toFixed(2);
+    }
+
+    function refreshCostsInTable() {
+        if(!table) return;
+        
+        table.rows().every(function () {
+            let data = this.data();
+            let powerConsumptionCol = data[4]; 
+            data[9] = calculateCost(powerConsumptionCol); 
+            this.data(data);
+        });
+        table.draw(false);
+    }
+
+    function applyAllFilters() {
+        if (!table) return;
+        table.search('').columns().search('');
+        let filtersByColumn = {};
+        $('.filter-pill.active').each(function() {
+            let colIdx = $(this).data('col');
+            let val = $(this).data('val').toString();
+            if (!filtersByColumn[colIdx]) filtersByColumn[colIdx] = [];
+            filtersByColumn[colIdx].push(val);
+        });
+
+        Object.keys(filtersByColumn).forEach(function(colIdx) {
+            let values = filtersByColumn[colIdx];
+            let regexParts = values.map(v => {
+                if(colIdx == '2' || colIdx == '3' || colIdx == '6') return v; 
+                return v.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            });
+            let combinedRegex = '(' + regexParts.join('|') + ')';
+            table.column(colIdx).search(combinedRegex, true, false);
+        });
+
+        const manualSearchVal = $('#column-search').val();
+        const manualColIdx = $('#column-select').val();
+        if (manualSearchVal) {
+            if (manualColIdx === 'all') table.search(manualSearchVal);
+            else table.column(manualColIdx).search(manualSearchVal);
+        }
+        table.draw();
+        updateMatchCounter();
+    }
+
+    async function loadSheetData() {
+        try {
+            const response = await fetch(url);
+            const text = await response.text();
+            const jsonData = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+            
+            const cols = jsonData.table.cols.slice(0, 9);
+            const rows = jsonData.table.rows;
+
+            const tableHead = document.getElementById('table-head');
+            const tableBody = document.getElementById('table-body');
+            const columnSelect = document.getElementById('column-select');
+            
+            // Build Headers
+            let headerHtml = '<tr>';
+            cols.forEach((col, index) => {
+                const colName = col.label || `Column ${index + 1}`;
+                headerHtml += `<th>${colName}</th>`;
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = colName;
+                columnSelect.appendChild(option);
+            });
+            headerHtml += `<th>Est. Bill RM/Month</th>`; 
+            headerHtml += '</tr>';
+            tableHead.innerHTML = headerHtml;
+
+            // Build Rows
+            let bodyHtml = '';
+            rows.forEach(row => {
+                bodyHtml += '<tr>';
+                const cells = (row.c || []).slice(0, 9);
+                let powerStr = '';
+
+                cells.forEach((cell, i) => {
+                    let cellValue = '';
+                    if (cell) {
+                        if (cell.f !== undefined && cell.f !== null) cellValue = cell.f;
+                        else if (cell.v !== undefined && cell.v !== null) cellValue = cell.v;
+                    }
+                    if (i === 4) powerStr = cellValue; 
+
+                    if (i === 8) { 
+                        const link = getCellUrl(cell);
+                        bodyHtml += `<td>${link ? `<a href="${link}" target="_blank" class="shop-icon" title="Buy Now">🛒</a>` : '-'}</td>`;
+                    } else {
+                        bodyHtml += `<td>${cellValue}</td>`;
+                    }
+                });
+                
+                bodyHtml += `<td>${calculateCost(powerStr)}</td>`; 
+                bodyHtml += '</tr>';
+            });
+            tableBody.innerHTML = bodyHtml;
+
+            // Reveal UI
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('data-table').style.display = 'table';
+            document.getElementById('dashboard-grid').style.display = 'grid';
+
+            function initDataTable() {
+                if ($.fn.DataTable.isDataTable('#data-table')) {
+                    $('#data-table').DataTable().destroy();
+                }
+                table = $('#data-table').DataTable({
+                    responsive: true,
+                    pageLength: 10,
+                    lengthMenu: [10, 25, 50],
+                    order: [],
+                    dom: '<"top"l>rt<"bottom"ip><"clear">',
+                    initComplete: function() {
+                        $('.dataTables_length').append('<button id="reset-sort-btn" class="reset-sort-btn" title="Reset table sorting to original Sheet layout">⏬ Reset Sorting</button>');
+                        $('#reset-sort-btn').on('click', function() {
+                            const activePills = [];
+                            $('.filter-pill.active').each(function() {
+                                activePills.push({
+                                    col: $(this).data('col'),
+                                    val: $(this).data('val')
+                                });
+                            });
+                            const manualSearchVal = $('#column-search').val();
+                            const manualColIdx = $('#column-select').val();
+
+                            initDataTable();
+
+                            activePills.forEach(function(p) {
+                                const val = p.val.toString();
+                                let regexStr = (p.col == '2' || p.col == '3' || p.col == '6') ? val : val.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                                table.column(p.col).search('(' + regexStr + ')', true, false);
+                            });
+
+                            if (manualSearchVal) {
+                                if (manualColIdx === 'all') table.search(manualSearchVal);
+                                else table.column(manualColIdx).search(manualSearchVal);
+                            }
+
+                            table.draw();
+                            updateMatchCounter();
+                        });
+                    }
+                });
+            }
+
+            // Init DataTables Engine
+            initDataTable();
+
+            updateMatchCounter();
+
+            // --- UI/UX Event Listeners ---
+            $('.filter-pill').on('click', function() { $(this).toggleClass('active'); applyAllFilters(); });
+            $('#column-search').on('keyup change clear', function () { applyAllFilters(); });
+            $('#column-select').on('change', function() { applyAllFilters(); });
+            $('#reset-filters').on('click', function() {
+                $('.filter-pill').removeClass('active');
+                $('#column-search').val('');
+                $('#column-select').val('all');
+                initDataTable();
+            });
+
+            // Toggle Input Fields based on Plan Selection
+            $('#calc-plan').on('change', function() {
+                if ($(this).val() === 'normal') {
+                    $('#wrap-normal-hrs').show();
+                    $('#wrap-peak-hrs, #wrap-offpeak-hrs, #tou-note').hide();
+                } else {
+                    $('#wrap-normal-hrs').hide();
+                    $('#wrap-peak-hrs, #wrap-offpeak-hrs, #tou-note').show();
+                }
+                refreshCostsInTable(); 
+            });
+
+            // Calculator Recalculation Triggers
+            $('#calc-usage, #calc-normal-hrs').on('change input', function() {
+                if($(this).attr('id') === 'calc-normal-hrs') {
+                    let v = parseFloat($(this).val()) || 0;
+                    if(v > 24) $(this).val(24);
+                }
+                refreshCostsInTable(); 
+            });
+
+            // Restrict combined TOU hours to 24 max
+            $('#calc-peak, #calc-offpeak').on('input', function() {
+                let p = parseFloat($('#calc-peak').val()) || 0;
+                let o = parseFloat($('#calc-offpeak').val()) || 0;
+                
+                if (p + o > 24) {
+                    if ($(this).attr('id') === 'calc-peak') $('#calc-offpeak').val(24 - p);
+                    else $('#calc-peak').val(24 - o);
+                }
+                refreshCostsInTable();
+            });
+
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('loading').innerHTML = '<p style="color: #ef4444;">Failed to load data.</p>';
+        }
+    }
+
+    $(document).ready(function() {
+        loadSheetData();
+    });
+</script>
+
+</body>
+</html>
