@@ -402,6 +402,7 @@
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_TITLE}`;
 
     let table; 
+    let allRowsData = []; 
 
     function getCellUrl(cell) {
         if (!cell) return null;
@@ -499,6 +500,66 @@
         }
         table.draw();
         updateMatchCounter();
+        updateCascadingFilters();
+    }
+
+    function updateCascadingFilters() {
+        if (!allRowsData || allRowsData.length === 0) return;
+        
+        const activeFilters = {};
+        $('.filter-pill.active').each(function() {
+            const col = $(this).data('col').toString();
+            const val = $(this).data('val').toString();
+            if (!activeFilters[col]) activeFilters[col] = [];
+            activeFilters[col].push(val);
+        });
+        
+        const filterCols = ['2', '3', '6'];
+        let changed = false;
+        
+        filterCols.forEach(col => {
+            $(`.filter-pill[data-col="${col}"]`).each(function() {
+                const val = $(this).data('val').toString();
+                let hasMatch = false;
+                let regex;
+                try { regex = new RegExp(val); } catch(e) { regex = null; }
+                
+                allRowsData.forEach(row => {
+                    if (hasMatch) return;
+                    
+                    let matchesAll = true;
+                    Object.keys(activeFilters).forEach(activeCol => {
+                        if (activeCol === col) return;
+                        const cellValue = (row[parseInt(activeCol)] || '').toString();
+                        const activeRegexes = activeFilters[activeCol].map(v => {
+                            try { return new RegExp(v); } catch(e) { return null; }
+                        }).filter(r => r !== null);
+                        
+                        const matches = activeRegexes.some(ar => ar.test(cellValue));
+                        if (!matches) matchesAll = false;
+                    });
+                    
+                    if (matchesAll && regex) {
+                        const cellValue = (row[parseInt(col)] || '').toString();
+                        if (regex.test(cellValue)) hasMatch = true;
+                    }
+                });
+                
+                if (hasMatch) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                    if ($(this).hasClass('active')) {
+                        $(this).removeClass('active');
+                        changed = true;
+                    }
+                }
+            });
+        });
+        
+        if (changed) {
+            applyAllFilters();
+        }
     }
 
     async function loadSheetData() {
@@ -530,10 +591,12 @@
 
             // Build Rows
             let bodyHtml = '';
+            allRowsData = [];
             rows.forEach(row => {
                 bodyHtml += '<tr>';
                 const cells = (row.c || []).slice(0, 9);
                 let powerStr = '';
+                const rowData = [];
 
                 cells.forEach((cell, i) => {
                     let cellValue = '';
@@ -541,6 +604,7 @@
                         if (cell.f !== undefined && cell.f !== null) cellValue = cell.f;
                         else if (cell.v !== undefined && cell.v !== null) cellValue = cell.v;
                     }
+                    rowData.push(cellValue);
                     if (i === 4) powerStr = cellValue; 
 
                     if (i === 8) { 
@@ -553,6 +617,7 @@
                 
                 bodyHtml += `<td>${calculateCost(powerStr)}</td>`; 
                 bodyHtml += '</tr>';
+                allRowsData.push(rowData);
             });
             tableBody.innerHTML = bodyHtml;
 
@@ -614,7 +679,7 @@
             $('#column-search').on('keyup change clear', function () { applyAllFilters(); });
             $('#column-select').on('change', function() { applyAllFilters(); });
             $('#reset-filters').on('click', function() {
-                $('.filter-pill').removeClass('active');
+                $('.filter-pill').removeClass('active').show();
                 $('#column-search').val('');
                 $('#column-select').val('all');
                 initDataTable();

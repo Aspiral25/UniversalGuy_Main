@@ -540,7 +540,7 @@
           <div id="carImageLoading" style="display:none; align-items: center; justify-content: center; height: 140px; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem;">
             Loading image...
           </div>
-          <img id="carImage" src="" alt="Car Image" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); display:none;" onload="document.getElementById('carImageLoading').style.display='none'; document.getElementById('carImageFallback').style.display='none'; this.style.display='block';" onerror="document.getElementById('carImageLoading').style.display='none'; document.getElementById('carImageFallback').style.display='flex'; this.style.display='none';">
+          <img id="carImage" src="" alt="Car Image" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); display:none;" onload="onCarImageLoaded(this)" onerror="onCarImageError(this)">
           <div id="carImageFallback" style="display:none; align-items: center; justify-content: center; height: 140px; background: var(--bg-secondary); border-radius: 12px; border: 1px dashed var(--border-color); color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">
             <span id="carImageText">Select a model</span>
           </div>
@@ -1008,6 +1008,27 @@
       calculate();
     }
 
+    function onCarImageLoaded(img) {
+      const loadingEl = document.getElementById('carImageLoading');
+      const fallbackEl = document.getElementById('carImageFallback');
+      loadingEl.style.display = 'none';
+      if (img.src.includes('car-placeholder')) {
+        fallbackEl.style.display = 'flex';
+        img.style.display = 'none';
+      } else {
+        fallbackEl.style.display = 'none';
+        img.style.display = 'block';
+      }
+    }
+
+    function onCarImageError(img) {
+      const loadingEl = document.getElementById('carImageLoading');
+      const fallbackEl = document.getElementById('carImageFallback');
+      loadingEl.style.display = 'none';
+      fallbackEl.style.display = 'flex';
+      img.style.display = 'none';
+    }
+
     function updateCarImage(brand, model) {
       const imageContainer = document.getElementById('carImageContainer');
       const imageEl = document.getElementById('carImage');
@@ -1053,21 +1074,18 @@
         'Hiace SLWB': 'https://www.toyota.com.my/content/dam/malaysia/models/hiace/explore-thumbnail/hiace-explore-thumbnail-450px.png'
       };
 
-      const imageUrl = brand === 'Toyota' ? (toyotaImages[model] || '') : '';
+      let imageUrl = toyotaImages[model] || '';
 
-      if (imageUrl) {
-        loadingEl.style.display = 'flex';
-        fallbackEl.style.display = 'none';
-        imageEl.style.display = 'none';
-        imageEl.src = imageUrl;
-        imageContainer.style.display = 'block';
-      } else {
-        fallbackEl.textContent = `${brand} ${model}`;
-        fallbackEl.style.display = 'flex';
-        loadingEl.style.display = 'none';
-        imageEl.style.display = 'none';
-        imageContainer.style.display = 'flex';
+      if (!imageUrl) {
+        imageUrl = `https://carapi.trustcar.info/getImage?make=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`;
       }
+
+      fallbackEl.textContent = `${brand} ${model}`;
+      loadingEl.style.display = 'flex';
+      fallbackEl.style.display = 'none';
+      imageEl.style.display = 'none';
+      imageEl.src = imageUrl;
+      imageContainer.style.display = 'block';
     }
 
     function calculate() {
