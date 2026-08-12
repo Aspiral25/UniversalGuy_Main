@@ -346,18 +346,82 @@
         .bracket-table tr:last-child td { border-bottom: none; }
         .bracket-table td:last-child { text-align: right; font-weight: 600; color: #38bdf8; }
 
-        @media (max-width: 1024px) {
-            body { overflow: auto; height: auto; }
-            .dashboard { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; overflow: visible; }
-            .panel { grid-column: 1 / -1 !important; }
-            .panel:last-child { grid-template-rows: auto auto auto; grid-template-columns: 1fr; }
-            .panel:last-child > h2 { grid-column: 1; }
-            .panel:last-child > .metrics-stack,
-            .panel:last-child > #refundStatus { grid-column: 1; flex-wrap: wrap; }
-            .metrics-stack { flex-wrap: wrap; }
-            .metric { flex: 1 1 calc(33% - 1rem); }
-        }
-    </style>
+@media (max-width: 1024px) {
+             body { overflow: auto; height: auto; }
+             .dashboard { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; overflow: visible; }
+             .panel { grid-column: 1 / -1 !important; }
+             .panel:last-child { grid-template-rows: auto auto auto; grid-template-columns: 1fr; }
+             .panel:last-child > h2 { grid-column: 1; }
+             .panel:last-child > .metrics-stack,
+             .panel:last-child > #refundStatus { grid-column: 1; flex-wrap: wrap; }
+             .metrics-stack { flex-wrap: wrap; }
+             .metric { flex: 1 1 calc(33% - 1rem); }
+         }
+
+         [data-theme="dark"] {
+             --bg-gradient: linear-gradient(135deg, #111b2d 0%, #0f1a2e 100%);
+             --panel-bg: rgba(10, 37, 64, 0.85);
+             --panel-border: rgba(30, 45, 61, 0.6);
+             --primary: #4f46e5;
+             --primary-glow: rgba(79, 70, 229, 0.25);
+             --text-main: #e6e6e6;
+             --text-muted: #718096;
+             --input-bg: #111b2d;
+             --input-border: #1e2d3d;
+             --success-bg: #0a2540;
+             --success-text: #34d399;
+             --success-border: #1e3a2e;
+             --error-bg: #2a1a1a;
+             --error-text: #f87171;
+             --error-border: #3a1e1e;
+             --neutral-bg: #111b2d;
+             --neutral-text: #a0aec0;
+             --neutral-border: #1e2d3d;
+         }
+
+         [data-theme="dark"] .panel {
+             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3),
+                         inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
+         }
+
+         [data-theme="dark"] .scrollable-content::-webkit-scrollbar-thumb { background: #4a5568; }
+
+         [data-theme="dark"] .bracket-table th { color: #718096; }
+         [data-theme="dark"] .bracket-table td { color: #a0aec0; border-bottom-color: rgba(255,255,255,0.05); }
+
+         [data-theme="dark"] .help-icon { fill: #718096; }
+
+         [data-theme="dark"] .tooltip-content {
+             background: rgba(10, 37, 64, 0.95);
+             color: #e6e6e6;
+             border-color: #1e2d3d;
+         }
+
+         [data-theme="dark"] .mytax-btn { background-color: #e6e6e6; color: #0a2540; }
+         [data-theme="dark"] .mytax-btn:hover { background-color: #ffffff; }
+
+         [data-theme="dark"] .dash-card { background: #111b2d; border-color: #1e2d3d; }
+         [data-theme="dark"] .match-counter { background-color: #1e2d3d; color: #93c5fd; }
+         [data-theme="dark"] .filter-pill { background-color: #111b2d; border-color: #1e2d3d; color: #e6e6e6; }
+         [data-theme="dark"] .filter-pill:hover { background-color: #1e2d3d; }
+         [data-theme="dark"] .filter-pill-reset { background-color: #111b2d; color: #718096; border-color: #1e2d3d; }
+         [data-theme="dark"] .filter-pill-reset:hover { background-color: #1e2d3d; color: #a0aec0; }
+         [data-theme="dark"] .search-group select, [data-theme="dark"] .search-group input { background: #111b2d; border-color: #1e2d3d; color: #e6e6e6; }
+         [data-theme="dark"] .calc-item select, [data-theme="dark"] .calc-item input { background: #111b2d; border-color: #1e2d3d; color: #e6e6e6; }
+         [data-theme="dark"] .calc-note { background: #111b2d; border-color: #1e2d3d; color: #718096; }
+         [data-theme="dark"] .section-divider { background: #111b2d; color: #718096; }
+         [data-theme="dark"] .info-box { background-color: rgba(79, 70, 229, 0.1); }
+         [data-theme="dark"] .dataTables_length { color: #718096; }
+         [data-theme="dark"] .reset-sort-btn { background-color: #111b2d; color: #93c5fd; border-color: #1e2d3d; }
+         [data-theme="dark"] .reset-sort-btn:hover { background-color: #1e2d3d; color: #bfdbfe; }
+         [data-theme="dark"] .shop-icon { background-color: #1e2d3d; }
+         [data-theme="dark"] .shop-icon:hover { background-color: #2a3f55; }
+         [data-theme="dark"] table.dataTable th { background-color: #111b2d !important; color: #e6e6e6 !important; border-bottom-color: #1e2d3d !important; }
+         [data-theme="dark"] table.dataTable td { border-bottom-color: #1e2d3d !important; }
+         [data-theme="dark"] .container { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.2); }
+         [data-theme="dark"] .loading-container { color: #718096; }
+         [data-theme="dark"] .spinner { border-color: #1e2d3d; border-top-color: var(--primary); }
+     </style>
 </head>
 <body>
 
@@ -697,11 +761,29 @@
             }
         }
 
-        document.querySelectorAll('.tax-input').forEach(input => {
-            input.addEventListener('input', calculateTax);
-        });
+function applyTheme(theme) {
+             document.documentElement.setAttribute('data-theme', theme);
+         }
 
-        calculateTax();
-    </script>
+         function initTheme() {
+             const savedTheme = localStorage.getItem('theme');
+             const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+             applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+         }
+
+         window.addEventListener('storage', (e) => {
+             if (e.key === 'theme') {
+                 applyTheme(e.newValue || 'light');
+             }
+         });
+
+         initTheme();
+
+         document.querySelectorAll('.tax-input').forEach(input => {
+             input.addEventListener('input', calculateTax);
+         });
+
+         calculateTax();
+     </script>
 </body>
 </html>

@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Zakat Pendapatan | MAIPP & Lembaga Zakat Malaysia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #ccfbf1;
+            --gold: #d97706;
+            --gold-light: #fef3c7;
+            --bg: #f0fdfa;
+            --card: #ffffff;
+            --text: #134e4a;
+            --text-secondary: #5c7c78;
+            --border: #99f6e4;
+            --shadow: 0 4px 20px rgba(13, 148, 136, 0.12);
+            --radius: 12px;
+            --font: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: linear-gradient(135deg, #f0fdfa 0%, #e6fffa 50%, #f0fdf4 100%);
+            color: var(--text);
+            height: 100vh;
+            padding: 0.5rem;
+            overflow: hidden;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr auto;
+            gap: 0.6rem;
+            height: calc(100vh - 1rem);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-panel {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-panel::before {
+            content: "\f0e3";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            opacity: 0.15;
+        }
+
+        .header-text h1 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .header-text p {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin: 2px 0 0 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.4rem;
+            z-index: 2;
+        }
+
+        .lang-toggle, .theme-toggle {
+            padding: 0.25rem 0.7rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font);
+        }
+
+        .lang-toggle:hover, .theme-toggle:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.6rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel h2 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .panel h2 .icon {
+            font-size: 0.85rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.6rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.2rem 0.4rem;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 0.7rem;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.3rem;
+            accent-color: var(--primary);
+        }
+
+        .form-group .info {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            margin-left: 0.2rem;
+        }
+
+        .nisab-display {
+            background: var(--primary-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.3rem 0.5rem;
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nisab-label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .nisab-value {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .method-tabs {
+            display: flex;
+            gap: 0.3rem;
+            margin: 0.3rem 0;
+        }
+
+        .method-tab {
+            flex: 1;
+            padding: 0.25rem;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--bg);
+            color: var(--text-secondary);
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font);
+        }
+
+        .method-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .deduction-box {
+            background: var(--primary-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.4rem;
+            margin-top: auto;
+            overflow-y: auto;
+            flex-grow: 1;
+            min-height: 0;
+        }
+
+        .deduction-box h4 {
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            color: var(--text);
+        }
+
+        .deduction-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.15rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.65rem;
+        }
+
+        .deduction-item .value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .total-deduction {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.2rem 0 0 0;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .bottom-row {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr 1.2fr;
+            gap: 0.6rem;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 0.8rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 0.6rem;
+        }
+
+        .result-main {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .result-box .status {
+            padding: 0.35rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+            align-self: flex-start;
+        }
+
+        .result-box .status.wajib {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .result-box .status.tidak-wajib {
+            background: rgba(220, 38, 38, 0.3);
+        }
+
+        .result-amount {
+            text-align: left;
+        }
+
+        .result-box .amount {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .result-box .amount-label {
+            font-size: 0.8rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .result-detail {
+            text-align: left;
+            padding: 0.35rem 0;
+        }
+
+        .result-detail .rd-label {
+            font-size: 0.7rem;
+            opacity: 0.85;
+            display: block;
+            margin-bottom: 0.15rem;
+        }
+
+        .result-detail .rd-value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .tax-rebate-box {
+            background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 0.5rem 0.7rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tax-rebate-box h3 {
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .tax-rebate-box p {
+            font-size: 0.6rem;
+            opacity: 0.9;
+            line-height: 1.3;
+        }
+
+        .info-panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.5rem 0.7rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .info-panel h2 {
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--text);
+        }
+
+        .info-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            flex-grow: 1;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .info-col p,
+        .info-col li {
+            font-size: 0.6rem;
+            line-height: 1.3;
+            color: var(--text-secondary);
+            margin-bottom: 0.15rem;
+        }
+
+        .info-col ul {
+            padding-left: 0.8rem;
+            margin: 0.15rem 0;
+        }
+
+        .formula-box {
+            background: var(--primary-light);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 0.3rem;
+            font-size: 0.6rem;
+            color: var(--primary-dark);
+            margin-top: 0.2rem;
+            white-space: pre-line;
+            line-height: 1.3;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto;
+                height: auto;
+                overflow: visible;
+            }
+
+            .header-panel,
+            .panel,
+            .bottom-row,
+            .result-box,
+            .tax-rebate-box,
+            .info-panel {
+                grid-column: 1 / -1;
+            }
+
+            .bottom-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .result-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .info-content {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                overflow: auto;
+                height: auto;
+            }
+        }
+
+        [data-theme="dark"] {
+            --text: #e6e6e6;
+            --text-secondary: #a0aec0;
+            --bg: #0f1a2e;
+            --card: #111b2d;
+            --border: #1e2d3d;
+            --primary-light: #0f2e2b;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0f1a2e 0%, #0a2540 50%, #111b2d 100%);
+        }
+
+        [data-theme="dark"] .form-group input,
+        [data-theme="dark"] .form-group select {
+            background: #1a2736;
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        [data-theme="dark"] .form-group input:focus,
+        [data-theme="dark"] .form-group select:focus {
+            background: #1a2736;
+            border-color: var(--primary);
+        }
+
+        [data-theme="dark"] .form-group input::placeholder {
+            color: #4a5f7a;
+        }
+
+        [data-theme="dark"] .method-tab {
+            background: #1a2736;
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        [data-theme="dark"] .method-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        [data-theme="dark"] .deduction-box {
+            background: #0f2e2b;
+            border-color: var(--border);
+        }
+
+        [data-theme="dark"] .deduction-item {
+            border-bottom-color: rgba(13, 148, 136, 0.3);
+        }
+
+        [data-theme="dark"] .nisab-display {
+            background: #0f2e2b;
+            border-color: var(--border);
+        }
+
+        [data-theme="dark"] .formula-box {
+            background: #0f2e2b;
+            border-color: var(--border);
+            color: var(--primary);
+        }
+
+        [data-theme="dark"] header {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+        }
+
+        [data-theme="dark"] .lang-toggle,
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.25);
+            color: #e6e6e6;
+        }
+
+        [data-theme="dark"] .lang-toggle:hover,
+        [data-theme="dark"] .theme-toggle:hover {
+            background: rgba(255,255,255,0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header-panel">
+            <div class="header-text">
+                <h1 data-key="title">Kalkulator Zakat Pendapatan</h1>
+                <p data-key="subtitle">Mengikut garis panduan Majlis Agama Islam Negeri Pulau Pinang dan Lembaga Zakat Malaysia</p>
+            </div>
+            <div class="header-actions">
+                <button class="lang-toggle" onclick="toggleLanguage()" id="langBtn">EN</button>
+                <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+            </div>
+        </div>
+
+        <div class="panel panel-income">
+            <h2><span class="icon">💰</span> <span data-key="incomeTitle">Maklumat Pendapatan</span></h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-key="monthlySalary">Gaji Bulanan (RM)</label>
+                    <input type="number" id="monthlySalary" placeholder="4,500" min="0" step="0.01" oninput="calculate()">
+                </div>
+                <div class="form-group">
+                    <label data-key="bonusAnnual">Bonus/Elaun Tahunan (RM)</label>
+                    <input type="number" id="bonusAnnual" placeholder="0" min="0" step="0.01" oninput="calculate()">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-key="otherIncome">Pendapatan Lain (RM/bulan)</label>
+                    <input type="number" id="otherIncome" placeholder="0" min="0" step="0.01" oninput="calculate()">
+                </div>
+                <div class="form-group">
+                    <label data-key="sideIncomeAnnual">Pendapatan Sampingan (RM/tahun)</label>
+                    <input type="number" id="sideIncomeAnnual" placeholder="0" min="0" step="0.01" oninput="calculate()">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><span data-key="zakatAuthority">Lembaga Zakat:</span> <span class="info" data-key="zakatAuthorityInfo">Pilih negeri/lembaga zakat anda</span></label>
+                    <select id="zakatAuthority" onchange="updateNisab(); calculate()">
+                        <option value="MAIPP" data-key="optMAIPP">MAIPP (Pulau Pinang)</option>
+                        <option value="LZS" data-key="optLZS">Lembaga Zakat Selangor</option>
+                        <option value="MAIWP" data-key="optMAIWP">PPZ-MAIWP (WP Kuala Lumpur)</option>
+                        <option value="MAIK" data-key="optMAIK">MAIK (Kelantan)</option>
+                        <option value="MAIA" data-key="optMAIA">MAIA (Perak)</option>
+                        <option value="MAIMS" data-key="optMAIMS">MAIMS (Melaka)</option>
+                        <option value="MAIS" data-key="optMAIS">MAIS (Terengganu)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><span data-key="haulYear">Tempoh Haul / Tahun:</span> <span class="info" data-key="haulYearInfo">Pilih tempoh haul zakat</span></label>
+                    <select id="haulYear" onchange="updateNisab(); calculate()">
+                        <option value="2026H1">2026 (Jan - Jun)</option>
+                        <option value="2025H2">2025 (Jul - Dis)</option>
+                        <option value="2025H1">2025 (Jan - Jun)</option>
+                        <option value="2024H2">2024 (Jul - Dis)</option>
+                        <option value="2024H1">2024 (Jan - Jun)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="nisab-display">
+                <div class="nisab-label" data-key="currentNisab">Nisab Semasa (Tahunan)</div>
+                <div class="nisab-value" id="nisabDisplay">RM 31,000.00</div>
+            </div>
+        </div>
+
+        <div class="panel panel-family">
+            <h2><span class="icon">👨‍👩‍👧‍👦</span> <span data-key="familyTitle">Maklumat Tanggungan & Potongan</span></h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-key="spouse">Status Perkahwinan</label>
+                    <select id="maritalStatus" onchange="calculate()">
+                        <option value="single" data-key="optSingle">Bujang</option>
+                        <option value="married" data-key="optMarried">Berkahwin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label data-key="children">Bilangan Anak</label>
+                    <input type="number" id="childrenCount" value="0" min="0" max="20" oninput="calculate()">
+                </div>
+            </div>
+            <div class="form-group">
+                <label data-key="kwsp">Potongan KWSP Pekerja (11% automatik)</label>
+                <div style="display: flex; align-items: center; gap: 0.3rem;">
+                    <input type="checkbox" id="kwspAuto" checked onchange="calculate()">
+                    <span style="font-size:0.6rem;color:var(--text-secondary)" data-key="kwspAutoInfo">Kira 11% daripada pendapatan kasar</span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-key="socso">Potongan SOCSO/EIS (RM/bulan)</label>
+                    <input type="number" id="socsoMonthly" placeholder="0" min="0" step="0.01" value="0" oninput="calculate()">
+                </div>
+                <div class="form-group">
+                    <label data-key="tabungHaji">Caruman Tabung Haji (RM/tahun)</label>
+                    <input type="number" id="tabungHaji" placeholder="0" min="0" step="0.01" value="0" oninput="calculate()">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-key="ptptn">Bayaran Balik PTPTN (RM/tahun)</label>
+                    <input type="number" id="ptptn" placeholder="0" min="0" step="0.01" value="0" oninput="calculate()">
+                </div>
+                <div class="form-group">
+                    <label data-key="zakatPaid">Zakat Sudah Dibayar (RM/tahun)</label>
+                    <input type="number" id="zakatPaid" placeholder="0" min="0" step="0.01" value="0" oninput="calculate()">
+                </div>
+            </div>
+            <div class="method-tabs">
+                <button class="method-tab active" onclick="setMethod('net')" id="methodNet" data-key="methodNet">Kaedah Bersih</button>
+                <button class="method-tab" onclick="setMethod('gross')" id="methodGross" data-key="methodGross">Kaedah Kasar</button>
+            </div>
+            <div class="deduction-box" id="deductionBox">
+                <h4 data-key="deductionBreakdown">Perbelanjaan Dibenarkan (Had Kifayah)</h4>
+                <div id="deductionList"></div>
+            </div>
+        </div>
+
+        <div class="bottom-row">
+            <div class="result-box" id="resultBox">
+                <div class="result-main">
+                    <div class="status" id="zakatStatus"></div>
+                    <div class="result-amount">
+                        <div class="amount" id="zakatAmount">RM 0.00</div>
+                        <div class="amount-label" data-key="zakatPayable">Zakat Pendapatan Tahunan</div>
+                    </div>
+                </div>
+                <div class="result-details">
+                    <div class="result-detail">
+                        <span class="rd-label" data-key="eligibleIncome">Pendapatan Layak Dizakat</span>
+                        <span class="rd-value" id="eligibleIncome">RM 0.00</span>
+                    </div>
+                    <div class="result-detail">
+                        <span class="rd-label" data-key="monthlyZakat">Zakat Bulanan</span>
+                        <span class="rd-value" id="monthlyZakat">RM 0.00</span>
+                    </div>
+                    <div class="result-detail">
+                        <span class="rd-label" data-key="grossIncome">Pendapatan Kasar Tahunan</span>
+                        <span class="rd-value" id="grossIncomeDisplay">RM 0.00</span>
+                    </div>
+                    <div class="result-detail">
+                        <span class="rd-label" data-key="totalDeductions">Jumlah Potongan</span>
+                        <span class="rd-value" id="totalDeductionsDisplay">RM 0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tax-rebate-box">
+                <h3 data-key="taxRebateTitle">Rebat Cukai Zakat (LHDN)</h3>
+                <p data-key="taxRebateDesc">Zakat pendapatan yang dibayar kepada lembaga zakat negeri yang diiktiraf layak dituntut sebagai rebat cukai 100% di bawah Seksyen 6A(3) Akta Cukai Pendapatan 1967. Simpan resit rasmi untuk tuntutan e-Filing. Bayar sebelum 31 Disember untuk rebat cukai tahun taksiran semasa.</p>
+            </div>
+
+            <div class="info-panel">
+                <h2 data-key="infoTitle">Maklumat Penting</h2>
+                <div class="info-content">
+                    <div class="info-col">
+                        <p data-key="info1"><strong>Syarat Wajib Zakat:</strong> Beragama Islam, baligh dan berakal, pendapatan melebihi nisab, dan haul (tempoh 1 tahun Hijrah).</p>
+                        <p data-key="info2"><strong>Kaedah Pengiraan:</strong> Kaedah Bersih (Had Kifayah) menolak perbelanjaan asas dahulu. Kaedah Kasar mengira 2.5% terus dari pendapatan tahunan.</p>
+                    </div>
+                    <div class="info-col">
+                        <ul>
+                            <li data-key="info3"><strong>MAIPP (Pulau Pinang):</strong> Mengikut contoh laman rasmi MAIPP, nisab 2025 ialah RM31,000. Kadar tolakan diri = RM9,000/tahun, isteri = RM3,000/tahun, setiap anak = RM1,000/tahun.</li>
+                            <li data-key="info4"><strong>Lembaga Zakat Selangor (LZS):</strong> Had Kifayah 2025 - Pekerja Dewasa: RM4,944/tahun, Tanggungan 7-17 tahun: RM4,896/tahun, Tanggungan 6 tahun ke bawah: RM2,100/tahun.</li>
+                            <li data-key="info5"><strong>PPZ-MAIWP (WP):</strong> Nisab 2026 (Jan-Jun) = RM33,996. Menggunakan kaedah bersih dengan potongan KWSP, SOCSO, dan keperluan asas.</li>
+                        </ul>
+                        <div class="formula-box" data-key="formula">Formula: Zakat = (Pendapatan Bersih - Potongan Dibenarkan) x 2.5% (Kaedah Bersih)
+Zakat = Pendapatan Kasar x 2.5% (Kaedah Kasar)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            ms: {
+                title: 'Kalkulator Zakat Pendapatan',
+                subtitle: 'Mengikut garis panduan Majlis Agama Islam Negeri Pulau Pinang dan Lembaga Zakat Malaysia',
+                incomeTitle: 'Maklumat Pendapatan',
+                monthlySalary: 'Gaji Bulanan (RM)',
+                bonusAnnual: 'Bonus/Elaun Tahunan (RM)',
+                otherIncome: 'Pendapatan Lain (RM/bulan)',
+                sideIncomeAnnual: 'Pendapatan Sampingan (RM/tahun)',
+                zakatAuthority: 'Lembaga Zakat:',
+                zakatAuthorityInfo: 'Pilih negeri/lembaga zakat anda',
+                haulYear: 'Tempoh Haul / Tahun:',
+                haulYearInfo: 'Pilih tempoh haul zakat',
+                currentNisab: 'Nisab Semasa (Tahunan)',
+                familyTitle: 'Maklumat Tanggungan & Potongan',
+                spouse: 'Status Perkahwinan',
+                optSingle: 'Bujang',
+                optMarried: 'Berkahwin',
+                children: 'Bilangan Anak',
+                kwsp: 'Potongan KWSP Pekerja (11% automatik)',
+                kwspAutoInfo: 'Kira 11% daripada pendapatan kasar',
+                socso: 'Potongan SOCSO/EIS (RM/bulan)',
+                tabungHaji: 'Caruman Tabung Haji (RM/tahun)',
+                ptptn: 'Bayaran Balik PTPTN (RM/tahun)',
+                zakatPaid: 'Zakat Sudah Dibayar (RM/tahun)',
+                methodNet: 'Kaedah Bersih',
+                methodGross: 'Kaedah Kasar',
+                deductionBreakdown: 'Perbelanjaan Dibenarkan (Had Kifayah)',
+                zakatPayable: 'Zakat Pendapatan Tahunan',
+                eligibleIncome: 'Pendapatan Layak Dizakat',
+                monthlyZakat: 'Zakat Bulanan',
+                grossIncome: 'Pendapatan Kasar Tahunan',
+                totalDeductions: 'Jumlah Potongan',
+                wajib: 'WAJIB ZAKAT',
+                tidakWajib: 'TIDAK WAJIB ZAKAT',
+                taxRebateTitle: 'Rebat Cukai Zakat (LHDN)',
+                taxRebateDesc: 'Zakat pendapatan yang dibayar kepada lembaga zakat negeri yang diiktiraf layak dituntut sebagai rebat cukai 100% di bawah Seksyen 6A(3) Akta Cukai Pendapatan 1967. Simpan resit rasmi untuk tuntutan e-Filing. Bayar sebelum 31 Disember untuk rebat cukai tahun taksiran semasa.',
+                infoTitle: 'Maklumat Penting',
+                info1: '<strong>Syarat Wajib Zakat:</strong> Beragama Islam, baligh dan berakal, pendapatan melebihi nisab, dan haul (tempoh 1 tahun Hijrah).',
+                info2: '<strong>Kaedah Pengiraan:</strong> Kaedah Bersih (Had Kifayah) menolak perbelanjaan asas dahulu. Kaedah Kasar mengira 2.5% terus dari pendapatan tahunan.',
+                info3: '<strong>MAIPP (Pulau Pinang):</strong> Mengikut contoh laman rasmi MAIPP, nisab 2025 ialah RM31,000. Kadar tolakan diri = RM9,000/tahun, isteri = RM3,000/tahun, setiap anak = RM1,000/tahun.',
+                info4: '<strong>Lembaga Zakat Selangor (LZS):</strong> Had Kifayah 2025 - Pekerja Dewasa: RM4,944/tahun, Tanggungan 7-17 tahun: RM4,896/tahun, Tanggungan 6 tahun ke bawah: RM2,100/tahun.',
+                info5: '<strong>PPZ-MAIWP (WP):</strong> Nisab 2026 (Jan-Jun) = RM33,996. Menggunakan kaedah bersih dengan potongan KWSP, SOCSO, dan keperluan asas.',
+                formula: 'Formula: Zakat = (Pendapatan Bersih - Potongan Dibenarkan) x 2.5% (Kaedah Bersih)\nZakat = Pendapatan Kasar x 2.5% (Kaedah Kasar)',
+                currency: 'RM',
+                self: 'Diri',
+                spouseLabel: 'Isteri',
+                childLabel: 'Anak-anak',
+                kwspLabel: 'KWSP (11%)',
+                socsoLabel: 'SOCSO/EIS',
+                thLabel: 'Tabung Haji',
+                ptptnLabel: 'PTPTN',
+                zakatPaidLabel: 'Zakat Sudah Dibayar',
+                totalLabel: 'Jumlah Potongan',
+                nisab: 'Nisab',
+                exceedsNisab: 'Pendapatan layak melebihi nisab',
+                belowNisab: 'Pendapatan layak tidak mencapai nisab',
+                perYear: 'setahun',
+                perMonth: 'sebulan'
+            },
+            en: {
+                title: 'Income Zakat Calculator',
+                subtitle: 'Based on MAIPP (Penang) and Malaysian Zakat Authority Guidelines',
+                incomeTitle: 'Income Information',
+                monthlySalary: 'Monthly Salary (RM)',
+                bonusAnnual: 'Annual Bonus/Allowance (RM)',
+                otherIncome: 'Other Income (RM/month)',
+                sideIncomeAnnual: 'Side Income (RM/year)',
+                zakatAuthority: 'Zakat Authority:',
+                zakatAuthorityInfo: 'Select your state zakat authority',
+                haulYear: 'Haul Period / Year:',
+                haulYearInfo: 'Select zakat haul period',
+                currentNisab: 'Current Nisab (Annual)',
+                familyTitle: 'Dependents & Deductions',
+                spouse: 'Marital Status',
+                optSingle: 'Single',
+                optMarried: 'Married',
+                children: 'Number of Children',
+                kwsp: 'Employee EPF Contribution (11% auto)',
+                kwspAutoInfo: 'Calculate 11% of gross income',
+                socso: 'SOCSO/EIS Contribution (RM/month)',
+                tabungHaji: 'Tabung Haji Contribution (RM/year)',
+                ptptn: 'PTPTN Repayment (RM/year)',
+                zakatPaid: 'Zakat Already Paid (RM/year)',
+                methodNet: 'Net Method',
+                methodGross: 'Gross Method',
+                deductionBreakdown: 'Approved Deductions (Had Kifayah)',
+                zakatPayable: 'Annual Income Zakat',
+                eligibleIncome: 'Zakat-Eligible Income',
+                monthlyZakat: 'Monthly Zakat',
+                grossIncome: 'Annual Gross Income',
+                totalDeductions: 'Total Deductions',
+                wajib: 'ZAKAT OBLIGATORY',
+                tidakWajib: 'ZAKAT NOT OBLIGATORY',
+                taxRebateTitle: 'Zakat Tax Rebate (LHDN)',
+                taxRebateDesc: 'Income zakat paid to recognized state zakat authorities is eligible for 100% tax rebate under Section 6A(3) of the Income Tax Act 1967. Keep official receipt for e-Filing claims. Pay before 31 December to claim rebate for current assessment year.',
+                infoTitle: 'Important Information',
+                info1: '<strong>Zakat Obligation Conditions:</strong> Muslim, baligh and of sound mind, income exceeds nisab, and haul (1 Hijrah year).',
+                info2: '<strong>Calculation Methods:</strong> Net Method (Had Kifayah) deducts basic expenses first. Gross Method calculates 2.5% directly from annual income.',
+                info3: '<strong>MAIPP (Penang):</strong> According to MAIPP official example, 2025 nisab is RM31,000. Deduction rates: self = RM9,000/year, spouse = RM3,000/year, per child = RM1,000/year.',
+                info4: '<strong>Lembaga Zakat Selangor (LZS):</strong> 2025 Had Kifayah - Employed Adult: RM4,944/year, Dependent 7-17 years: RM4,896/year, Dependent 6 years & below: RM2,100/year.',
+                info5: '<strong>PPZ-MAIWP (WP):</strong> 2026 (Jan-Jun) Nisab = RM33,996. Uses net method with EPF, SOCSO, and basic needs deductions.',
+                formula: 'Formula: Zakat = (Net Income - Approved Deductions) x 2.5% (Net Method)\nZakat = Gross Income x 2.5% (Gross Method)',
+                currency: 'RM',
+                self: 'Self',
+                spouseLabel: 'Spouse',
+                childLabel: 'Children',
+                kwspLabel: 'EPF (11%)',
+                socsoLabel: 'SOCSO/EIS',
+                thLabel: 'Tabung Haji',
+                ptptnLabel: 'PTPTN',
+                zakatPaidLabel: 'Zakat Already Paid',
+                totalLabel: 'Total Deductions',
+                nisab: 'Nisab',
+                exceedsNisab: 'Eligible income exceeds nisab',
+                belowNisab: 'Eligible income does not reach nisab',
+                perYear: 'per year',
+                perMonth: 'per month'
+            }
+        };
+
+        let currentLang = 'ms';
+
+        const nisabData = {
+            'MAIPP': {
+                '2026H1': 33000,
+                '2025H2': 31000,
+                '2025H1': 28000,
+                '2024H2': 26000,
+                '2024H1': 24000
+            },
+            'LZS': {
+                '2026H1': 42047,
+                '2025H2': 35449,
+                '2025H1': 29961,
+                '2024H2': 27696,
+                '2024H1': 24007
+            },
+            'MAIWP': {
+                '2026H1': 33996,
+                '2025H2': 32000,
+                '2025H1': 29961,
+                '2024H2': 27696,
+                '2024H1': 24007
+            },
+            'MAIK': {
+                '2026H1': 35000,
+                '2025H2': 31000,
+                '2025H1': 28000,
+                '2024H2': 26000,
+                '2024H1': 24000
+            },
+            'MAIA': {
+                '2026H1': 34000,
+                '2025H2': 31000,
+                '2025H1': 28000,
+                '2024H2': 26000,
+                '2024H1': 24000
+            },
+            'MAIMS': {
+                '2026H1': 33000,
+                '2025H2': 30000,
+                '2025H1': 27000,
+                '2024H2': 25000,
+                '2024H1': 23000
+            },
+            'MAIS': {
+                '2026H1': 34000,
+                '2025H2': 31000,
+                '2025H1': 28000,
+                '2024H2': 26000,
+                '2024H1': 24000
+            }
+        };
+
+        const hadKifayah = {
+            'MAIPP': { self: 9000, spouse: 3000, child: 1000 },
+            'LZS': { self: 4944, spouse: 3200, child: 1000, dep78: 4896, dep6: 2100 },
+            'MAIWP': { self: 9000, spouse: 3000, child: 1000 },
+            'MAIK': { self: 9000, spouse: 3000, child: 1000 },
+            'MAIA': { self: 9000, spouse: 3000, child: 1000 },
+            'MAIMS': { self: 9000, spouse: 3000, child: 1000 },
+            'MAIS': { self: 9000, spouse: 3000, child: 1000 }
+        };
+
+        let currentMethod = 'net';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ms' ? 'en' : 'ms';
+            document.getElementById('langBtn').textContent = currentLang === 'ms' ? 'EN' : 'BM';
+            updateUIText();
+            calculate();
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+        }
+
+        function updateUIText() {
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (t[key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'SELECT') {
+                        // skip
+                    } else {
+                        el.innerHTML = t[key];
+                    }
+                }
+            });
+
+            document.querySelectorAll('option').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (key && t[key]) {
+                    el.textContent = t[key];
+                }
+            });
+        }
+
+        function updateNisab() {
+            const authority = document.getElementById('zakatAuthority').value;
+            const haul = document.getElementById('haulYear').value;
+            const nisab = nisabData[authority]?.[haul] || 31000;
+            document.getElementById('nisabDisplay').textContent = formatCurrency(nisab);
+        }
+
+        function formatCurrency(val) {
+            return translations[currentLang].currency + ' ' + Number(val).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function setMethod(method) {
+            currentMethod = method;
+            document.getElementById('methodNet').classList.toggle('active', method === 'net');
+            document.getElementById('methodGross').classList.toggle('active', method === 'gross');
+            document.getElementById('deductionBox').style.display = method === 'net' ? 'flex' : 'none';
+            calculate();
+        }
+
+        function calculate() {
+            const monthlySalary = parseFloat(document.getElementById('monthlySalary').value) || 0;
+            const bonusAnnual = parseFloat(document.getElementById('bonusAnnual').value) || 0;
+            const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+            const sideIncomeAnnual = parseFloat(document.getElementById('sideIncomeAnnual').value) || 0;
+            const maritalStatus = document.getElementById('maritalStatus').value;
+            const childrenCount = parseInt(document.getElementById('childrenCount').value) || 0;
+            const kwspAuto = document.getElementById('kwspAuto').checked;
+            const socsoMonthly = parseFloat(document.getElementById('socsoMonthly').value) || 0;
+            const tabungHaji = parseFloat(document.getElementById('tabungHaji').value) || 0;
+            const ptptn = parseFloat(document.getElementById('ptptn').value) || 0;
+            const zakatPaid = parseFloat(document.getElementById('zakatPaid').value) || 0;
+
+            const grossAnnual = (monthlySalary * 12) + bonusAnnual + (otherIncome * 12) + sideIncomeAnnual;
+
+            let totalDeductions = 0;
+            const deductionItems = [];
+
+            if (currentMethod === 'net') {
+                const authority = document.getElementById('zakatAuthority').value;
+                const hk = hadKifayah[authority] || hadKifayah['MAIPP'];
+
+                let selfDeduction = hk.self;
+                deductionItems.push({ label: translations[currentLang].self, value: selfDeduction });
+                totalDeductions += selfDeduction;
+
+                if (maritalStatus === 'married') {
+                    let spouseDeduction = hk.spouse;
+                    deductionItems.push({ label: translations[currentLang].spouseLabel, value: spouseDeduction });
+                    totalDeductions += spouseDeduction;
+                }
+
+                if (childrenCount > 0) {
+                    let childDeduction = childrenCount * hk.child;
+                    deductionItems.push({ label: `${translations[currentLang].childLabel} (${childrenCount})`, value: childDeduction });
+                    totalDeductions += childDeduction;
+                }
+
+                if (kwspAuto && grossAnnual > 0) {
+                    const kwspAmount = grossAnnual * 0.11;
+                    deductionItems.push({ label: translations[currentLang].kwspLabel, value: kwspAmount });
+                    totalDeductions += kwspAmount;
+                }
+
+                const socsoAnnual = socsoMonthly * 12;
+                if (socsoAnnual > 0) {
+                    deductionItems.push({ label: translations[currentLang].socsoLabel, value: socsoAnnual });
+                    totalDeductions += socsoAnnual;
+                }
+
+                if (tabungHaji > 0) {
+                    deductionItems.push({ label: translations[currentLang].thLabel, value: tabungHaji });
+                    totalDeductions += tabungHaji;
+                }
+
+                if (ptptn > 0) {
+                    deductionItems.push({ label: translations[currentLang].ptptnLabel, value: ptptn });
+                    totalDeductions += ptptn;
+                }
+
+                if (zakatPaid > 0) {
+                    deductionItems.push({ label: translations[currentLang].zakatPaidLabel, value: zakatPaid });
+                    totalDeductions += zakatPaid;
+                }
+            }
+
+            const eligibleIncome = currentMethod === 'net'
+                ? Math.max(0, grossAnnual - totalDeductions)
+                : grossAnnual;
+
+            const authority = document.getElementById('zakatAuthority').value;
+            const haul = document.getElementById('haulYear').value;
+            const nisab = nisabData[authority]?.[haul] || 31000;
+
+            const isWajib = eligibleIncome >= nisab;
+            const zakatAnnual = isWajib ? eligibleIncome * 0.025 : 0;
+            const zakatMonthly = isWajib ? zakatAnnual / 12 : 0;
+
+            const statusEl = document.getElementById('zakatStatus');
+            statusEl.textContent = isWajib ? translations[currentLang].wajib : translations[currentLang].tidakWajib;
+            statusEl.className = 'status ' + (isWajib ? 'wajib' : 'tidak-wajib');
+
+            document.getElementById('zakatAmount').textContent = formatCurrency(zakatAnnual);
+            document.getElementById('eligibleIncome').textContent = formatCurrency(eligibleIncome);
+            document.getElementById('monthlyZakat').textContent = formatCurrency(zakatMonthly);
+            document.getElementById('grossIncomeDisplay').textContent = formatCurrency(grossAnnual);
+            document.getElementById('totalDeductionsDisplay').textContent = formatCurrency(totalDeductions);
+
+            const deductionList = document.getElementById('deductionList');
+            deductionList.innerHTML = deductionItems.map(item =>
+                `<div class="deduction-item">
+                    <span class="label">${item.label}</span>
+                    <span class="value">${formatCurrency(item.value)}</span>
+                </div>`
+            ).join('') + `
+                <div class="total-deduction">
+                    <span>${translations[currentLang].totalLabel}</span>
+                    <span class="value">${formatCurrency(totalDeductions)}</span>
+                </div>
+            `;
+        }
+
+        updateNisab();
+        calculate();
+        updateUIText();
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                document.getElementById('themeBtn').textContent = '☀️';
+            } else {
+                document.getElementById('themeBtn').textContent = '🌙';
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+        }
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                applyTheme(e.newValue || 'light');
+            }
+        });
+
+        initTheme();
+    </script>
+</body>
+</html>

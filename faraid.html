@@ -169,12 +169,48 @@
             text-decoration: underline;
         }
 
-        @media (max-width: 1024px) {
-            .faraid-container { grid-template-columns: 1fr; }
-            .faraid-tree-container { flex-direction: column; }
-            .faraid-tree-svg { display: none; }
-        }
-    </style>
+@media (max-width: 1024px) {
+             .faraid-container { grid-template-columns: 1fr; }
+             .faraid-tree-container { flex-direction: column; }
+             .faraid-tree-svg { display: none; }
+         }
+
+         [data-theme="dark"] .faraid-wrapper {
+             --faraid-bg: #0a2540;
+             --faraid-card-bg: #0f1a2e;
+             --faraid-text: #e6e6e6;
+             --faraid-text-muted: #718096;
+             --faraid-primary: #2c7a7b;
+             --faraid-primary-light: #1a3a3b;
+             --faraid-border: #1e2d3d;
+             --faraid-disabled: #1e2d3d;
+             --faraid-danger: #e53e3e;
+         }
+
+         [data-theme="dark"] .faraid-header h1 { color: #e6e6e6; }
+         [data-theme="dark"] .faraid-header p { color: #718096; }
+         [data-theme="dark"] .faraid-section-title { color: #e6e6e6; border-bottom-color: #1e2d3d; }
+         [data-theme="dark"] .faraid-input-group input[type="number"],
+         [data-theme="dark"] .faraid-input-group select {
+             background-color: #111b2d;
+             border-color: #1e2d3d;
+             color: #e6e6e6;
+         }
+         [data-theme="dark"] .faraid-input-group label { color: #a0aec0; }
+         [data-theme="dark"] .faraid-checkbox-label { color: #e6e6e6; }
+         [data-theme="dark"] .faraid-blocked input[type="number"] { background-color: #1e2d3d; }
+         [data-theme="dark"] .faraid-estate-node { background: #0a2540; }
+         [data-theme="dark"] .faraid-estate-node .faraid-value { color: #e6e6e6; }
+         [data-theme="dark"] .faraid-estate-node .faraid-label { color: #a0aec0; }
+         [data-theme="dark"] .faraid-heir-card { background: #0a2540; border-color: #1e2d3d; }
+         [data-theme="dark"] .faraid-heir-role { color: #e6e6e6; }
+         [data-theme="dark"] .faraid-heir-value { color: #e6e6e6; }
+         [data-theme="dark"] .faraid-explanation { background-color: #111b2d; color: #a0aec0; border-left-color: #2c7a7b; }
+         [data-theme="dark"] .faraid-explanation h4 { color: #e6e6e6; }
+         [data-theme="dark"] .faraid-footer { color: #718096; border-top-color: #1e2d3d; }
+         [data-theme="dark"] .faraid-tree-svg path { stroke: #2c7a7b; }
+         [data-theme="dark"] .heir-group-container { border-color: #1e2d3d; }
+     </style>
 </head>
 <body>
 
@@ -951,7 +987,24 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (error) { console.error(error); alert(t('err-calculation')); }
     });
-    }
-</script>
+function applyTheme(theme) {
+         document.documentElement.setAttribute('data-theme', theme);
+     }
+
+     function initTheme() {
+         const savedTheme = localStorage.getItem('theme');
+         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+         applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+     }
+
+     window.addEventListener('storage', (e) => {
+         if (e.key === 'theme') {
+             applyTheme(e.newValue || 'light');
+         }
+     });
+
+     initTheme();
+     }
+ </script>
 </body>
 </html>

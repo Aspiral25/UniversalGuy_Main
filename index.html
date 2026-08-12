@@ -57,36 +57,41 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 32px;
+      padding: 0 clamp(12px, 3vw, 32px);
       z-index: 1001;
+      gap: clamp(8px, 2vw, 24px);
     }
 
     .topnav-logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: clamp(6px, 1.5vw, 12px);
       text-decoration: none;
+      flex-shrink: 0;
     }
 
     .topnav-logo .site-name {
-      font-size: 1.1rem;
+      font-size: clamp(0.85rem, 2vw, 1.1rem);
       font-weight: 700;
       color: var(--text-primary);
       letter-spacing: -0.01em;
+      white-space: nowrap;
     }
 
     .topnav .logo-img {
-      height: 40px;
+      height: clamp(24px, 5vw, 40px);
       width: auto;
       display: block;
+      flex-shrink: 0;
     }
 
     .topnav video.logo-img {
-      height: 40px;
+      height: clamp(24px, 5vw, 40px);
       width: auto;
       display: block;
       object-fit: contain;
-      border-radius: 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
     }
 
     .topnav-logo::before {
@@ -95,16 +100,18 @@
 
     .topnav-links {
       display: flex;
-      gap: 24px;
+      gap: clamp(8px, 2vw, 24px);
       align-items: center;
+      flex-shrink: 0;
     }
 
     .topnav-links a {
       color: var(--text-secondary);
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: clamp(0.75rem, 1.8vw, 0.9rem);
       font-weight: 500;
       transition: color var(--transition);
+      white-space: nowrap;
     }
 
     .topnav-links a:hover {
@@ -117,15 +124,16 @@
       justify-content: center;
       background: var(--accent);
       color: #fff;
-      padding: 8px 12px;
+      padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
       border-radius: 6px;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+      flex-shrink: 0;
     }
 
     .topnav-links .cta-btn svg {
-      width: 20px;
-      height: 20px;
+      width: clamp(14px, 3.5vw, 20px);
+      height: clamp(14px, 3.5vw, 20px);
     }
 
     .topnav-links .cta-btn:hover {
@@ -143,15 +151,17 @@
       top: var(--topnav-height);
       left: 0;
       height: calc(100vh - var(--topnav-height));
+      height: calc(100dvh - var(--topnav-height));
       z-index: 1000;
       transition: transform var(--transition);
       border-right: 1px solid var(--border-color);
       overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .sidebar-nav {
       flex: 1;
-      padding: 20px 16px;
+      padding: clamp(12px, 3vw, 20px) clamp(8px, 2vw, 16px);
     }
 
     .nav-section {
@@ -163,11 +173,11 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 8px 12px;
+      padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
       background: none;
       border: none;
       color: var(--text-primary);
-      font-size: 0.8rem;
+      font-size: clamp(0.7rem, 1.6vw, 0.8rem);
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -183,7 +193,7 @@
 
     .nav-section-header .chevron {
       transition: transform var(--transition);
-      font-size: 0.7rem;
+      font-size: clamp(0.6rem, 1.2vw, 0.7rem);
     }
 
     .nav-section.open .nav-section-header .chevron {
@@ -203,12 +213,12 @@
     .nav-item {
       display: block;
       width: 100%;
-      padding: 8px 12px;
+      padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
       text-align: left;
       background: none;
       border: none;
       color: var(--text-secondary);
-      font-size: 0.9rem;
+      font-size: clamp(0.75rem, 1.8vw, 0.9rem);
       cursor: pointer;
       transition: all var(--transition);
       border-radius: 6px;
@@ -229,13 +239,13 @@
     }
 
     .sidebar-footer {
-      padding: 16px;
+      padding: clamp(10px, 2.5vw, 16px);
       border-top: 1px solid var(--border-color);
-      font-size: 0.85rem;
+      font-size: clamp(0.75rem, 1.8vw, 0.85rem);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: clamp(8px, 2vw, 12px);
     }
 
     .sidebar-footer .theme-toggle {
@@ -246,20 +256,21 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: clamp(4px, 1vw, 8px);
       width: 100%;
-      padding: 12px 16px;
+      padding: clamp(8px, 2vw, 12px) clamp(10px, 2.5vw, 16px);
       background: linear-gradient(135deg, lab(41.44% 75.44 -69.6) 0%, #50146b 100%);
       color: #fefefe;
       text-decoration: none;
-      border-radius: 10px;
+      border-radius: clamp(6px, 1.5vw, 10px);
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: clamp(0.7rem, 1.8vw, 0.9rem);
       font-family: var(--font-sans);
       box-shadow: 0 2px 8px rgba(7, 0, 7, 0.3);
       transition: all var(--transition);
       border: none;
       cursor: pointer;
+      text-align: center;
     }
 
     .coffee-btn:hover {
@@ -270,8 +281,8 @@
     }
 
     .coffee-btn svg {
-      width: 20px;
-      height: 20px;
+      width: clamp(14px, 3.5vw, 20px);
+      height: clamp(14px, 3.5vw, 20px);
       flex-shrink: 0;
     }
 
@@ -282,41 +293,50 @@
       display: flex;
       flex-direction: column;
       height: calc(100vh - var(--topnav-height));
+      height: calc(100dvh - var(--topnav-height));
       overflow: hidden;
       background: var(--bg-primary);
+      min-width: 0;
     }
 
     .mobile-header {
       display: none;
-      padding: 16px 20px;
+      padding: clamp(6px, 1.5vw, 10px) clamp(10px, 3vw, 16px);
       border-bottom: 1px solid var(--border-color);
       align-items: center;
-      justify-content: space-between;
+      gap: 10px;
       background: var(--bg-primary);
     }
 
     .mobile-header h2 {
-      font-size: 1.1rem;
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
       font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      text-align: center;
     }
 
     .hamburger {
       background: none;
       border: none;
-      font-size: 1.5rem;
+      font-size: clamp(1.1rem, 3.5vw, 1.3rem);
       cursor: pointer;
       color: var(--text-primary);
-      padding: 4px;
+      padding: 2px;
       line-height: 1;
+      flex-shrink: 0;
+      order: -1;
     }
 
     .theme-toggle {
       background: var(--bg-primary);
       border: 1px solid var(--border-color);
-      font-size: 0.85rem;
+      font-size: clamp(0.7rem, 1.8vw, 0.85rem);
       cursor: pointer;
       color: var(--text-secondary);
-      padding: 6px 12px;
+      padding: clamp(5px, 1.5vw, 6px) clamp(8px, 2vw, 12px);
       border-radius: 6px;
       transition: all var(--transition);
       width: 100%;
@@ -338,8 +358,15 @@
       display: flex;
       border-bottom: 1px solid var(--border-color);
       background: var(--bg-primary);
-      padding: 0 32px;
+      padding: 0 clamp(12px, 3vw, 32px);
       gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .tab-bar::-webkit-scrollbar {
+      display: none;
     }
 
     .tab-bar.hidden {
@@ -347,11 +374,11 @@
     }
 
     .tab-btn {
-      padding: 16px 20px;
+      padding: clamp(12px, 3vw, 16px) clamp(10px, 2.5vw, 20px);
       background: none;
       border: none;
       border-bottom: 2px solid transparent;
-      font-size: 0.95rem;
+      font-size: clamp(0.8rem, 2vw, 0.95rem);
       font-weight: 500;
       color: var(--text-secondary);
       cursor: pointer;
@@ -359,6 +386,8 @@
       position: relative;
       top: 1px;
       font-family: var(--font-sans);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .tab-btn:hover {
@@ -374,10 +403,12 @@
     .content-area {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      overflow-x: hidden;
+      padding: clamp(12px, 3vw, 20px);
       max-width: 100%;
       display: flex;
       flex-direction: column;
+      min-height: 0;
     }
 
     .content-panel {
@@ -387,6 +418,7 @@
       display: none;
       flex-direction: column;
       min-height: 0;
+      min-width: 0;
     }
 
     .content-panel.active {
@@ -399,12 +431,12 @@
     }
 
     .home-hero {
-      margin-bottom: 48px;
-      max-width: 1000px;
+      margin-bottom: clamp(24px, 5vw, 48px);
+      max-width: 100%;
     }
 
     .home-hero h2 {
-      font-size: 2rem;
+      font-size: clamp(1.4rem, 4vw, 2rem);
       font-weight: 800;
       margin-bottom: 16px;
       letter-spacing: -0.04em;
@@ -413,9 +445,9 @@
 
     .home-hero p {
       color: var(--text-secondary);
-      font-size: 1rem;
+      font-size: clamp(0.85rem, 2vw, 1rem);
       line-height: 1.7;
-      max-width: 1000px;
+      max-width: 100%;
     }
 
     .btn-primary {
@@ -424,11 +456,11 @@
       gap: 8px;
       background: var(--accent);
       color: #fff;
-      padding: 12px 24px;
+      padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 24px);
       border-radius: 8px;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: clamp(0.8rem, 2vw, 0.95rem);
       transition: all var(--transition);
       border: none;
       cursor: pointer;
@@ -446,11 +478,11 @@
       gap: 8px;
       background: var(--bg-primary);
       color: var(--text-primary);
-      padding: 12px 24px;
+      padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 24px);
       border-radius: 8px;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: clamp(0.8rem, 2vw, 0.95rem);
       border: 1px solid var(--border-color);
       transition: all var(--transition);
       cursor: pointer;
@@ -463,15 +495,15 @@
 
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+      gap: clamp(12px, 3vw, 24px);
     }
 
     .project-card {
       background: var(--bg-primary);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 28px;
+      padding: clamp(16px, 4vw, 28px);
       cursor: pointer;
       transition: all var(--transition);
       display: flex;
@@ -486,7 +518,7 @@
     }
 
     .project-card h3 {
-      font-size: 1.15rem;
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
       font-weight: 700;
       margin: 0;
       color: var(--text-primary);
@@ -494,7 +526,7 @@
 
     .project-card p {
       color: var(--text-secondary);
-      font-size: 0.95rem;
+      font-size: clamp(0.8rem, 2vw, 0.95rem);
       line-height: 1.6;
       margin: 0;
       flex: 1;
@@ -518,12 +550,12 @@
     }
 
     .doc-header {
-      margin-bottom: 32px;
-      max-width: 720px;
+      margin-bottom: clamp(20px, 4vw, 32px);
+      max-width: 100%;
     }
 
     .doc-header h2 {
-      font-size: 2rem;
+      font-size: clamp(1.4rem, 4vw, 2rem);
       font-weight: 700;
       margin-bottom: 8px;
       letter-spacing: -0.03em;
@@ -531,17 +563,17 @@
 
     .doc-header p {
       color: var(--text-secondary);
-      font-size: 1.05rem;
+      font-size: clamp(0.85rem, 2vw, 1.05rem);
       line-height: 1.7;
     }
 
     .doc-section {
-      margin-bottom: 32px;
-      max-width: 720px;
+      margin-bottom: clamp(20px, 4vw, 32px);
+      max-width: 100%;
     }
 
     .doc-section h3 {
-      font-size: 1.25rem;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
       font-weight: 600;
       margin-bottom: 12px;
       padding-bottom: 8px;
@@ -568,7 +600,7 @@
       display: inline-block;
       padding: 4px 10px;
       border-radius: 4px;
-      font-size: 0.8rem;
+      font-size: clamp(0.7rem, 1.8vw, 0.8rem);
       font-weight: 500;
       background: var(--bg-secondary);
       color: var(--text-secondary);
@@ -581,9 +613,9 @@
       background: var(--code-bg);
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 16px 20px;
+      padding: clamp(10px, 2.5vw, 16px) clamp(12px, 3vw, 20px);
       font-family: var(--font-mono);
-      font-size: 0.9rem;
+      font-size: clamp(0.75rem, 1.8vw, 0.9rem);
       overflow-x: auto;
       margin: 12px 0;
       color: var(--text-secondary);
@@ -592,6 +624,7 @@
     .iframe-container {
       flex: 1;
       min-height: 0;
+      min-width: 0;
       border: 1px solid var(--border-color);
       border-radius: 8px;
       overflow: hidden;
@@ -629,6 +662,7 @@
       left: 0;
       width: 100%;
       height: calc(100vh - var(--topnav-height));
+      height: calc(100dvh - var(--topnav-height));
       background: rgba(0, 0, 0, 0.3);
       z-index: 999;
       backdrop-filter: blur(2px);
@@ -702,9 +736,10 @@
     @media (max-width: 768px) {
       .sidebar {
         transform: translateX(-100%);
-        width: 280px;
+        width: min(85vw, 300px);
         top: var(--topnav-height);
         height: calc(100vh - var(--topnav-height));
+        height: calc(100dvh - var(--topnav-height));
         box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
       }
 
@@ -725,36 +760,99 @@
       }
 
       .content-area {
-        padding: 24px 20px;
+        padding: clamp(12px, 4vw, 24px) clamp(10px, 3vw, 20px);
       }
 
       .tab-bar {
-        padding: 0 16px;
+        padding: 0 clamp(8px, 2vw, 16px);
       }
 
       .tab-btn {
-        padding: 14px 14px;
-        font-size: 0.9rem;
+        padding: clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 14px);
+        font-size: clamp(0.75rem, 2vw, 0.9rem);
       }
 
       .iframe-container {
         flex: 1;
         min-height: 0;
+        min-width: 0;
       }
 
       .home-hero h2 {
-        font-size: 1.8rem;
+        font-size: clamp(1.2rem, 4vw, 1.8rem);
       }
 
       .projects-grid {
         grid-template-columns: 1fr;
       }
 
+      .coffee-btn {
+        font-size: clamp(0.75rem, 2vw, 0.9rem);
+        padding: clamp(10px, 2.5vw, 12px) clamp(12px, 3vw, 16px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sidebar {
+        width: 90vw;
+        max-width: 300px;
+      }
+
+      .home-hero h2 {
+        font-size: 1.3rem;
+      }
+
+      .doc-header h2 {
+        font-size: 1.3rem;
+      }
+
+      .project-card {
+        padding: 16px;
+      }
+
+      .content-area {
+        padding: 12px;
+      }
+
+      .tab-btn {
+        padding: 10px 10px;
+        font-size: 0.8rem;
+      }
     }
 
     @media (min-width: 769px) {
       .sidebar {
         transform: translateX(0) !important;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .topnav {
+        padding: 0 16px;
+        gap: 12px;
+      }
+
+      .topnav-logo .site-name {
+        font-size: 0.95rem;
+      }
+
+      .topnav .logo-img,
+      .topnav video.logo-img {
+        height: 32px;
+      }
+
+      .topnav-links {
+        gap: 12px;
+      }
+
+      .topnav-links .cta-btn {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+      }
+
+      .topnav-links .cta-btn svg {
+        width: 16px;
+        height: 16px;
       }
     }
 
@@ -794,7 +892,7 @@
         <span class="site-name">WAFI Dev Hub</span>
       </a>
       <div class="topnav-links">
-        <video src="mas.mp4" alt="Malaysia" class="logo-img" autoplay loop muted playsinline></video>
+        <video src="malaysia.mp4" alt="Malaysia" class="logo-img" autoplay loop muted playsinline></video>
         <img src="universal.png" alt="Universal Logo" class="logo-img">
         <img src="Ns.png" alt="WAFI Dev Hub Logo" class="logo-img">
         <a href="https://github.com/Aspiral25" target="_blank" rel="noopener noreferrer" class="cta-btn" aria-label="GitHub">
@@ -920,6 +1018,32 @@
         hasIframe: true
       },
       {
+        id: 'car_affordability_calculator',
+        label: 'Car Affordability',
+        section: 'Web Project',
+        docs: {
+          title: 'Car Affordability Calculator',
+          description: 'A motorsport-themed calculator that estimates the minimum salary required to afford a selected car. Includes loan calculations, insurance, road tax, maintenance, and fuel estimates for Malaysian market cars.',
+          techStack: ['HTML5', 'CSS3', 'JavaScript'],
+          features: [
+            'Brand and model selection with multiple variants and on-road prices',
+            'Loan parameter inputs: term (5/7/9 years), interest rate, down payment percentage',
+            'Monthly commitment breakdown: installment, insurance, road tax, maintenance, fuel',
+            'Minimum salary calculation based on 40% debt-to-income ratio',
+            'Motorsport dark theme with racing-inspired UI and real-time breakdown panel'
+          ],
+          formulas: [
+            'Monthly Installment = PMT(rate/12, term*12, loanAmount)',
+            'Loan Amount = On-Road Price - Down Payment',
+            'Total Monthly Commitment = Installment + Insurance/12 + RoadTax/12 + Maintenance/12 + Fuel',
+            'Minimum Salary = Total Monthly Commitment / 0.40'
+          ],
+          notes: 'Estimates are based on typical Malaysian car insurance and road tax rates. Actual rates vary by age, location, and insurer. Maintenance and fuel estimates are approximate. This tool does not constitute financial advice.'
+        },
+        iframeSrc: 'car_affordability.html',
+        hasIframe: true
+      },
+      {
         id: 'malaysia_aircond_selector',
         label: 'AC Buying Guide',
         section: 'Web Project',
@@ -944,6 +1068,34 @@
           notes: 'Uses jQuery and DataTables for table rendering, sorting, and responsive design. Bill estimates cover AC unit consumption only and do not include fixed charges (RM10 Retail Charge, 1.6% KWTBB, 8% SST for >600kWh, AFA fluctuations). Google Sheets ID: 1nFhN5NKR88DsYMMTfiX6e9FiFECko1JtTmYxg2Eku3o.'
         },
         iframeSrc: 'aircond.html',
+        hasIframe: true
+      },
+      {
+        id: 'zakat_calculator',
+        label: 'Zakat Pendapatan',
+        section: 'Web Project',
+        docs: {
+          title: 'Zakat Pendapatan Calculator (MAIPP & Malaysia)',
+          description: 'An Islamic income zakat calculator based on Majlis Agama Islam Pulau Pinang (MAIPP) guidelines and other Malaysian zakat authorities. Supports both Kaedah Bersih (Had Kifayah) and Kaedah Kasar calculation methods with bilingual interface.',
+          techStack: ['HTML5', 'CSS3', 'JavaScript'],
+          features: [
+            'Dual calculation methods: Kaedah Bersih (Had Kifayah deductions) and Kaedah Kasar (gross 2.5%)',
+            'Multi-authority support: MAIPP, LZS, MAIWP, MAIK, MAIA, MAIMS, MAIS with respective nisab values',
+            'Had Kifayah deductions: Self, spouse, children, EPF (11%), SOCSO/EIS, Tabung Haji, PTPTN',
+            'Real-time zakat liability check against current nisab thresholds (updated per haul period)',
+            'Annual and monthly zakat breakdown with eligible income calculation',
+            'Bilingual interface (Malay/English) with LHDN tax rebate information'
+          ],
+          formulas: [
+            'Nisab (MAIPP 2025): RM31,000/year | LZS 2025 H1: RM29,961 | LZS 2026 H1: RM42,047',
+            'MAIPP Had Kifayah: Self = RM9,000/yr, Spouse = RM3,000/yr, Child = RM1,000/yr',
+            'Kaedah Bersih: Zakat = (Pendapatan Bersih - Potongan Dibenarkan) x 2.5%',
+            'Kaedah Kasar: Zakat = Pendapatan Kasar Tahunan x 2.5%',
+            'LHDN Tax Rebate: 100% rebate under Section 6A(3) Income Tax Act 1967, capped at tax payable'
+          ],
+          notes: 'Zakat rates and nisab values vary by state Islamic authority and are updated based on 85-gram gold prices. Users should verify current nisab with their respective state zakat portal. Calculations are for estimation only; consult your state zakat authority for official rulings.'
+        },
+        iframeSrc: 'zakat.html',
         hasIframe: true
       },
       {

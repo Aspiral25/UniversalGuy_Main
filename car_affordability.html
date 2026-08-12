@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Affordability Calculator | Wafi Dev Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --accent-warm: #f59e0b;
+      --text-primary: #0a2540;
+      --text-secondary: #425466;
+      --text-muted: #697386;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-panel: #ffffff;
+      --bg-card: #f8fafc;
+      --border-color: #e8edf4;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+      --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font-body);
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+      overflow: hidden;
+    }
+
+    .app-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    header {
+      text-align: center;
+      padding: 16px 20px;
+      background: var(--bg-primary);
+      border-radius: 16px;
+      flex-shrink: 0;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+
+    header h1 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 12px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    @media (max-width: 900px) {
+      .grid { 
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+      }
+      html, body { overflow: auto; }
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+      transition: border-color 0.15s ease;
+    }
+
+    .panel:hover {
+      border-color: #d5dce6;
+    }
+
+    .panel h2 {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+
+    .panel h2 .icon {
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+
+    .form-group:last-of-type {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+      letter-spacing: 0.03em;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 9px 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      transition: all 0.15s ease;
+      appearance: none;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23425466' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--bg-primary);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.08);
+    }
+
+    select:disabled, input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .info-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-top: auto;
+      flex-shrink: 0;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .info-row:last-child { border-bottom: none; }
+
+    .info-label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    .info-value {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+    }
+
+    .info-value.highlight {
+      color: var(--accent);
+      font-family: var(--font-display);
+    }
+
+    .info-value.gold {
+      color: var(--accent-warm);
+      font-family: var(--font-display);
+    }
+
+    .result-panel {
+      background: var(--bg-primary);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: var(--shadow);
+    }
+
+    .result-panel .value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .result-panel .subtext {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .breakdown {
+      margin-top: 14px;
+      text-align: left;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 16px;
+    }
+
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.75rem;
+    }
+
+    .breakdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .breakdown-item .desc { 
+      color: var(--text-secondary); 
+    }
+    .breakdown-item .amt { 
+      font-weight: 600; 
+      color: var(--text-primary); 
+    }
+
+    .footer {
+      text-align: center;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      flex-shrink: 0;
+    }
+
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .footer a:hover {
+      color: var(--accent-hover);
+    }
+
+    .note {
+      background: rgba(16, 185, 129, 0.05);
+      border-left: 2px solid var(--accent);
+      padding: 6px 12px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 10px;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .sparkline {
+      height: 3px;
+      background: var(--border-color);
+      border-radius: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .sparkline-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .calc-toggle {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 3px;
+      border: 1px solid var(--border-color);
+    }
+
+    .calc-toggle-btn {
+      flex: 1;
+      padding: 7px 14px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+
+    .calc-toggle-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .calc-toggle-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+    }
+
+    [data-theme="dark"] .calc-toggle {
+      background: #111b2d;
+      border-color: #1e2d3d;
+    }
+
+    [data-theme="dark"] .calc-toggle-btn {
+      color: #718096;
+    }
+
+    [data-theme="dark"] .calc-toggle-btn:hover {
+      color: #e6e6e6;
+    }
+
+    [data-theme="dark"] .calc-toggle-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+    }
+
+    [data-theme="dark"] {
+      --text-primary: #e6e6e6;
+      --text-secondary: #a0aec0;
+      --text-muted: #718096;
+      --bg-primary: #0a2540;
+      --bg-secondary: #111b2d;
+      --bg-panel: #0a2540;
+      --bg-card: #111b2d;
+      --border-color: #1e2d3d;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    [data-theme="dark"] select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0aec0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    }
+
+    [data-theme="dark"] select:focus, [data-theme="dark"] input:focus {
+      border-color: var(--accent);
+      background: var(--bg-primary);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+
+    [data-theme="dark"] .note {
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    [data-theme="dark"] .panel:hover {
+      border-color: #2a3f55;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Car <span>Affordability</span> Calculator</h1>
+    </header>
+
+    <div class="grid">
+      <div class="panel">
+        <h2><span class="icon">&#128663;</span> Select Your Car</h2>
+
+        <div class="form-group">
+          <label for="brand">Brand</label>
+          <select id="brand" onchange="updateModels()">
+            <option value="">-- Select Brand --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="model">Model</label>
+          <select id="model" onchange="updateVariants()" disabled>
+            <option value="">-- Select Model --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="variant">Variant</label>
+          <select id="variant" onchange="calculate()" disabled>
+            <option value="">-- Select Variant --</option>
+          </select>
+        </div>
+
+        <div id="carDetails" class="info-box" style="display:none;">
+          <div class="info-row">
+            <span class="info-label">On-Road Price</span>
+            <span class="info-value gold" id="detailPrice">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Engine</span>
+            <span class="info-value" id="detailEngine">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Transmission</span>
+            <span class="info-value" id="detailTrans">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Fuel Type</span>
+            <span class="info-value" id="detailFuel">-</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2><span class="icon">&#128176;</span> Loan Parameters</h2>
+
+        <div class="form-group">
+          <label>Loan Calculation Method</label>
+          <div class="calc-toggle" id="calcMethodToggle">
+            <button type="button" class="calc-toggle-btn active" data-value="flat">Flat Rate</button>
+            <button type="button" class="calc-toggle-btn" data-value="reducing">Reducing Balance</button>
+          </div>
+          <input type="radio" name="calcMethod" value="flat" checked style="display:none;">
+          <input type="radio" name="calcMethod" value="reducing" style="display:none;">
+        </div>
+
+        <div class="form-group">
+          <label for="loanTerm">Loan Term (Years)</label>
+          <select id="loanTerm" onchange="calculate()">
+            <option value="5">5 Years</option>
+            <option value="7" selected>7 Years</option>
+            <option value="9">9 Years</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="interestRate">Interest Rate (% p.a.)</label>
+          <input type="number" id="interestRate" value="3.5" step="0.1" min="1" max="10" onchange="calculate()">
+        </div>
+
+        <div class="form-group">
+          <label for="downPayment">Down Payment (%)</label>
+          <select id="downPayment" onchange="calculate()">
+            <option value="10">10%</option>
+            <option value="20" selected>20%</option>
+            <option value="30">30%</option>
+            <option value="40">40%</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="monthlyOther">Monthly Other Commitments (RM)</label>
+          <input type="number" id="monthlyOther" value="0" min="0" step="100" onchange="calculate()">
+        </div>
+
+        <div class="note">
+          Default assumption: Total monthly commitments should not exceed 40% of gross monthly salary.
+        </div>
+      </div>
+
+      <div class="panel result-panel" id="resultPanel" style="display: none;">
+        <div class="result-content" id="resultContent">
+          <div class="label">Minimum Monthly Salary Required</div>
+          <div class="value" id="salaryResult">RM 0</div>
+          <div class="subtext" id="salarySubtext">Select a car to calculate</div>
+          <div class="sparkline"><div class="sparkline-fill" id="sparkline" style="width: 0%"></div></div>
+
+          <div class="breakdown" id="breakdown">
+            <div class="breakdown-item">
+              <span class="desc">On-Road Price</span>
+              <span class="amt" id="bdPrice">-</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="desc">Down Payment</span>
+              <span class="amt" id="bdDown">-</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="desc">Loan Amount</span>
+              <span class="amt" id="bdLoan">-</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="desc">Monthly Installment</span>
+              <span class="amt" id="bdInstallment">-</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="desc">Monthly Insurance</span>
+              <span class="amt" id="bdInsurance">-</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="desc">Monthly Road Tax</span>
+              <span class="amt" id="bdRoadTax">-</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="desc">Monthly Maintenance</span>
+              <span class="amt" id="bdMaintenance">-</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="desc">Monthly Fuel</span>
+              <span class="amt" id="bdFuel">-</span>
+            </div>
+            <div class="breakdown-item" style="grid-column: span 2;">
+              <span class="desc">Total Monthly Commitment</span>
+              <span class="amt" id="bdTotal" style="color: var(--accent-warm);">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="carImageContainer" style="display:none; margin-top: 14px; text-align: center;">
+          <div id="carImageLoading" style="display:none; align-items: center; justify-content: center; height: 140px; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem;">
+            Loading image...
+          </div>
+          <img id="carImage" src="" alt="Car Image" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); display:none;" onload="document.getElementById('carImageLoading').style.display='none'; document.getElementById('carImageFallback').style.display='none'; this.style.display='block';" onerror="document.getElementById('carImageLoading').style.display='none'; document.getElementById('carImageFallback').style.display='flex'; this.style.display='none';">
+          <div id="carImageFallback" style="display:none; align-items: center; justify-content: center; height: 140px; background: var(--bg-secondary); border-radius: 12px; border: 1px dashed var(--border-color); color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">
+            <span id="carImageText">Select a model</span>
+          </div>
+        </div>
+      </div>
+
+    <div class="footer">
+      <p>Built by <a href="index.html">Wafi Dev Hub</a> &middot; All figures are estimates only &middot; Actual loan approval depends on bank assessment</p>
+    </div>
+  </div>
+
+  <script>
+    const carData = {
+      'Perodua': {
+        models: ['Axia', 'Bezza', 'Myvi', 'Ativa', 'Alza', 'Aruz', 'Traz', 'QV-E'],
+        variants: {
+          'Axia': [
+            { name: '1.0 E (MT)', price: 22000, engine: '1.0L', trans: '5MT', fuel: 'Petrol', roadTax: 60, insurance: 1500 },
+            { name: '1.0 G (AT)', price: 28000, engine: '1.0L', trans: '4AT', fuel: 'Petrol', roadTax: 60, insurance: 1800 },
+            { name: '1.0 X (AT)', price: 32000, engine: '1.0L', trans: '4AT', fuel: 'Petrol', roadTax: 60, insurance: 1900 },
+            { name: '1.0 SE (AT)', price: 42000, engine: '1.0L', trans: '4AT', fuel: 'Petrol', roadTax: 60, insurance: 2200 },
+            { name: '1.0 AV (AT)', price: 49500, engine: '1.0L', trans: '4AT', fuel: 'Petrol', roadTax: 60, insurance: 2500 }
+          ],
+          'Bezza': [
+            { name: '1.0 G (MT)', price: 34580, engine: '1.0L', trans: '5MT', fuel: 'Petrol', roadTax: 60, insurance: 1600 },
+            { name: '1.0 G (AT)', price: 38000, engine: '1.0L', trans: '4AT', fuel: 'Petrol', roadTax: 60, insurance: 1800 },
+            { name: '1.3 X (AT)', price: 42000, engine: '1.3L', trans: '4AT', fuel: 'Petrol', roadTax: 80, insurance: 2000 },
+            { name: '1.3 AV (AT)', price: 49980, engine: '1.3L', trans: '4AT', fuel: 'Petrol', roadTax: 80, insurance: 2400 }
+          ],
+          'Myvi': [
+            { name: '1.3 G (MT)', price: 46500, engine: '1.3L', trans: '5MT', fuel: 'Petrol', roadTax: 100, insurance: 2200 },
+            { name: '1.3 G (CVT)', price: 49000, engine: '1.3L', trans: 'CVT', fuel: 'Petrol', roadTax: 100, insurance: 2300 },
+            { name: '1.5 X (CVT)', price: 52000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2500 },
+            { name: '1.5 H (CVT)', price: 56000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol Hybrid', roadTax: 120, insurance: 2700 },
+            { name: '1.5 AV (CVT)', price: 59900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol Hybrid', roadTax: 120, insurance: 2900 }
+          ],
+          'Ativa': [
+            { name: '1.0 Turbo X (CVT)', price: 62500, engine: '1.0L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 160, insurance: 3000 },
+            { name: '1.0 Turbo H (CVT)', price: 68000, engine: '1.0L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 160, insurance: 3200 },
+            { name: '1.0 Turbo AV (CVT)', price: 72600, engine: '1.0L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 160, insurance: 3500 }
+          ],
+          'Alza': [
+            { name: '1.5 X (CVT)', price: 62500, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 130, insurance: 2900 },
+            { name: '1.5 H (CVT)', price: 69000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol Hybrid', roadTax: 140, insurance: 3100 },
+            { name: '1.5 AV (CVT)', price: 75500, engine: '1.5L', trans: 'CVT', fuel: 'Petrol Hybrid', roadTax: 140, insurance: 3400 }
+          ],
+          'Aruz': [
+            { name: '1.5 X (AT)', price: 72900, engine: '1.5L', trans: '4AT', fuel: 'Petrol', roadTax: 140, insurance: 3200 },
+            { name: '1.5 AV (AT)', price: 77900, engine: '1.5L', trans: '4AT', fuel: 'Petrol', roadTax: 140, insurance: 3500 }
+          ],
+          'Traz': [
+            { name: '1.5 X (CVT)', price: 76100, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 150, insurance: 3300 },
+            { name: '1.5 H (CVT)', price: 80000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol Hybrid', roadTax: 160, insurance: 3600 },
+            { name: '1.5 H 2-Tone (CVT)', price: 82000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol Hybrid', roadTax: 160, insurance: 3700 }
+          ],
+          'QV-E': [
+            { name: 'Battery-as-a-Service', price: 69999, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 2500 },
+            { name: 'Full Purchase', price: 93999, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 2800 }
+          ]
+        }
+      },
+      'Proton': {
+        models: ['Saga', 'Iriz', 'Persona', 'S70', 'X50', 'X70', 'X90', 'e.MAS 5', 'e.MAS 7', 'e.MAS 7 PHEV'],
+        variants: {
+          'Saga': [
+            { name: '1.5 Standard (MT)', price: 38990, engine: '1.5L', trans: '5MT', fuel: 'Petrol', roadTax: 90, insurance: 1700 },
+            { name: '1.5 Executive (AT)', price: 43000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 90, insurance: 1900 },
+            { name: '1.5 Premium (AT)', price: 47000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 90, insurance: 2100 }
+          ],
+          'Iriz': [
+            { name: '1.3 Standard (MT)', price: 42800, engine: '1.3L', trans: '5MT', fuel: 'Petrol', roadTax: 90, insurance: 1800 },
+            { name: '1.6 Executive (AT)', price: 48000, engine: '1.6L', trans: 'CVT', fuel: 'Petrol', roadTax: 100, insurance: 2000 },
+            { name: '1.6 Active (AT)', price: 52000, engine: '1.6L', trans: 'CVT', fuel: 'Petrol', roadTax: 100, insurance: 2200 }
+          ],
+          'Persona': [
+            { name: '1.6 Standard (AT)', price: 47800, engine: '1.6L', trans: 'CVT', fuel: 'Petrol', roadTax: 100, insurance: 2100 },
+            { name: '1.6 Executive (AT)', price: 52000, engine: '1.6L', trans: 'CVT', fuel: 'Petrol', roadTax: 100, insurance: 2300 },
+            { name: '1.6 Premium (AT)', price: 56000, engine: '1.6L', trans: 'CVT', fuel: 'Petrol', roadTax: 100, insurance: 2500 }
+          ],
+          'S70': [
+            { name: '1.5T Executive (AT)', price: 68800, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 180, insurance: 3200 },
+            { name: '1.5T Premium (AT)', price: 78000, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 180, insurance: 3500 },
+            { name: '1.5T Flagship (AT)', price: 85000, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 180, insurance: 3800 },
+            { name: '1.5T Flagship X (AT)', price: 89800, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 180, insurance: 4000 }
+          ],
+          'X50': [
+            { name: '1.5T Executive (AT)', price: 89800, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 200, insurance: 4000 },
+            { name: '1.5T Premium (AT)', price: 98000, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 200, insurance: 4200 },
+            { name: '1.5T Flagship (AT)', price: 106000, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 200, insurance: 4500 }
+          ],
+          'X70': [
+            { name: '1.5T Executive (AT)', price: 99800, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 220, insurance: 4200 },
+            { name: '1.5T Premium (AT)', price: 108000, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 220, insurance: 4500 }
+          ],
+          'X90': [
+            { name: '1.5TD Lite (AT)', price: 99800, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 250, insurance: 4500 },
+            { name: '1.5TD Prime (AT)', price: 108000, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 250, insurance: 4800 },
+            { name: '1.5TD Prime X (AT)', price: 115000, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 250, insurance: 5100 }
+          ],
+          'e.MAS 5': [
+            { name: 'Prime (EV)', price: 56800, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 2800 },
+            { name: 'Premium (EV)', price: 65000, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 3200 }
+          ],
+          'e.MAS 7': [
+            { name: 'Prime (EV)', price: 99800, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 4200 },
+            { name: 'Premium (EV)', price: 108000, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 4500 }
+          ],
+          'e.MAS 7 PHEV': [
+            { name: 'Prime (PHEV)', price: 105800, engine: '1.5L Turbo Hybrid', trans: 'Auto', fuel: 'PHEV', roadTax: 200, insurance: 4500 },
+            { name: 'Premium (PHEV)', price: 115000, engine: '1.5L Turbo Hybrid', trans: 'Auto', fuel: 'PHEV', roadTax: 200, insurance: 4800 },
+            { name: 'Premium Plus (PHEV)', price: 125800, engine: '1.5L Turbo Hybrid', trans: 'Auto', fuel: 'PHEV', roadTax: 200, insurance: 5200 }
+          ]
+        }
+      },
+      'Toyota': {
+        models: ['Vios', 'Vios Hybrid Electric', 'Vios HEV GR Sport', 'Corolla', 'Corolla GR Sport', 'Camry', 'Camry Hybrid', 'Yaris', 'GR Yaris', 'GR Corolla', 'Rush', 'Corolla Cross', 'Corolla Cross Hybrid', 'Corolla Cross GR Sport', 'Yaris Cross', 'Harrier', 'Fortuner', 'bZ4X', 'Urban Cruiser EV', 'Veloz', 'Innova', 'Innova Zenix', 'Alphard', 'Vellfire', 'Vellfire HEV', 'Hilux', 'Hilux BEV', 'GR 86', 'GR Supra', 'Hiace', 'Hiace SLWB'],
+        variants: {
+          'Vios': [
+            { name: '1.5 E (CVT)', price: 89600, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2400 },
+            { name: '1.5 G (CVT)', price: 93000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2600 }
+          ],
+          'Vios Hybrid Electric': [
+            { name: '1.5 HEV (CVT)', price: 105000, engine: '1.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 120, insurance: 2800 }
+          ],
+          'Vios HEV GR Sport': [
+            { name: '1.5 HEV GR Sport (CVT)', price: 112000, engine: '1.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 120, insurance: 3000 }
+          ],
+          'Corolla': [
+            { name: '1.8 G (CVT)', price: 139800, engine: '1.8L', trans: 'CVT', fuel: 'Petrol', roadTax: 150, insurance: 3500 },
+            { name: '1.8 V (CVT)', price: 147800, engine: '1.8L', trans: 'CVT', fuel: 'Petrol', roadTax: 150, insurance: 3800 }
+          ],
+          'Corolla GR Sport': [
+            { name: '1.8 GR Sport (CVT)', price: 156000, engine: '1.8L', trans: 'CVT', fuel: 'Petrol', roadTax: 150, insurance: 4000 }
+          ],
+          'Camry': [
+            { name: '2.5 V (8AT)', price: 221800, engine: '2.5L', trans: '8AT', fuel: 'Petrol', roadTax: 320, insurance: 5200 },
+            { name: '2.5 Hybrid (CVT)', price: 235000, engine: '2.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 330, insurance: 5600 }
+          ],
+          'Camry Hybrid': [
+            { name: '2.5 Hybrid Premium (CVT)', price: 245000, engine: '2.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 330, insurance: 5800 }
+          ],
+          'Yaris': [
+            { name: '1.5 G (CVT)', price: 70490, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 120, insurance: 2500 },
+            { name: '1.5 GR Sport (CVT)', price: 85000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 120, insurance: 2800 }
+          ],
+          'GR Yaris': [
+            { name: '1.6 Turbo (6MT)', price: 190000, engine: '1.6L Turbo', trans: '6MT', fuel: 'Petrol', roadTax: 200, insurance: 5500 }
+          ],
+          'GR Corolla': [
+            { name: '1.6 Turbo (6MT)', price: 205000, engine: '1.6L Turbo', trans: '6MT', fuel: 'Petrol', roadTax: 210, insurance: 5800 }
+          ],
+          'Rush': [
+            { name: '1.5 G (AT)', price: 93000, engine: '1.5L', trans: '4AT', fuel: 'Petrol', roadTax: 120, insurance: 2800 },
+            { name: '1.5 S (AT)', price: 97000, engine: '1.5L', trans: '4AT', fuel: 'Petrol', roadTax: 120, insurance: 3000 }
+          ],
+          'Corolla Cross': [
+            { name: '1.8 G (CVT)', price: 130900, engine: '1.8L', trans: 'CVT', fuel: 'Petrol', roadTax: 170, insurance: 4000 },
+            { name: '1.8 V (CVT)', price: 138000, engine: '1.8L', trans: 'CVT', fuel: 'Petrol', roadTax: 170, insurance: 4200 },
+            { name: '1.8 GR Sport (CVT)', price: 142000, engine: '1.8L', trans: 'CVT', fuel: 'Petrol', roadTax: 170, insurance: 4300 }
+          ],
+          'Corolla Cross Hybrid': [
+            { name: '1.8 Hybrid (CVT)', price: 146000, engine: '1.8L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 180, insurance: 4500 }
+          ],
+          'Corolla Cross GR Sport': [
+            { name: '1.8 Hybrid GR Sport (CVT)', price: 155000, engine: '1.8L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 180, insurance: 4800 }
+          ],
+          'Yaris Cross': [
+            { name: '1.5 S (CVT)', price: 99900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 140, insurance: 3200 },
+            { name: '1.5 S HEV (CVT)', price: 109900, engine: '1.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 150, insurance: 3500 }
+          ],
+          'Harrier': [
+            { name: '2.0 Elegant (CVT)', price: 188000, engine: '2.0L', trans: 'CVT', fuel: 'Petrol', roadTax: 220, insurance: 5000 },
+            { name: '2.0 GR Sport (CVT)', price: 202000, engine: '2.0L', trans: 'CVT', fuel: 'Petrol', roadTax: 220, insurance: 5300 }
+          ],
+          'Fortuner': [
+            { name: '2.4 G (MT)', price: 139888, engine: '2.4L Diesel', trans: '6MT', fuel: 'Diesel', roadTax: 280, insurance: 4500 },
+            { name: '2.4 V (AT)', price: 165000, engine: '2.4L Diesel', trans: '6AT', fuel: 'Diesel', roadTax: 280, insurance: 4800 },
+            { name: '2.8 VRZ (AT)', price: 195880, engine: '2.8L Diesel', trans: '6AT', fuel: 'Diesel', roadTax: 320, insurance: 5500 },
+            { name: '2.8 VRZ 4x4 (AT)', price: 236880, engine: '2.8L Diesel', trans: '6AT', fuel: 'Diesel', roadTax: 320, insurance: 6000 }
+          ],
+          'bZ4X': [
+            { name: 'Premium (EV)', price: 199900, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 6000 }
+          ],
+          'Urban Cruiser EV': [
+            { name: 'Standard (EV)', price: 149900, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 4500 }
+          ],
+          'Veloz': [
+            { name: '1.5 AT', price: 95000, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 130, insurance: 3000 }
+          ],
+          'Innova': [
+            { name: '2.4 G (MT)', price: 115000, engine: '2.4L Diesel', trans: '6MT', fuel: 'Diesel', roadTax: 200, insurance: 3800 },
+            { name: '2.4 V (AT)', price: 130000, engine: '2.4L Diesel', trans: '6AT', fuel: 'Diesel', roadTax: 200, insurance: 4000 }
+          ],
+          'Innova Zenix': [
+            { name: '2.0 X (CVT)', price: 165000, engine: '2.0L', trans: 'CVT', fuel: 'Petrol', roadTax: 200, insurance: 4500 },
+            { name: '2.0 HEV (CVT)', price: 185000, engine: '2.0L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 210, insurance: 4800 },
+            { name: '2.0 Q (CVT)', price: 202000, engine: '2.0L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 210, insurance: 5200 }
+          ],
+          'Alphard': [
+            { name: '2.5 X (CVT)', price: 298000, engine: '2.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 350, insurance: 6500 },
+            { name: '2.5 Elite (CVT)', price: 340000, engine: '2.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 350, insurance: 7000 }
+          ],
+          'Vellfire': [
+            { name: '2.5 X (CVT)', price: 305000, engine: '2.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 350, insurance: 6500 }
+          ],
+          'Vellfire HEV': [
+            { name: '2.5 HEV Executive (CVT)', price: 325000, engine: '2.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 350, insurance: 7000 }
+          ],
+          'Hilux': [
+            { name: '2.4 E (MT)', price: 103880, engine: '2.4L Diesel', trans: '6MT', fuel: 'Diesel', roadTax: 250, insurance: 3800 },
+            { name: '2.4 V (AT)', price: 125000, engine: '2.4L Diesel', trans: '6AT', fuel: 'Diesel', roadTax: 250, insurance: 4200 },
+            { name: '2.8 VRZ (AT)', price: 145000, engine: '2.8L Diesel', trans: '6AT', fuel: 'Diesel', roadTax: 280, insurance: 4800 },
+            { name: '2.8 Rogue (AT)', price: 169080, engine: '2.8L Diesel', trans: '6AT', fuel: 'Diesel', roadTax: 280, insurance: 5200 }
+          ],
+          'Hilux BEV': [
+            { name: 'EV (Electric)', price: 180000, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 5000 }
+          ],
+          'GR 86': [
+            { name: '2.4 (6MT)', price: 245000, engine: '2.4L Boxer', trans: '6MT', fuel: 'Petrol', roadTax: 300, insurance: 6500 }
+          ],
+          'GR Supra': [
+            { name: '3.0 Turbo (8AT)', price: 350000, engine: '3.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 500, insurance: 9000 }
+          ],
+          'Hiace': [
+            { name: '2.5 MT', price: 148000, engine: '2.5L Diesel', trans: '5MT', fuel: 'Diesel', roadTax: 250, insurance: 4200 }
+          ],
+          'Hiace SLWB': [
+            { name: '2.5 Super Long Wheelbase (MT)', price: 165000, engine: '2.5L Diesel', trans: '5MT', fuel: 'Diesel', roadTax: 280, insurance: 4500 }
+          ]
+        }
+      },
+      'Honda': {
+        models: ['City', 'City Hatchback', 'Civic', 'CR-V', 'HR-V', 'Accord', 'BR-V', 'WR-V', 'e:N1'],
+        variants: {
+          'City': [
+            { name: '1.5 S (CVT)', price: 84900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2400 },
+            { name: '1.5 E (CVT)', price: 89900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2600 },
+            { name: '1.5 V (CVT)', price: 94900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2800 },
+            { name: '1.5 RS (CVT)', price: 99900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 3000 },
+            { name: '1.5 e:HEV RS (CVT)', price: 111900, engine: '1.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 120, insurance: 3200 }
+          ],
+          'City Hatchback': [
+            { name: '1.5 V (CVT)', price: 85900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2500 },
+            { name: '1.5 RS (CVT)', price: 103900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2800 },
+            { name: '1.5 e:HEV RS (CVT)', price: 112900, engine: '1.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 120, insurance: 3000 }
+          ],
+          'Civic': [
+            { name: '1.5 E (CVT)', price: 133900, engine: '1.5L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 140, insurance: 3200 },
+            { name: '1.5 V (CVT)', price: 144900, engine: '1.5L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 140, insurance: 3400 },
+            { name: '1.5 RS Turbo (CVT)', price: 149900, engine: '1.5L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 140, insurance: 3600 },
+            { name: '2.0 RS e:HEV (CVT)', price: 167900, engine: '2.0L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 150, insurance: 4000 },
+            { name: 'Type R (MT)', price: 399900, engine: '2.0L Turbo', trans: '6MT', fuel: 'Petrol', roadTax: 400, insurance: 8500 }
+          ],
+          'CR-V': [
+            { name: '1.5 S (CVT)', price: 159900, engine: '1.5L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 190, insurance: 4200 },
+            { name: '1.5 E (CVT)', price: 169900, engine: '1.5L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 190, insurance: 4400 },
+            { name: '1.5 V (CVT)', price: 181900, engine: '1.5L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 190, insurance: 4700 },
+            { name: '2.0 e:HEV RS (CVT)', price: 195900, engine: '2.0L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 200, insurance: 5000 }
+          ],
+          'HR-V': [
+            { name: '1.5 S (CVT)', price: 115900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 140, insurance: 3000 },
+            { name: '1.5 E (CVT)', price: 124900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 140, insurance: 3200 },
+            { name: '1.5 V (CVT)', price: 134900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 140, insurance: 3400 },
+            { name: '1.5 RS Turbo (CVT)', price: 141900, engine: '1.5L Turbo', trans: 'CVT', fuel: 'Petrol', roadTax: 150, insurance: 3600 },
+            { name: '1.5 e:HEV RS (CVT)', price: 141900, engine: '1.5L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 150, insurance: 3600 }
+          ],
+          'Accord': [
+            { name: '2.0 e:HEV (CVT)', price: 215100, engine: '2.0L Hybrid', trans: 'CVT', fuel: 'Hybrid', roadTax: 320, insurance: 5200 }
+          ],
+          'BR-V': [
+            { name: '1.5 S (CVT)', price: 91900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 130, insurance: 2800 },
+            { name: '1.5 E (CVT)', price: 99900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 130, insurance: 3000 },
+            { name: '1.5 V (CVT)', price: 108900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 130, insurance: 3200 }
+          ],
+          'WR-V': [
+            { name: '1.5 S (CVT)', price: 89900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2600 },
+            { name: '1.5 E (CVT)', price: 95900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 2800 },
+            { name: '1.5 V (CVT)', price: 102900, engine: '1.5L', trans: 'CVT', fuel: 'Petrol', roadTax: 110, insurance: 3000 }
+          ],
+          'e:N1': [
+            { name: 'EV', price: 149900, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 5500 }
+          ]
+        }
+      },
+      'BMW': {
+        models: ['2 Series Gran Coupe', '3 Series', '5 Series', '7 Series', 'X1', 'X3', 'X4', 'X5', 'X6', 'X7', 'i5', 'iX1', 'M3', 'M5', 'XM'],
+        variants: {
+          '2 Series Gran Coupe': [
+            { name: '218 Sport (CKD)', price: 219800, engine: '1.5L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 500, insurance: 7500 }
+          ],
+          '3 Series': [
+            { name: '320i Sport (CKD)', price: 265800, engine: '2.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 600, insurance: 8500 },
+            { name: '330i M Sport (CKD)', price: 291800, engine: '2.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 600, insurance: 9000 },
+            { name: '330Li M Sport (CKD)', price: 316800, engine: '2.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 650, insurance: 9500 },
+            { name: 'M340i xDrive M Sport Pro (CBU)', price: 452800, engine: '3.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 900, insurance: 12000 },
+            { name: 'M3 Competition M xDrive (CBU)', price: 837800, engine: '3.0L Twin-Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 1200, insurance: 18000 }
+          ],
+          '5 Series': [
+            { name: '520i M Sport (CKD)', price: 377800, engine: '2.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 900, insurance: 12000 },
+            { name: '530i M Sport (CKD)', price: 399800, engine: '2.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 900, insurance: 13000 },
+            { name: 'M5 Sedan PHEV (CBU)', price: 1188800, engine: '4.4L Twin-Turbo Hybrid', trans: '8AT', fuel: 'PHEV', roadTax: 1500, insurance: 25000 }
+          ],
+          '7 Series': [
+            { name: '750e xDrive Pure Excellence PHEV (CBU)', price: 656300, engine: '3.0L Turbo Hybrid', trans: '8AT', fuel: 'PHEV', roadTax: 1200, insurance: 18000 },
+            { name: '750e xDrive M Sport PHEV (CKD)', price: 685800, engine: '3.0L Turbo Hybrid', trans: '8AT', fuel: 'PHEV', roadTax: 1200, insurance: 19000 }
+          ],
+          'X1': [
+            { name: 'sDrive20i xLine (CKD)', price: 250800, engine: '2.0L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 500, insurance: 7500 }
+          ],
+          'X3': [
+            { name: 'xDrive20 M Sport (CKD)', price: 320800, engine: '2.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 800, insurance: 10500 }
+          ],
+          'X4': [
+            { name: 'xDrive30i M Sport Pro (CKD)', price: 406800, engine: '3.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 900, insurance: 12000 }
+          ],
+          'X5': [
+            { name: 'xDrive40i M Sport (CKD)', price: 469800, engine: '3.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 1200, insurance: 15500 },
+            { name: 'xDrive50e M Sport PHEV (CKD)', price: 494800, engine: '3.0L Turbo Hybrid', trans: '8AT', fuel: 'PHEV', roadTax: 1200, insurance: 16500 }
+          ],
+          'X6': [
+            { name: 'xDrive40i M Sport (CBU)', price: 734800, engine: '3.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 1300, insurance: 18000 }
+          ],
+          'X7': [
+            { name: 'xDrive40i M Sport (CBU)', price: 732000, engine: '3.0L Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 1500, insurance: 20000 }
+          ],
+          'i5': [
+            { name: 'eDrive40 M Sport Pro (CKD)', price: 369000, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 12000 }
+          ],
+          'iX1': [
+            { name: 'xDrive20L M Sport (CBU)', price: 255000, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 8500 }
+          ],
+          'M3': [
+            { name: 'M3 Competition M xDrive (CBU)', price: 837800, engine: '3.0L Twin-Turbo', trans: '8AT', fuel: 'Petrol', roadTax: 1200, insurance: 18000 }
+          ],
+          'M5': [
+            { name: 'M5 Sedan PHEV (CBU)', price: 1188800, engine: '4.4L Twin-Turbo Hybrid', trans: '8AT', fuel: 'PHEV', roadTax: 1500, insurance: 25000 }
+          ],
+          'XM': [
+            { name: 'XM Label Red PHEV (CBU)', price: 1554800, engine: '4.4L Twin-Turbo Hybrid', trans: '8AT', fuel: 'PHEV', roadTax: 1800, insurance: 30000 }
+          ]
+        }
+      },
+      'Mercedes-Benz': {
+        models: ['A-Class', 'C-Class', 'E-Class', 'GLA', 'GLC', 'GLE', 'GLS', 'S-Class', 'EQA', 'EQB', 'EQC', 'EQE', 'EQS'],
+        variants: {
+          'A-Class': [
+            { name: 'A200 Progressive (CKD)', price: 216888, engine: '1.3L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 500, insurance: 7200 },
+            { name: 'A250 AMG (CBU)', price: 343888, engine: '2.0L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 600, insurance: 8500 }
+          ],
+          'C-Class': [
+            { name: 'C200 Avantgarde (CKD)', price: 292888, engine: '1.5L Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 650, insurance: 9500 },
+            { name: 'C300 AMG Line (CKD)', price: 338888, engine: '2.0L Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 700, insurance: 11000 }
+          ],
+          'E-Class': [
+            { name: 'E200 Avantgarde (CKD)', price: 355888, engine: '2.0L Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 900, insurance: 12500 },
+            { name: 'E300 AMG Line (CKD)', price: 418888, engine: '2.0L Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 1000, insurance: 14000 }
+          ],
+          'GLA': [
+            { name: 'GLA200 (CKD)', price: 254888, engine: '1.3L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 500, insurance: 7500 },
+            { name: 'AMG GLA 35 4MATIC (CBU)', price: 539888, engine: '2.0L Turbo', trans: '7DCT', fuel: 'Petrol', roadTax: 800, insurance: 12000 }
+          ],
+          'GLC': [
+            { name: 'GLC200 (CKD)', price: 299539, engine: '2.0L Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 800, insurance: 11000 },
+            { name: 'GLC300 4MATIC (CKD)', price: 391888, engine: '2.0L Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 900, insurance: 12500 },
+            { name: 'AMG GLC 63 S 4MATIC+ (CBU)', price: 933888, engine: '4.0L Twin-Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 1500, insurance: 22000 }
+          ],
+          'GLE': [
+            { name: 'GLE350 d 4MATIC (CKD)', price: 498888, engine: '3.0L Diesel', trans: '9AT', fuel: 'Diesel', roadTax: 1300, insurance: 17000 },
+            { name: 'GLE53 AMG 4MATIC+ (CBU)', price: 1198888, engine: '3.0L Turbo Hybrid', trans: '9AT', fuel: 'PHEV', roadTax: 1500, insurance: 25000 }
+          ],
+          'GLS': [
+            { name: 'GLS450 4MATIC (CBU)', price: 899888, engine: '3.0L Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 1800, insurance: 22000 },
+            { name: 'Maybach GLS 600 4MATIC (CBU)', price: 1918888, engine: '4.0L Twin-Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 2500, insurance: 35000 }
+          ],
+          'S-Class': [
+            { name: 'S350 L 4MATIC (CBU)', price: 1050000, engine: '3.0L Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 2000, insurance: 30000 },
+            { name: 'S680 Maybach 4MATIC (CBU)', price: 2400000, engine: '6.0L Twin-Turbo', trans: '9AT', fuel: 'Petrol', roadTax: 3000, insurance: 50000 }
+          ],
+          'EQA': [
+            { name: 'EQA 250+ (EV)', price: 296888, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 8500 }
+          ],
+          'EQB': [
+            { name: 'EQB 300 4MATIC (EV)', price: 328888, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 9500 }
+          ],
+          'EQC': [
+            { name: 'EQC 400 4MATIC (EV)', price: 388888, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 11000 }
+          ],
+          'EQE': [
+            { name: 'EQE 300 (EV)', price: 485888, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 14000 }
+          ],
+          'EQS': [
+            { name: 'EQS 450+ (EV)', price: 699888, engine: 'Electric', trans: 'Auto', fuel: 'Electric', roadTax: 0, insurance: 18000 }
+          ]
+        }
+      }
+    };
+
+    const maintenanceData = {
+      'Perodua': { annual: 800, spareParts: 600, fuelBase: 0.12 },
+      'Proton': { annual: 1000, spareParts: 800, fuelBase: 0.13 },
+      'Toyota': { annual: 1500, spareParts: 1200, fuelBase: 0.15 },
+      'Honda': { annual: 1400, spareParts: 1100, fuelBase: 0.14 },
+      'BMW': { annual: 4000, spareParts: 3000, fuelBase: 0.18 },
+      'Mercedes-Benz': { annual: 4500, spareParts: 3500, fuelBase: 0.19 }
+    };
+
+    function populateBrands() {
+      const brandSelect = document.getElementById('brand');
+      Object.keys(carData).forEach(brand => {
+        const option = document.createElement('option');
+        option.value = brand;
+        option.textContent = brand;
+        brandSelect.appendChild(option);
+      });
+    }
+
+    function updateModels() {
+      const brand = document.getElementById('brand').value;
+      const modelSelect = document.getElementById('model');
+      const variantSelect = document.getElementById('variant');
+
+      modelSelect.innerHTML = '<option value="">-- Select Model --</option>';
+      variantSelect.innerHTML = '<option value="">-- Select Variant --</option>';
+      variantSelect.disabled = true;
+      document.getElementById('carDetails').style.display = 'none';
+      document.getElementById('carImageContainer').style.display = 'none';
+
+      if (brand && carData[brand]) {
+        modelSelect.disabled = false;
+        carData[brand].models.forEach(model => {
+          const option = document.createElement('option');
+          option.value = model;
+          option.textContent = model;
+          modelSelect.appendChild(option);
+        });
+      } else {
+        modelSelect.disabled = true;
+      }
+
+      calculate();
+    }
+
+    function updateVariants() {
+      const brand = document.getElementById('brand').value;
+      const model = document.getElementById('model').value;
+      const variantSelect = document.getElementById('variant');
+
+      variantSelect.innerHTML = '<option value="">-- Select Variant --</option>';
+      document.getElementById('carDetails').style.display = 'none';
+      document.getElementById('carImageContainer').style.display = 'none';
+
+      if (brand && model && carData[brand] && carData[brand].variants[model]) {
+        variantSelect.disabled = false;
+        updateCarImage(brand, model);
+        carData[brand].variants[model].forEach((v, idx) => {
+          const option = document.createElement('option');
+          option.value = idx;
+          option.textContent = v.name + ' - RM ' + v.price.toLocaleString();
+          variantSelect.appendChild(option);
+        });
+      } else {
+        variantSelect.disabled = true;
+      }
+
+      calculate();
+    }
+
+    function updateCarImage(brand, model) {
+      const imageContainer = document.getElementById('carImageContainer');
+      const imageEl = document.getElementById('carImage');
+      const fallbackEl = document.getElementById('carImageFallback');
+      const loadingEl = document.getElementById('carImageLoading');
+
+      if (!brand || !model) {
+        imageContainer.style.display = 'none';
+        return;
+      }
+
+      const toyotaImages = {
+        'Vios': 'https://www.toyota.com.my/content/dam/malaysia/models/vios/new-features/nav-explore-thumbnails_V2.png',
+        'Vios Hybrid Electric': 'https://www.toyota.com.my/content/dam/malaysia/models/vios-hev/explore-thumbnails/explore-thumbnail-vios-hybrid-electric-450px.png',
+        'Vios HEV GR Sport': 'https://www.toyota.com.my/content/dam/malaysia/models/vios-hev-grs/explore-thumbnails/explore-thumbnail-vios-grs-hybrid-electric-450px.png',
+        'Corolla': 'https://www.toyota.com.my/content/dam/malaysia/models/corolla/explore-thumbnails/side-profile-450px.png',
+        'Corolla GR Sport': 'https://www.toyota.com.my/content/dam/malaysia/models/corolla-gr-s/explore-thumbnail/corolla-gr-sport-navi-side-view-450px-v2.png',
+        'Camry': 'https://www.toyota.com.my/content/dam/malaysia/models/camry-ice/explore-thumbnail/camry-ice-navi.png',
+        'Camry Hybrid': 'https://www.toyota.com.my/content/dam/malaysia/models/camry-hybrid-electric/explore-thumbnail/camry-hybrid-electric-navi.png',
+        'Yaris': 'https://www.toyota.com.my/content/dam/malaysia/models/yaris/explore-thumbnails/explore-thumbnail-red-black-yaris.png',
+        'GR Yaris': 'https://www.toyota.com.my/content/dam/malaysia/models/yaris/explore-thumbnails/explore-thumbnail-red-black-yaris.png',
+        'GR Corolla': 'https://www.toyota.com.my/content/dam/malaysia/models/corolla-gr-s/explore-thumbnail/corolla-gr-sport-navi-side-view-450px-v2.png',
+        'Rush': 'https://www.toyota.com.my/content/dam/malaysia/models/rush/explore-thumbnail/explore-thumbnail-rush-450px.png',
+        'Corolla Cross': 'https://www.toyota.com.my/content/dam/malaysia/models/corolla-cross-hybrid-electric/explore-thumbnail/corolla-cross-hev-navi.png',
+        'Corolla Cross Hybrid': 'https://www.toyota.com.my/content/dam/malaysia/models/corolla-cross-hybrid-electric/explore-thumbnail/corolla-cross-hev-navi.png',
+        'Corolla Cross GR Sport': 'https://www.toyota.com.my/content/dam/malaysia/models/corolla-cross-hev-gr-sport/explore-thumbnail/corolla-cross-hev-grs-navi-450px.png',
+        'Yaris Cross': 'https://www.toyota.com.my/content/dam/malaysia/models/yaris-cross/explore-thumbnail/thumbnail-450px.png',
+        'Harrier': 'https://www.toyota.com.my/content/dam/malaysia/models/harrier/explore-thumbnail/harrier-explore-thumbnail-450px.png',
+        'Fortuner': 'https://www.toyota.com.my/content/dam/malaysia/models/fortuner/explore-thumbnail/explore-thumbnail-super-white-ii-black-roof-fortuner.png',
+        'bZ4X': 'https://www.toyota.com.my/content/dam/malaysia/models/bz4x/explore-thumbnails/bz4x-explore-thumbnail-450px.png',
+        'Urban Cruiser EV': 'https://www.toyota.com.my/content/dam/malaysia/models/bz4x/explore-thumbnails/bz4x-explore-thumbnail-450px.png',
+        'Veloz': 'https://www.toyota.com.my/content/dam/malaysia/models/veloz/explore-thumbnail/explore-thumbnail-veloz-white-01-450px.png',
+        'Innova': 'https://www.toyota.com.my/content/dam/malaysia/models/zenix/explore-thumbnails/explore-thumbnail-innova-zenix-600.png',
+        'Innova Zenix': 'https://www.toyota.com.my/content/dam/malaysia/models/zenix/explore-thumbnails/explore-thumbnail-innova-zenix-600.png',
+        'Alphard': 'https://www.toyota.com.my/content/dam/malaysia/models/alphard/explore-thumbnails/explore-thumbnail-leo-blond-alphard.png',
+        'Vellfire': 'https://www.toyota.com.my/content/dam/malaysia/models/vellfire/explore-thumbnail/explore-thumbnail-black-vellfire-v2.png',
+        'Vellfire HEV': 'https://www.toyota.com.my/content/dam/malaysia/models/vellfire-hev/explore-thumbnail/explore-thumbnail-vellfire-hev.png',
+        'Hilux': 'https://www.toyota.com.my/content/dam/malaysia/models/hilux/explore-thumbnails/explore-thumbnail-bronze-me-2-4-hilux.png',
+        'Hilux BEV': 'https://www.toyota.com.my/content/dam/malaysia/models/hilux-bev/explore-thumbnail/explore-thumbnail-hilux-bev-ash.png',
+        'GR 86': 'https://www.toyota.com.my/content/dam/malaysia/models/gr-86/explore-thumbnails/toyota-gr-86-navi.png',
+        'GR Supra': 'https://www.toyota.com.my/content/dam/malaysia/models/gr-supra/explore-thumbnail/explore-thumbnail-gr-supra-red-01-450px.png',
+        'Hiace': 'https://www.toyota.com.my/content/dam/malaysia/models/hiace/explore-thumbnail/hiace-explore-thumbnail-450px.png',
+        'Hiace SLWB': 'https://www.toyota.com.my/content/dam/malaysia/models/hiace/explore-thumbnail/hiace-explore-thumbnail-450px.png'
+      };
+
+      const imageUrl = brand === 'Toyota' ? (toyotaImages[model] || '') : '';
+
+      if (imageUrl) {
+        loadingEl.style.display = 'flex';
+        fallbackEl.style.display = 'none';
+        imageEl.style.display = 'none';
+        imageEl.src = imageUrl;
+        imageContainer.style.display = 'block';
+      } else {
+        fallbackEl.textContent = `${brand} ${model}`;
+        fallbackEl.style.display = 'flex';
+        loadingEl.style.display = 'none';
+        imageEl.style.display = 'none';
+        imageContainer.style.display = 'flex';
+      }
+    }
+
+    function calculate() {
+      const brand = document.getElementById('brand').value;
+      const model = document.getElementById('model').value;
+      const variantIdx = document.getElementById('variant').value;
+      const loanTerm = parseInt(document.getElementById('loanTerm').value);
+      const interestRate = parseFloat(document.getElementById('interestRate').value) / 100;
+      const downPaymentPct = parseFloat(document.getElementById('downPayment').value) / 100;
+      const monthlyOther = parseFloat(document.getElementById('monthlyOther').value) || 0;
+
+      const resultPanel = document.getElementById('resultPanel');
+      const salaryResult = document.getElementById('salaryResult');
+      const salarySubtext = document.getElementById('salarySubtext');
+
+      if (!brand || !model) {
+        resultPanel.style.display = 'none';
+        document.getElementById('carImageContainer').style.display = 'none';
+        return;
+      }
+
+      if (variantIdx === '') {
+        resultPanel.style.display = 'block';
+        document.getElementById('resultContent').style.display = 'none';
+        return;
+      }
+
+      const variant = carData[brand].variants[model][parseInt(variantIdx)];
+      const onRoadPrice = variant.price;
+      const downPayment = onRoadPrice * downPaymentPct;
+      const loanAmount = onRoadPrice - downPayment;
+       const monthlyRate = interestRate / 12;
+      const numPayments = loanTerm * 12;
+
+      const calcMethod = document.querySelector('input[name="calcMethod"]:checked').value;
+
+      let monthlyInstallment = 0;
+      if (calcMethod === 'reducing') {
+        if (monthlyRate > 0) {
+          monthlyInstallment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+        } else {
+          monthlyInstallment = loanAmount / numPayments;
+        }
+      } else {
+        if (monthlyRate > 0) {
+          monthlyInstallment = (loanAmount / numPayments) + (loanAmount * monthlyRate);
+        } else {
+          monthlyInstallment = loanAmount / numPayments;
+        }
+      }
+
+      const monthlyInsurance = variant.insurance / 12;
+      const monthlyRoadTax = variant.roadTax / 12;
+
+      const maint = maintenanceData[brand] || maintenanceData['Perodua'];
+      const monthlyMaintenance = maint.annual / 12;
+      const monthlyFuel = onRoadPrice * maint.fuelBase / 1000;
+
+      const totalMonthly = monthlyInstallment + monthlyInsurance + monthlyRoadTax + monthlyMaintenance + monthlyFuel + monthlyOther;
+      const maxCommitmentRatio = 0.40;
+      const minSalary = totalMonthly / maxCommitmentRatio;
+
+      resultPanel.style.display = 'block';
+      document.getElementById('resultContent').style.display = 'block';
+      salaryResult.textContent = 'RM ' + Math.ceil(minSalary).toLocaleString();
+      salarySubtext.textContent = 'Based on 40% debt-to-income ratio';
+
+      document.getElementById('detailPrice').textContent = 'RM ' + onRoadPrice.toLocaleString();
+      document.getElementById('detailEngine').textContent = variant.engine;
+      document.getElementById('detailTrans').textContent = variant.trans;
+      document.getElementById('detailFuel').textContent = variant.fuel;
+      document.getElementById('carDetails').style.display = 'block';
+
+      document.getElementById('bdPrice').textContent = 'RM ' + onRoadPrice.toLocaleString();
+      document.getElementById('bdDown').textContent = 'RM ' + Math.round(downPayment).toLocaleString();
+      document.getElementById('bdLoan').textContent = 'RM ' + Math.round(loanAmount).toLocaleString();
+      document.getElementById('bdInstallment').textContent = 'RM ' + Math.round(monthlyInstallment).toLocaleString();
+      document.getElementById('bdInsurance').textContent = 'RM ' + Math.round(monthlyInsurance).toLocaleString() + '/mo';
+      document.getElementById('bdRoadTax').textContent = 'RM ' + Math.round(monthlyRoadTax).toLocaleString() + '/mo';
+      document.getElementById('bdMaintenance').textContent = 'RM ' + Math.round(monthlyMaintenance).toLocaleString() + '/mo';
+      document.getElementById('bdFuel').textContent = 'RM ' + Math.round(monthlyFuel).toLocaleString() + '/mo';
+      document.getElementById('bdTotal').textContent = 'RM ' + Math.round(totalMonthly).toLocaleString() + '/mo';
+
+      const ratio = Math.min((totalMonthly / minSalary) / maxCommitmentRatio * 100, 100);
+      document.getElementById('sparkline').style.width = ratio + '%';
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+    }
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'theme') {
+        applyTheme(e.newValue || 'light');
+      }
+    });
+
+    initTheme();
+
+    function initCalcMethodToggle() {
+      const toggle = document.getElementById('calcMethodToggle');
+      if (!toggle) return;
+      const buttons = toggle.querySelectorAll('.calc-toggle-btn');
+      const radios = toggle.parentElement.querySelectorAll('input[name="calcMethod"]');
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          radios.forEach(r => { r.checked = (r.value === btn.dataset.value); });
+          calculate();
+        });
+      });
+    }
+
+    initCalcMethodToggle();
+
+    populateBrands();
+  </script>
+</body>
+</html>
